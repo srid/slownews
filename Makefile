@@ -1,5 +1,5 @@
 all:
-	elm make SlowNews.elm
+	elm make SlowNews.elm --output=static/index.html
 
 fetch:
 	mkdir -p data

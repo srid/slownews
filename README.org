@@ -1,5 +1,9 @@
 * slownews
 
+
+#+CAPTION: Deploy
+[[https://heroku.com/deploy]]
+
 ** setting up
 - install jq
 - install httpie
