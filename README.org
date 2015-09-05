@@ -1,0 +1,14 @@
+* slownews
+
+** setting up
+- install jq
+- install httpie
+- install elm-platform
+- edit WWWDIR and run `make`
+- run `make fetch` periodically
+** tasks
+*** DONE normalize json
+CLOSED: [2015-09-05 Sat 14:49]
+*** TODO basic rendering in Elm
+*** TODO heroku deployment
+- [ ] scheduler
