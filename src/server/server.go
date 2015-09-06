@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,7 +8,12 @@ import (
 
 // handleData ...
 func handleData(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "{}")
+	links, err := getSubredditLinks("programming")
+	if err != nil {
+		httpFatal(w, err)
+	} else {
+		httpRespondJSON(w, links)
+	}
 }
 
 func main() {
