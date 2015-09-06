@@ -2,8 +2,7 @@
     "name": "SlowNews",
     "repository": "https://github.com/srid/slownews",
     "env": {
-        "ELM_COMPILE": "make client",
-        "GO15VENDOREXPERIMENT": "1"
+        "ELM_COMPILE": "make client"
     },
     "buildpacks": [
         {
