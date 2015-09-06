@@ -1,4 +1,10 @@
-all:
+all:	server client
+	@true
+
+server:
+	go build
+
+client:
 	elm make SlowNews.elm --output=static/index.html
 
 fetch:
