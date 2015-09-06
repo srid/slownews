@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 // httpGetJSON ...
 func httpGetJSON(url string, value interface{}) error {
+	log.Printf("Retrieving %v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
