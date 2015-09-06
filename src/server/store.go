@@ -39,3 +39,10 @@ func (s *Store) IsStale(siteName string) bool {
 func (s *Store) Put(site *Site) {
 	s.Sites[site.Name] = site
 }
+
+func (s *Store) Get(siteName string) *Site {
+	if site, ok := s.Sites[siteName]; ok {
+		return site
+	}
+	panic("not possible")
+}

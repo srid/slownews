@@ -18,6 +18,8 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		store.Put(site)
+	} else {
+		site = store.Get("r/programming")
 	}
 
 	httpRespondJSON(w, []*Site{site})
