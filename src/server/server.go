@@ -8,12 +8,19 @@ import (
 
 // handleData ...
 func handleData(w http.ResponseWriter, r *http.Request) {
-	links, err := getSubredditLinks("programming")
-	if err != nil {
-		httpFatal(w, err)
-	} else {
-		httpRespondJSON(w, &links)
+	var site *Site
+	var err error
+
+	if store.IsStale("r/programming") {
+		site, err = getSubredditLinks("programming")
+		if err != nil {
+			httpFatal(w, err)
+			return
+		}
+		store.Put(site)
 	}
+
+	httpRespondJSON(w, &site)
 }
 
 func main() {
