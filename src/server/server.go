@@ -12,7 +12,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		httpFatal(w, err)
 	} else {
-		httpRespondJSON(w, links)
+		httpRespondJSON(w, &links)
 	}
 }
 

@@ -22,7 +22,7 @@ type RedditT3 struct {
 func getSubredditLinks(subreddit string) ([]Link, error) {
 	var response RedditListing
 	url := fmt.Sprintf("https://www.reddit.com/r/%s/top/.json?sort=top&t=week", subreddit)
-	err := httpGetJSON(url, response)
+	err := httpGetJSON(url, &response)
 	if err != nil {
 		return nil, err
 	}
