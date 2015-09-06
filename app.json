@@ -2,7 +2,15 @@
     "name": "SlowNews",
     "repository": "https://github.com/srid/slownews",
     "env": {
-        "ELM_COMPILE": "make client"
+        "ELM_COMPILE": "make client",
+        "SITES": {
+            "description": "List of supported sites to fetch",
+            "value": "r/programming:r/haskell"
+        },
+        "CACHE_DURATION": {
+            "description": "Frequency of fetching upstream content",
+            "value": "1h"
+        }
     },
     "buildpacks": [
         {

@@ -26,7 +26,8 @@ func getSubredditSite(subreddit string) (*Site, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewSite(subreddit, normalizeRedditResponse(response)), nil
+	links := normalizeRedditResponse(response)
+	return NewSite(subreddit, links), nil
 }
 
 // normalizeRedditResponse ...

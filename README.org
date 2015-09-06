@@ -4,8 +4,14 @@
 [[https://heroku.com/deploy][Deploy to Heroku]]
 
 ** tasks
-*** TODO mvp [3/3]
+*** DONE mvp [3/3]
+CLOSED: [2015-09-05 Sat 22:40]
 + [X] project layout & heroku deployment
 + [X] Server: fetch reddit json
 + [X] Elm: fetch and render json
-*** TODO add other sites, and polish
+*** DONE add other sites, and polish
+CLOSED: [2015-09-05 Sat 22:40]
+*** TODO add HN
+*** TODO compact layout
+*** TODO reliable and smooth http GET
+move fetching away from http GET to heroku scheduler.

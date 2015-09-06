@@ -4,7 +4,7 @@
     "repository": "https://github.com/srid/slownews.git",
     "license": "MIT",
     "source-directories": [
-        "."
+        "src/client"
     ],
     "exposed-modules": [],
     "dependencies": {
