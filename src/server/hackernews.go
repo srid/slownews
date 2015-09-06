@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-const HNCOUNT = 15
+const HNCOUNT = 25
 const HNSITENAME = "hn"
 
 func getHNSite() (*Site, error) {
