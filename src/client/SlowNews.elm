@@ -59,9 +59,9 @@ view sites =
 
 viewSite : Site -> Html
 viewSite site =
-  H.div []
+  H.div [class "site"]
     [ H.h2 [] [H.text site.name]
-    , H.div [] <| List.map viewLink site.links ]
+    , H.ul [] <| List.map viewLink site.links ]
 
 viewLink : Link -> Html
 viewLink link =

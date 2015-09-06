@@ -19,7 +19,7 @@ type RedditT3 struct {
 	} `json:"data"`
 }
 
-func getSubredditLinks(subreddit string) (*Site, error) {
+func getSubredditSite(subreddit string) (*Site, error) {
 	var response RedditListing
 	url := fmt.Sprintf("https://www.reddit.com/r/%s/top/.json?sort=top&t=week", subreddit)
 	err := httpGetJSON(url, &response)

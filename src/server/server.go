@@ -4,25 +4,23 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
+
+var SITES []string
+
+func init() {
+	sitesString := os.Getenv("SITES")
+	if sitesString == "" {
+		sitesString = "r/programming:r/haskell:r/elm"
+	}
+	SITES = strings.Split(sitesString, ":")
+}
 
 // handleData ...
 func handleData(w http.ResponseWriter, r *http.Request) {
-	var site *Site
-	var err error
-
-	if store.IsStale("r/programming") {
-		site, err = getSubredditLinks("programming")
-		if err != nil {
-			httpFatal(w, err)
-			return
-		}
-		store.Put(site)
-	} else {
-		site = store.Get("r/programming")
-	}
-
-	httpRespondJSON(w, []*Site{site})
+	sites := store.GetOrFetchMultiple(SITES)
+	httpRespondJSON(w, sites)
 }
 
 func main() {

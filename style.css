@@ -5,8 +5,22 @@ html {
     margin:    0 auto;
     max-width: 960px;
     font-family: 'Muli', sans-serif;
+    font-size: 85%;
 }
 
-h2.site {
+div.site h2 {
     font-family: 'Autour One', cursive;
+    background-color: orange;
+    padding: 0.3em;
+}
+
+div.site ul {
+    list-style-type: circle;
+}
+div.site ul li {
+    padding-bottom: 0.4em;
+}
+
+a {
+    text-decoration: none;
 }
