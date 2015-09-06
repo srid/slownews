@@ -4,7 +4,8 @@
 [[https://heroku.com/deploy][Deploy to Heroku]]
 
 ** tasks
-*** TODO mvp [2/3]
+*** TODO mvp [3/3]
 + [X] project layout & heroku deployment
 + [X] Server: fetch reddit json
-+ [ ] Elm: fetch and render json
++ [X] Elm: fetch and render json
+*** TODO add other sites, and polish
