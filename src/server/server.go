@@ -20,7 +20,7 @@ func handleData(w http.ResponseWriter, r *http.Request) {
 		store.Put(site)
 	}
 
-	httpRespondJSON(w, &site)
+	httpRespondJSON(w, []*Site{site})
 }
 
 func main() {

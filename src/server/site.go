@@ -5,9 +5,9 @@ import (
 )
 
 type Site struct {
-	Name        string
-	Links       []Link
-	LastFetched time.Time
+	Name        string    `json:"name"`
+	Links       []Link    `json:"links"`
+	LastFetched time.Time `json:"last_fetched"`
 }
 
 func NewSite(name string, links []Link) *Site {
