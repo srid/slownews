@@ -6,10 +6,10 @@
     },
     "buildpacks": [
         {
-            "url": "https://github.com/srid/heroku-buildpack-elm.git"
+            "url": "https://github.com/heroku/heroku-buildpack-go.git"
         },
         {
-            "url": "https://github.com/heroku/heroku-buildpack-go.git"
+            "url": "https://github.com/srid/heroku-buildpack-elm.git"
         }
     ]
 }
