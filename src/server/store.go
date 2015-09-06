@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -33,7 +34,6 @@ func init() {
 func (s *Store) IsStale(siteName string) bool {
 	if site, ok := s.Sites[siteName]; ok {
 		cacheExpiry := site.LastFetched.Add(CACHE_DURATION)
-		log.Printf("%v before %v?", cacheExpiry, time.Now())
 		return cacheExpiry.Before(time.Now())
 	} else {
 		return true
@@ -42,6 +42,7 @@ func (s *Store) IsStale(siteName string) bool {
 
 func (s *Store) Put(site *Site) {
 	s.Sites[site.Name] = site
+	log.Printf("Stored site %v with %d links in store", site.Name, len(site.Links))
 }
 
 func (s *Store) Get(siteName string) *Site {
@@ -52,12 +53,21 @@ func (s *Store) Get(siteName string) *Site {
 }
 
 func (s *Store) GetOrFetch(siteName string) (*Site, error) {
+	var site *Site
+	var err error
+
 	if store.IsStale(siteName) {
 		log.Printf("Fetching stale/missing site %v", siteName)
-		site, err := getSubredditSite(siteName)
+		switch {
+		case strings.HasPrefix(siteName, "r/"):
+			site, err = getSubredditSite(siteName)
+		case siteName == "hn":
+			site, err = getHNSite()
+		}
 		if err == nil {
 			store.Put(site)
-			log.Printf("Stored site %v with %d links in store", site.Name, len(site.Links))
+		} else {
+			log.Printf("Not caching site %v because err: %v", siteName, err)
 		}
 		return site, err
 	} else {

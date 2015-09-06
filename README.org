@@ -11,7 +11,10 @@ CLOSED: [2015-09-05 Sat 22:40]
 + [X] Elm: fetch and render json
 *** DONE add other sites, and polish
 CLOSED: [2015-09-05 Sat 22:40]
-*** TODO add HN
+*** DONE add HN
+CLOSED: [2015-09-06 Sun 16:51]
 *** TODO compact layout
 *** TODO reliable and smooth http GET
 move fetching away from http GET to heroku scheduler.
+*** TODO feature: hide links
+and/or style them the same as 'visited' links

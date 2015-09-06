@@ -24,3 +24,6 @@ div.site ul li {
 a {
     text-decoration: none;
 }
+a:hover {
+    background-color: #efefef;
+}
