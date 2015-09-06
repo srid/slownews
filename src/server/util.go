@@ -26,7 +26,7 @@ func httpRespondJSON(w http.ResponseWriter, value interface{}) {
 	if err != nil {
 		httpFatal(w, err)
 	} else {
-		fmt.Fprint(w, data)
+		fmt.Fprintf(w, "%s", string(data))
 	}
 }
 
