@@ -29,7 +29,7 @@ func main() {
 		log.Fatal("PORT must be set")
 	}
 	http.HandleFunc("/data", handleData)
-	fs := http.FileServer(http.Dir("static"))
+	fs := http.FileServer(http.Dir("."))
 	http.Handle("/", fs)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
