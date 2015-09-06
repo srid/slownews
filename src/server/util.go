@@ -26,6 +26,7 @@ func httpRespondJSON(w http.ResponseWriter, value interface{}) {
 	if err != nil {
 		httpFatal(w, err)
 	} else {
+		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, "%s", string(data))
 	}
 }
