@@ -21,12 +21,12 @@ type RedditT3 struct {
 
 func getSubredditSite(subreddit string) (*Site, error) {
 	var response RedditListing
-	url := fmt.Sprintf("https://www.reddit.com/r/%s/top/.json?sort=top&t=week", subreddit)
+	url := fmt.Sprintf("https://www.reddit.com/%s/top/.json?sort=top&t=week", subreddit)
 	err := httpGetJSON(url, &response)
 	if err != nil {
 		return nil, err
 	}
-	return NewSite("r/programming", normalizeRedditResponse(response)), nil
+	return NewSite(subreddit, normalizeRedditResponse(response)), nil
 }
 
 // normalizeRedditResponse ...

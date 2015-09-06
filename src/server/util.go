@@ -20,6 +20,10 @@ func httpGetJSON(url string, value interface{}) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("Completed reading response with code %v", resp.StatusCode)
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("Unsuccessful HTTP response")
+	}
 	return json.Unmarshal(body, value)
 }
 

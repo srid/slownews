@@ -26,14 +26,18 @@ func init() {
 	if err != nil {
 		log.Fatalf("Invalid cache duration: %v", err)
 	}
+	log.Printf("CACHE_DURATION = %v", CACHE_DURATION)
 }
 
 // (s *store) IsStale ...
 func (s *Store) IsStale(siteName string) bool {
 	if site, ok := s.Sites[siteName]; ok {
-		return time.Now().Sub(site.LastFetched) > CACHE_DURATION
+		cacheExpiry := site.LastFetched.Add(CACHE_DURATION)
+		log.Printf("%v before %v?", cacheExpiry, time.Now())
+		return cacheExpiry.Before(time.Now())
+	} else {
+		return true
 	}
-	return true
 }
 
 func (s *Store) Put(site *Site) {
@@ -49,8 +53,15 @@ func (s *Store) Get(siteName string) *Site {
 
 func (s *Store) GetOrFetch(siteName string) (*Site, error) {
 	if store.IsStale(siteName) {
-		return getSubredditSite(siteName)
+		log.Printf("Fetching stale/missing site %v", siteName)
+		site, err := getSubredditSite(siteName)
+		if err == nil {
+			store.Put(site)
+			log.Printf("Stored site %v with %d links in store", site.Name, len(site.Links))
+		}
+		return site, err
 	} else {
+		log.Printf("Returning cached site %v", siteName)
 		return store.Get(siteName), nil
 	}
 }

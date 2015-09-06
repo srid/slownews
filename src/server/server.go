@@ -15,11 +15,13 @@ func init() {
 		sitesString = "r/programming:r/haskell:r/elm"
 	}
 	SITES = strings.Split(sitesString, ":")
+	log.Printf("SITES = %+v", SITES)
 }
 
 // handleData ...
 func handleData(w http.ResponseWriter, r *http.Request) {
 	sites := store.GetOrFetchMultiple(SITES)
+	log.Printf("Responding with %d sites", len(sites))
 	httpRespondJSON(w, sites)
 }
 
