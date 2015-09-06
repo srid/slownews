@@ -1,12 +1,10 @@
 * slownews
 
-
 #+CAPTION: Deploy
-[[https://heroku.com/deploy]]
+[[https://heroku.com/deploy][Deploy to Heroku]]
 
 ** tasks
-*** DONE normalize json
-CLOSED: [2015-09-05 Sat 14:49]
-*** TODO basic rendering in Elm
-*** DONE heroku deployment
-CLOSED: [2015-09-05 Sat 21:18]
+*** TODO mvp [2/3]
++ [X] project layout & heroku deployment
++ [X] Server: fetch reddit json
++ [ ] Elm: fetch and render json
