@@ -12,7 +12,7 @@ var SITES []string
 func init() {
 	sitesString := os.Getenv("SITES")
 	if sitesString == "" {
-		sitesString = HNSITENAME + ":r/programming:r/haskell:r/elm"
+		log.Fatalf("SITES is empty")
 	}
 	SITES = strings.Split(sitesString, ":")
 	log.Printf("SITES = %+v", SITES)

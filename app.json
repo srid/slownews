@@ -5,7 +5,7 @@
         "ELM_COMPILE": "make client",
         "SITES": {
             "description": "List of supported sites to fetch",
-            "value": "r/programming:r/haskell"
+            "value": "hn:r/programming:r/haskell"
         },
         "CACHE_DURATION": {
             "description": "Frequency of fetching upstream content",

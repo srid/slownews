@@ -14,8 +14,9 @@ type RedditListing struct {
 type RedditT3 struct {
 	Kind string `json:"kind"`
 	Data struct {
-		Title string `json:"title"`
-		Url   string `json:"url"`
+		Title   string  `json:"title"`
+		Url     string  `json:"url"`
+		Created float64 `json:"created_utc"`
 	} `json:"data"`
 }
 
@@ -35,7 +36,7 @@ func normalizeRedditResponse(listing RedditListing) []Link {
 	links := make([]Link, 0, len(listing.Data.Children))
 	for _, child := range listing.Data.Children {
 		links = append(links,
-			Link{Title: child.Data.Title, Url: child.Data.Url})
+			Link{Title: child.Data.Title, Url: child.Data.Url, Time: int(child.Data.Created)})
 	}
 	return links
 }

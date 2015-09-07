@@ -33,13 +33,3 @@ func getItem(itemId int) (Link, error) {
 	err := httpGetJSON(url, &link)
 	return link, err
 }
-
-// normalizeRedditResponse ...
-func normalizeHNResponse(listing RedditListing) []Link {
-	links := make([]Link, 0, len(listing.Data.Children))
-	for _, child := range listing.Data.Children {
-		links = append(links,
-			Link{Title: child.Data.Title, Url: child.Data.Url})
-	}
-	return links
-}

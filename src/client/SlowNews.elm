@@ -11,6 +11,7 @@ import Json.Encode as JE
 type alias Link =
   { title  : String
   , url    : String
+  , time   : Int
   }
 
 type alias Site =
@@ -28,6 +29,7 @@ decodeLink : J.Decoder Link
 decodeLink = Link
   `J.map`   ("title"  := J.string)
   `andMap`  ("url"    := J.string)
+  `andMap`  ("time"   := J.int)
 
 decodeSite : J.Decoder Site
 decodeSite = Site
@@ -59,9 +61,12 @@ view sites =
 
 viewSite : Site -> Html
 viewSite site =
+  let
+    links = site.links |> List.sortBy .time |> List.reverse
+  in
   H.div [class "site"]
     [ H.h2 [] [H.text site.name]
-    , H.ul [] <| List.map viewLink site.links ]
+    , H.ul [] <| List.map viewLink links ]
 
 viewLink : Link -> Html
 viewLink link =
