@@ -15,6 +15,12 @@ CLOSED: [2015-09-05 Sat 22:40]
 CLOSED: [2015-09-06 Sun 16:51]
 *** TODO compact layout
 *** TODO reliable and smooth http GET
-move fetching away from http GET to heroku scheduler.
+- move fetching away from http GET to heroku scheduler.
+- cache in redis to persist cache across deployments/restarts
 *** TODO feature: hide links
 and/or style them the same as 'visited' links
+*** TODO consider fetching from client side (Elm)
+no Go server required.
+- assuming reddit and HN api have the perms
+- use local storage to cache values
+- blog post worthy topic (transition from Go server to SPA elm and local storage)

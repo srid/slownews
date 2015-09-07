@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
+    "summary": "SlowNews Elm client",
     "repository": "https://github.com/srid/slownews.git",
     "license": "MIT",
     "source-directories": [
