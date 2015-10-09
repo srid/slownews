@@ -1,8 +1,5 @@
-all:	server client
+all:	client
 	@true
 
-server:
-	GOBIN=./bin go install ./src/server/
-
 client:
-	elm make src/client/SlowNews.elm
+	elm make web/SlowNews.elm --output=web/static/elm.js

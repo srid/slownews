@@ -5,4 +5,4 @@ erl_crash.dump
 *.ez
 
 /elm-stuff
-/elm.js
+/web/static/elm.js
