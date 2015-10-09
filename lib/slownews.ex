@@ -1,0 +1,2 @@
+defmodule Slownews do
+end
