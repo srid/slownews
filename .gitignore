@@ -1,6 +1,8 @@
-data
-elm-stuff
+/_build
+/cover
+/deps
+erl_crash.dump
+*.ez
 
-/bin
-/elm.js
-/server
+/elm-stuff
+/web/static/elm.js

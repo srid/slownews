@@ -1,8 +1,11 @@
-all:	server client
+all:	client
 	@true
 
-server:
-	GOBIN=./bin go install ./src/server/
-
 client:
-	elm make src/client/SlowNews.elm
+	elm make web/SlowNews.elm --output=web/static/elm.js
+
+server:
+	SITES=hn:programming PORT=4444 mix run --no-halt
+
+shell:
+	SITES=hn:programming PORT=4444 iex -S mix
