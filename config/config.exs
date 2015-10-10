@@ -8,7 +8,7 @@ config :slownews,
   sites: System.get_env("SITES")
 
 config :quantum, cron: [
-  "*/15 * * * *": &Slownews.fetchAll/0
+  "*/15 * * * *": &Slownews.Crawler.fetchAll/0
 ]
 
 # This configuration is loaded before any dependency and is restricted

@@ -10,7 +10,8 @@ defmodule Slownews.Supervisor do
     Logger.info "Starting Cowboy on port #{opts[:port]}"
 
     tree = [
-      Plug.Adapters.Cowboy.child_spec(:http, Slownews.Router, [], opts)
+      Plug.Adapters.Cowboy.child_spec(:http, Slownews.Router, [], opts),
+      Slownews.Crawler.child_spec()
     ]
     supervise(tree, strategy: :rest_for_one)
   end
