@@ -8,4 +8,19 @@ defmodule Slownews do
 
     Slownews.Supervisor.start_link(opts)
   end
+
+  def fetchAll() do
+    sites()
+    |> Enum.map(&makeSite/1)
+    |> Enum.map(&Slownews.Site.fetch/1)
+  end
+
+  def sites() do
+    Application.get_env(:slownews, :sites)
+    |> String.split(":")
+  end
+
+  def makeSite(site) do
+    Slownews.Site.Reddit.new site
+  end
 end

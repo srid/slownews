@@ -14,7 +14,7 @@ defmodule Slownews.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :httpoison],
+    [applications: [:logger, :cowboy, :plug, :httpoison, :quantum],
      mod: {Slownews, []},
      env: []]
   end
@@ -32,6 +32,7 @@ defmodule Slownews.Mixfile do
     [{:cowboy, "~> 1.0.0"},
      {:plug, "~> 1.0"},
      {:httpoison, "~> 0.7.2"},
-     {:poison, "~> 1.5"}]
+     {:poison, "~> 1.5"},
+     {:quantum, ">= 1.5.0"}]
   end
 end

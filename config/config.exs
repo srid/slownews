@@ -4,6 +4,12 @@ use Mix.Config
 
 config :slownews,
   port: System.get_env("PORT")
+config :slownews,
+  sites: System.get_env("SITES")
+
+config :quantum, cron: [
+  "*/15 * * * *": &Slownews.fetchAll/0
+]
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

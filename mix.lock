@@ -7,6 +7,7 @@
   "plug": {:hex, :plug, "1.0.2"},
   "plug_heartbeat": {:hex, :plug_heartbeat, "0.2.0"},
   "poison": {:hex, :poison, "1.5.0"},
+  "quantum": {:hex, :quantum, "1.5.0"},
   "ranch": {:hex, :ranch, "1.1.0"},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"},
   "trot": {:git, "https://github.com/hexedpackets/trot.git", "299027ec29ba7840a27f4eecf2b95a2bf45a73de", []}}

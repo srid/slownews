@@ -1,25 +1,33 @@
 defmodule Slownews.Site.Reddit do
   use HTTPoison.Base
-  defstruct subreddit: "reddit.com"
+  require Logger
 
-  @expected_fields ~w(title permalink created_utc)
+  defstruct subreddit: "reddit.com"
 
   def new(name), do: %Slownews.Site.Reddit{subreddit: name}
 
   def process_url(subreddit) do
-    "https://www.reddit.com/r/#{subreddit}.json"
+    "https://www.reddit.com/r/#{subreddit}/top/.json?sort=top&t=week"
   end
 
   def process_response_body(data) do
     data
     |> Poison.decode!
     |> get_in(["data", "children"])
-    |> Enum.map(&(get_in(&1, ["data"]) |> Dict.take(@expected_fields)))
+    |> Enum.map(&(get_in(&1, ["data"]) |> transform_link))
+  end
+
+  def transform_link(link) do
+    %{title: link["title"],
+      url: link["url"],
+      meta_url: "https://www.reddit.com" <> link["permalink"],
+      created: link["created_utc"]}
   end
 
   defimpl Slownews.Site, for: Slownews.Site.Reddit do
     def fetch(redditSite) do
-      Slownews.Site.Reddit.get!(redditSite.subreddit)
+      Logger.info "Fetching reddit #{redditSite.subreddit}"
+      Slownews.Site.Reddit.get!(redditSite.subreddit).body
     end
   end
 end
