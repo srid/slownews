@@ -2,7 +2,7 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :trot, :port, 4001
+config :trot, :port, System.get_env("PORT")
 config :trot, :router, Slownews.Router
 
 # This configuration is loaded before any dependency and is restricted
