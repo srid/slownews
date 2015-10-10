@@ -1,0 +1,8 @@
+%{"calliope": {:hex, :calliope, "0.3.0"},
+  "cowboy": {:hex, :cowboy, "1.0.3"},
+  "cowlib": {:hex, :cowlib, "1.0.1"},
+  "plug": {:hex, :plug, "0.14.0"},
+  "plug_heartbeat": {:hex, :plug_heartbeat, "0.2.0"},
+  "poison": {:hex, :poison, "1.5.0"},
+  "ranch": {:hex, :ranch, "1.1.0"},
+  "trot": {:git, "https://github.com/hexedpackets/trot.git", "299027ec29ba7840a27f4eecf2b95a2bf45a73de", []}}
