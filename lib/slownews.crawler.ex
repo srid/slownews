@@ -63,6 +63,11 @@ defmodule Slownews.Crawler.Util do
   end
 
   def makeSite(site) do
-    Slownews.Site.Reddit.new site
+    case site do
+      "hn" ->
+        Slownews.Site.HackerNews.new
+      subreddit ->
+        Slownews.Site.Reddit.new site
+    end
   end
 end
