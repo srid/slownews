@@ -3,6 +3,12 @@
 #+CAPTION: Deploy
 [[https://heroku.com/deploy][Deploy to Heroku]]
 
+** local dev
+
+#+BEGIN_SRC shell
+  PORT=4444 mix run --no-halt
+#+END_SRC
+
 ** tasks
 *** DONE mvp [3/3]
 CLOSED: [2015-09-05 Sat 22:40]

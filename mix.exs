@@ -14,7 +14,9 @@ defmodule Slownews.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :trot]]
+    [applications: [:logger, :cowboy, :plug],
+     mod: {Slownews, []},
+     env: []]
   end
 
   # Dependencies can be Hex packages:
@@ -27,6 +29,7 @@ defmodule Slownews.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:trot, github: "hexedpackets/trot"}]
+    [{:cowboy, "~> 1.0.0"},
+     {:plug, "~> 1.0"}]
   end
 end

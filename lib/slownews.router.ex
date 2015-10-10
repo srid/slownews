@@ -1,12 +1,33 @@
 defmodule Slownews.Router do
-  use Trot.Router
+  use Plug.Router
+
+  if Mix.env == :dev do
+    use Plug.Debugger
+  end
+
+  use Plug.ErrorHandler
 
   plug Plug.Logger
   plug Plug.Static, at: "/", from: "web/static"
 
+  plug :match
+  plug :dispatch
+
   get "/" do
-    {:redirect, "/index.html"}
+    conn
+    |> put_resp_header("location", "/index.html")
+    |> send_resp(conn.status || 302, "Moved")
   end
 
-  use Trot.NotFound
+  get "/data" do
+    send_resp(conn, 200, "[]")
+  end
+
+  match _ do
+    send_resp(conn, 404, "404, may I help you?")
+  end
+
+  defp handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+    send_resp(conn, conn.status, "Something went wrong")
+  end
 end
