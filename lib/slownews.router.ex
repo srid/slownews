@@ -20,7 +20,9 @@ defmodule Slownews.Router do
   end
 
   get "/data" do
-    send_resp(conn, 200, "[]")
+    data = Slownews.getSiteResults
+    |> Poison.encode!
+    send_resp(conn, 200, data)
   end
 
   match _ do

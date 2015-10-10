@@ -30,4 +30,8 @@ defmodule Slownews.Site.Reddit do
       Slownews.Site.Reddit.get!(redditSite.subreddit).body
     end
   end
+
+  defimpl String.Chars, for: Slownews.Site.Reddit do
+    def to_string(redditSite), do: redditSite.subreddit
+  end
 end
