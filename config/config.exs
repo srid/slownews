@@ -9,9 +9,6 @@ config :slownews,
 config :slownews,
   hackernews_maxlinks: 2
 
-config :quantum, cron: [
-  "*/15 * * * *": &Slownews.Crawler.fetchAll/0
-]
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
@@ -38,6 +35,4 @@ config :quantum, cron: [
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 
-if File.exists? "#{Mix.env}.exs" do
-  import_config "#{Mix.env}.exs"
-end
+import_config "#{Mix.env}.exs"
