@@ -20,7 +20,10 @@ defmodule Slownews.Router do
   end
 
   get "/data" do
-    data = Slownews.Crawler.Util.getSiteResults
+    siteNames = Slownews.Crawler.Util.sites
+    allSites = Slownews.Crawler.Util.getSiteResults
+    data = siteNames
+    |> Enum.map(fn (siteName) -> %{name: siteName, links: Map.get(allSites, siteName)} end)
     |> Poison.encode!
     send_resp(conn, 200, data)
   end

@@ -6,3 +6,6 @@ client:
 
 server:
 	SITES=haskell PORT=4444 mix run --no-halt
+
+shell:
+	SITES=haskell PORT=4444 iex -S mix
