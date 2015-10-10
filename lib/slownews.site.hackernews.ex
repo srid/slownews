@@ -11,8 +11,8 @@ defmodule Slownews.Site.HackerNews do
     end
   end
 
-  defimpl String.Chars, for: __MODULE__ do
-    def to_string(hnSite), do: "hn"
+  defimpl String.Chars, for: Slownews.Site.HackerNews do
+    def to_string(_), do: "hn"
   end
 end
 
