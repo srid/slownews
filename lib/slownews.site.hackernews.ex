@@ -19,12 +19,12 @@ end
 defmodule Slownews.Site.HackerNews.Client do
   use HTTPoison.Base
 
-  @maxlinks 2
+  @maxlinks Application.get_env(:slownews, :hackernews_maxlinks)
 
   def getBest! do
     # TODO: parallelize fetches
     # TODO: cache fetching of individual links? (only matters during development)
-    Logger.info "Fetching HackerNews"
+    Logger.info "Fetching HackerNews (maxlinks = #{@maxlinks})"
     get!("best").body
     |> Enum.take(@maxlinks)
     |> Enum.map(&get!(&1).body)
