@@ -46,7 +46,7 @@ defmodule Slownews.Site.HackerNews.Client do
   end
 
   def transform_link(link) do
-    meta_url = "https://news.ycombinator.com?id=" <> to_string(link["id"])
+    meta_url = "https://news.ycombinator.com/item?id=" <> to_string(link["id"])
     %{title: link["title"],
       url: link["url"] || meta_url,
       meta_url: meta_url,
