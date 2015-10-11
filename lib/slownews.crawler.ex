@@ -56,8 +56,10 @@ defmodule Slownews.Crawler.Util do
   end
 
   def fetchAndStore(site) do
+    Logger.info "Fetching site #{site}"
     results = Slownews.Site.fetch(site)
     :ets.insert(:site_results, {to_string(site), results})
+    Logger.info "Stored reddit #{site} in ETS"
   end
 
   def getSiteResults() do

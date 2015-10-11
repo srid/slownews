@@ -6,7 +6,7 @@
 ** local dev
 
 #+BEGIN_SRC shell
-  make run
+  make 
 #+END_SRC
 
 ** tasks

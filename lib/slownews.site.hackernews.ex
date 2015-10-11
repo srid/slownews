@@ -24,7 +24,6 @@ defmodule Slownews.Site.HackerNews.Client do
   def getBest! do
     # TODO: parallelize fetches
     # TODO: cache fetching of individual links? (only matters during development)
-    Logger.info "Fetching HackerNews (maxlinks = #{@maxlinks})"
     get!("best").body
     |> Enum.take(@maxlinks)
     |> Enum.map(&get!(&1).body)

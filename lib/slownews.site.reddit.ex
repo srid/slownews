@@ -1,13 +1,12 @@
 require Logger
 
 defmodule Slownews.Site.Reddit do
-  defstruct subreddit: "reddit.com"
+  defstruct subreddit: "r/reddit.com"
 
   def new(name), do: %Slownews.Site.Reddit{subreddit: name}
 
   defimpl Slownews.Site, for: Slownews.Site.Reddit do
     def fetch(redditSite) do
-      Logger.info "Fetching reddit #{redditSite.subreddit}"
       Slownews.Site.Reddit.Client.get!(redditSite.subreddit, [], [recv_timeout: 60*1000]).body
     end
   end
@@ -21,7 +20,7 @@ defmodule Slownews.Site.Reddit.Client do
   use HTTPoison.Base
 
   def process_url(subreddit) do
-    "https://www.reddit.com/r/#{subreddit}/top/.json?sort=top&t=week"
+    "https://www.reddit.com/#{subreddit}/top/.json?sort=top&t=week"
   end
 
   def process_response_body(data) do

@@ -5,7 +5,7 @@
         "ELM_COMPILE": "make client",
         "SITES": {
             "description": "List of supported sites to fetch",
-            "value": "hn:programming:haskell"
+            "value": "hn:r/programming:r/todayilearned"
         }
     },
     "buildpacks": [
