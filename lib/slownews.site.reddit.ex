@@ -8,7 +8,7 @@ defmodule Slownews.Site.Reddit do
   defimpl Slownews.Site, for: Slownews.Site.Reddit do
     def fetch(redditSite) do
       Logger.info "Fetching reddit #{redditSite.subreddit}"
-      Slownews.Site.Reddit.Client.get!(redditSite.subreddit).body
+      Slownews.Site.Reddit.Client.get!(redditSite.subreddit, [], [recv_timeout: 60*1000]).body
     end
   end
 
