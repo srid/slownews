@@ -9,3 +9,6 @@ server:
 
 shell:
 	SITES=hn:programming PORT=4444 iex -S mix
+
+heroku:
+	git push heroku master && heroku logs -t

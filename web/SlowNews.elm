@@ -28,9 +28,6 @@ type alias Site =
 type alias Model =
   List Site
 
-dateFromUnix unixtime =
-  unixtime * 1000 |> toFloat |> Date.fromTime |> Result.Ok
-
 dateToString : Date.Date -> String
 dateToString date =
   String.join ""
@@ -41,11 +38,16 @@ dateToString date =
           , Date.day date |> toString
           , " " ]
 
+deflateSite site =
+  List.map (\link -> (site.name, link)) site.links
 
 -- JSON decoders
 
 andMap : J.Decoder (a -> b) -> J.Decoder a -> J.Decoder b
 andMap = J.object2 (<|)
+
+dateFromUnix unixtime =
+  unixtime * 1000 |> toFloat |> Date.fromTime |> Result.Ok
 
 decodeDate : J.Decoder (Date.Date)
 decodeDate = J.customDecoder J.int dateFromUnix 
@@ -65,6 +67,9 @@ decodeSite = Site
 decodeModel : J.Decoder Model
 decodeModel = J.list decodeSite
 
+
+-- Main routines
+
 getData : Task Http.Error Model
 getData =
   Http.get decodeModel "/data"
@@ -81,29 +86,36 @@ main : Signal Html
 main =
   Signal.map view dataMailbox.signal
 
+
+-- View
+
 view : Model -> Html
 view sites =
   let
-    siteViews = List.map viewSite sites
-    allViews  = siteViews ++ [viewFooter]
+    allLinks = List.concatMap deflateSite sites
+    allSites = List.map .name sites
+    mainView = viewAllLinks allSites allLinks
+    allViews  = [mainView, viewFooter]
   in
     H.div [] allViews
 
-viewSite : Site -> Html
-viewSite site =
+viewAllLinks : List String -> List (String, Link) -> Html
+viewAllLinks allSites allLinks =
   let
-    links = site.links |> List.sortBy (.created >> Date.toTime) |> List.reverse
+    links     = allLinks |> List.sortBy (snd >> .created >> Date.toTime) |> List.reverse
+    siteTitle = "Current week for - " ++ (String.join ":" allSites)
   in
-  H.div [class "site"]
-    [ H.h2 [] [H.text site.name]
-    , H.ul [] <| List.map viewLink links ]
+    H.div [class "site"]
+       [ H.h2 [] [H.text siteTitle]
+       , H.ul [] <| List.map viewLink links ]
 
-viewLink : Link -> Html
-viewLink link =
+viewLink : (String, Link) -> Html
+viewLink (name, link) =
   H.li []
-     [ H.a [href link.url] [H.text link.title]
+     [ H.text <| "[" ++ (link.created |> Date.dayOfWeek |> toString) ++ "] "
+     , H.a [href link.url] [H.text link.title]
      , H.text " "
-     , H.a [class "meta", href link.metaUrl, title (link.created |> dateToString)] [H.text "meta"] ]
+     , H.a [class "meta", href link.metaUrl, title (link.created |> dateToString)] [H.text name] ]
 
 viewFooter : Html
 viewFooter =
