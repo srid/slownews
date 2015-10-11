@@ -4,6 +4,7 @@ import Signal
 import String
 import Result
 import Date
+import Set
 import Task exposing (..)
 import Html as H
 import Html exposing (Html)
@@ -18,15 +19,11 @@ type alias Link =
   , url       : String
   , metaUrl   : String
   , created   : Date.Date
-  }
-
-type alias Site =
-  { name   : String
-  , links  : List Link
+  , site      : String
   }
 
 type alias Model =
-  List Site
+  List Link
 
 dateToString : Date.Date -> String
 dateToString date =
@@ -38,8 +35,10 @@ dateToString date =
           , Date.day date |> toString
           , " " ]
 
-deflateSite site =
-  List.map (\link -> (site.name, link)) site.links
+
+summarizeLinks : List Link -> String
+summarizeLinks =
+  (List.map .site) >> Set.fromList >> Set.toList >> String.join ":"
 
 -- JSON decoders
 
@@ -58,14 +57,10 @@ decodeLink = Link
   `andMap`  ("url"       := J.string)
   `andMap`  ("meta_url"  := J.string)
   `andMap`  ("created"   := decodeDate)
-
-decodeSite : J.Decoder Site
-decodeSite = Site
-  `J.map`  ("name"    := J.string)
-  `andMap` ("links"   := J.list decodeLink)
+  `andMap`  ("site"      := J.string)
 
 decodeModel : J.Decoder Model
-decodeModel = J.list decodeSite
+decodeModel = J.list decodeLink
 
 
 -- Main routines
@@ -76,7 +71,7 @@ getData =
 
 dataMailbox : Signal.Mailbox Model
 dataMailbox =
-  Signal.mailbox [{ name = "Loading...", links = []}]
+  Signal.mailbox []
 
 port runner : Task Http.Error ()
 port runner =
@@ -90,32 +85,30 @@ main =
 -- View
 
 view : Model -> Html
-view sites =
+view links =
   let
-    allLinks = List.concatMap deflateSite sites
-    allSites = List.map .name sites
-    mainView = viewAllLinks allSites allLinks
+    mainView = viewLinks links
     allViews  = [mainView, viewFooter]
   in
     H.div [] allViews
 
-viewAllLinks : List String -> List (String, Link) -> Html
-viewAllLinks allSites allLinks =
+viewLinks : List Link -> Html
+viewLinks links =
   let
-    links     = allLinks |> List.sortBy (snd >> .created >> Date.toTime) |> List.reverse
-    siteTitle = "Current week for - " ++ (String.join ":" allSites)
+    orderedLinks  = links |> List.sortBy (.created >> Date.toTime) |> List.reverse
+    siteTitle     = "Current week for - " ++ (summarizeLinks links)
   in
     H.div [class "site"]
        [ H.h2 [] [H.text siteTitle]
-       , H.ul [] <| List.map viewLink links ]
+       , H.ul [] <| List.map viewLink orderedLinks ]
 
-viewLink : (String, Link) -> Html
-viewLink (name, link) =
+viewLink : Link -> Html
+viewLink link =
   H.li []
      [ H.text <| "[" ++ (link.created |> Date.dayOfWeek |> toString) ++ "] "
      , H.a [href link.url] [H.text link.title]
      , H.text " "
-     , H.a [class "meta", href link.metaUrl, title (link.created |> dateToString)] [H.text name] ]
+     , H.a [class "meta", href link.metaUrl, title (link.created |> dateToString)] [H.text link.site] ]
 
 viewFooter : Html
 viewFooter =

@@ -59,12 +59,25 @@ defmodule Slownews.Crawler.Util do
     Logger.info "Fetching site #{site}"
     results = Slownews.Site.fetch(site)
     :ets.insert(:site_results, {to_string(site), results})
-    Logger.info "Stored reddit #{site} in ETS"
+    Logger.info "Stored site #{site} in ETS"
   end
 
-  def getSiteResults() do
-    :ets.tab2list(:site_results)
-    |> Enum.into(Map.new)
+  def getLinksFor(site) when is_binary(site) do
+    getLinksFor([site])
+  end
+
+  def getLinksFor([site]) do
+    case :ets.lookup(:site_results, site) do
+      [] ->
+        []
+      [{_, links}] ->
+        links
+          |> Enum.map(&Dict.put(&1, :site, site))
+    end
+  end
+
+  def getLinksFor([site|rest]) do
+    getLinksFor([site]) ++ Enum.flat_map(rest, &getLinksFor/1)
   end
 
   def sites() do
