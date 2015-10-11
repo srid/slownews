@@ -24,9 +24,10 @@ defmodule Slownews.Site.HackerNews.Client do
   def getBest! do
     # TODO: parallelize fetches
     # TODO: cache fetching of individual links? (only matters during development)
-    get!("best").body
+    opts = Application.get_env(:slownews, :hackney_opts)
+    get!("best", opts).body
     |> Enum.take(@maxlinks)
-    |> Enum.map(&get!(&1).body)
+    |> Enum.map(&get!(&1, opts).body)
     |> Enum.map(&transform_link/1)
   end
 

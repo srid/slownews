@@ -25,20 +25,9 @@ type alias Link =
 type alias Model =
   List Link
 
-dateToString : Date.Date -> String
-dateToString date =
-  String.join ""
-          [ Date.dayOfWeek date |> toString
-          , ", "
-          , Date.month date |> toString
-          , " "
-          , Date.day date |> toString
-          , " " ]
-
-
 summarizeLinks : List Link -> String
 summarizeLinks =
-  (List.map .site) >> Set.fromList >> Set.toList >> String.join ":"
+  (List.map .site) >> Set.fromList >> Set.toList >> List.sort >> String.join ":"
 
 -- JSON decoders
 
@@ -49,7 +38,7 @@ dateFromUnix unixtime =
   unixtime * 1000 |> toFloat |> Date.fromTime |> Result.Ok
 
 decodeDate : J.Decoder (Date.Date)
-decodeDate = J.customDecoder J.int dateFromUnix 
+decodeDate = J.customDecoder J.int dateFromUnix
 
 decodeLink : J.Decoder Link
 decodeLink = Link
@@ -108,7 +97,7 @@ viewLink link =
      [ H.text <| "[" ++ (link.created |> Date.dayOfWeek |> toString) ++ "] "
      , H.a [href link.url] [H.text link.title]
      , H.text " "
-     , H.a [class "meta", href link.metaUrl, title (link.created |> dateToString)] [H.text link.site] ]
+     , H.a [class "meta", href link.metaUrl] [H.text link.site] ]
 
 viewFooter : Html
 viewFooter =

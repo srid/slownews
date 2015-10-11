@@ -7,7 +7,8 @@ defmodule Slownews.Site.Reddit do
 
   defimpl Slownews.Site, for: Slownews.Site.Reddit do
     def fetch(redditSite) do
-      Slownews.Site.Reddit.Client.get!(redditSite.subreddit, [], [recv_timeout: 60*1000]).body
+      opts = Application.get_env(:slownews, :hackney_opts)
+      Slownews.Site.Reddit.Client.get!(redditSite.subreddit, [], opts).body
     end
   end
 
