@@ -45,6 +45,7 @@ defmodule Slownews.Crawler do
     Util.sites()
     |> Enum.map(&Util.makeSite/1)
     |> Enum.map(&Util.fetchAndStore/1)
+    Logger.info "Done fetching all sites (#{reason})"
   end
 
 end
