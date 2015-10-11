@@ -9,8 +9,9 @@ import Json.Decode exposing ((:=))
 import Json.Encode as JE
 
 type alias Link =
-  { title  : String
-  , url    : String
+  { title     : String
+  , url       : String
+  , metaUrl   : String
   , created   : Int
   }
 
@@ -29,6 +30,7 @@ decodeLink : J.Decoder Link
 decodeLink = Link
   `J.map`   ("title"     := J.string)
   `andMap`  ("url"       := J.string)
+  `andMap`  ("meta_url"  := J.string)
   `andMap`  ("created"   := J.int)
 
 decodeSite : J.Decoder Site
@@ -70,4 +72,7 @@ viewSite site =
 
 viewLink : Link -> Html
 viewLink link =
-  H.li [] [H.a [href link.url] [H.text link.title]]
+  H.li []
+     [ H.a [href link.url] [H.text link.title]
+     , H.text " "
+     , H.a [class "meta", href link.metaUrl] [H.text "meta"] ]
