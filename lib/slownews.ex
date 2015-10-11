@@ -5,7 +5,10 @@ defmodule Slownews do
   def start(_type, _args) do
     opts = []
     port = Application.get_env(:slownews, :port)
-    opts = Keyword.put(opts, :port, String.to_integer(port))
+
+    # Cowboy options, passed down by the supervisor:
+    opts = opts
+      |> Keyword.put(:port, String.to_integer(port))
 
     Slownews.Supervisor.start_link(opts)
   end

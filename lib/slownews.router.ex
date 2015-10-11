@@ -15,8 +15,8 @@ defmodule Slownews.Router do
 
   get "/" do
     conn
-    |> put_resp_header("location", "/index.html")
-    |> send_resp(conn.status || 302, "Moved")
+    |> put_resp_header("content-type", "text/html")
+    |> send_file(200, "web/static/index.html")
   end
 
   get "/data" do
