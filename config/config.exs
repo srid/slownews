@@ -7,7 +7,7 @@ config :slownews,
 config :slownews,
   sites: System.get_env("SITES")
 config :slownews,
-  hackernews_maxlinks: 2
+  hackernews_maxlinks: 20
 
 
 # This configuration is loaded before any dependency and is restricted
