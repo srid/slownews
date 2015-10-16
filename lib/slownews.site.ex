@@ -37,3 +37,18 @@ defmodule Slownews.Site.Spec do
     kl |> Enum.map(fn ({k,v}) -> to_string(k) <> "=" <> to_string(v) end)
   end
 end
+
+defmodule Slownews.Site.Factory do
+  def newFromSpec(spec) do
+    spec |> Slownews.Site.Spec.parse |> makeSite
+  end
+
+  defp makeSite({name, opts}) do
+    case name do
+      "hn" ->
+        Slownews.Site.HackerNews.new opts
+      _ ->
+        Slownews.Site.Reddit.new name, opts
+    end
+  end
+end

@@ -82,16 +82,6 @@ defmodule Slownews.Crawler.Util do
   def sites() do
     Application.get_env(:slownews, :sites)
       |> String.split(":")
-      |> Enum.map(&Slownews.Site.Spec.parse/1)
-      |> Enum.map(&makeSite/1)
-  end
-
-  defp makeSite({name, opts}) do
-    case name do
-      "hn" ->
-        Slownews.Site.HackerNews.new opts
-      _ ->
-        Slownews.Site.Reddit.new name, opts
-    end
+      |> Enum.map(&Slownews.Site.Factory.newFromSpec/1)
   end
 end
