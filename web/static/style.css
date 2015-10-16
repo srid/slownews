@@ -44,3 +44,13 @@ a.meta {
     margin-bottom: 2em;
 
 }
+
+td {
+    padding: 0.2em;
+    padding-bottom: 0.5em;
+}
+
+td.meta {
+    text-align: right;
+    padding-right: 0.5em;
+}

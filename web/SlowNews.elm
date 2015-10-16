@@ -94,11 +94,11 @@ viewLinks links =
 
 viewLink : Link -> Html
 viewLink link =
-  H.li []
-     [ H.text <| "[" ++ (link.created |> Date.dayOfWeek |> toString) ++ "] "
-     , H.a [href link.url] [H.text link.title]
-     , H.text " "
-     , viewMeta link.site link.metaUrl ]
+  H.tr []
+     [ H.td [] [H.text <| (link.created |> Date.dayOfWeek |> toString)]
+     , H.td [class "meta"] [viewMeta link.site link.metaUrl ]
+     , H.td [] [H.a [href link.url] [H.text link.title]]
+     ]
 
 viewMeta : String -> String -> Html
 viewMeta name url =
