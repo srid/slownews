@@ -66,7 +66,6 @@ defmodule Slownews.Crawler.Util do
   end
 
   def getLinksFor([site]) do
-    IO.puts "Looking up #{site}"
     case :ets.lookup(:site_results, site) do
       [] ->
         []

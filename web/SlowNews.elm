@@ -85,10 +85,9 @@ viewLinks : List Link -> Html
 viewLinks links =
   let
     orderedLinks  = links |> List.sortBy (.created >> Date.toTime) |> List.reverse
-    siteTitle     = "Current week for - " ++ (summarizeLinks links)
   in
     H.div [class "site"]
-       [ H.h2 [] [H.text siteTitle]
+       [ H.h2 [] [H.text "SlowNews"]
        , H.ul [] <| List.map viewLink orderedLinks ]
 
 viewLink : Link -> Html
