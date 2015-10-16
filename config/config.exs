@@ -7,8 +7,6 @@ config :slownews,
 config :slownews,
   sites: System.get_env("SITES")
 config :slownews,
-  hackernews_maxlinks: 20
-config :slownews,
   hackney_opts: [recv_timeout: 60*1000, "User-agent": "SlowNews <https://github.com/srid/slownews>"]
 
 # This configuration is loaded before any dependency and is restricted

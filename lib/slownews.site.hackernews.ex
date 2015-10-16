@@ -1,32 +1,35 @@
 require Logger
 
 defmodule Slownews.Site.HackerNews do
-  defstruct dummy: __MODULE__
+  defstruct max: 20
 
-  def new(), do: %Slownews.Site.HackerNews{}
+  def new(_name, opts \\ []) do
+    max = Keyword.get(opts, :max, 20)
+    %Slownews.Site.HackerNews{max: max}
+  end 
 
   defimpl Slownews.Site, for: Slownews.Site.HackerNews do
-    def fetch(_site) do
-      Slownews.Site.HackerNews.Client.getBest!()
+    def fetch(site) do
+      Slownews.Site.HackerNews.Client.getBest!(site.max)
     end
   end
 
   defimpl String.Chars, for: Slownews.Site.HackerNews do
-    def to_string(_), do: "hn"
+    def to_string(hn) do
+      Slownews.Site.Spec.new("hn", max: hn.max)
+    end
   end
 end
 
 defmodule Slownews.Site.HackerNews.Client do
   use HTTPoison.Base
 
-  @maxlinks Application.get_env(:slownews, :hackernews_maxlinks)
-
-  def getBest! do
+  def getBest!(maxlinks) do
     # TODO: parallelize fetches
     # TODO: cache fetching of individual links? (only matters during development)
     opts = Application.get_env(:slownews, :hackney_opts)
     get!("best", opts).body
-    |> Enum.take(@maxlinks)
+    |> Enum.take(maxlinks)
     |> Enum.map(&get!(&1, opts).body)
     |> Enum.map(&transform_link/1)
   end

@@ -43,7 +43,6 @@ defmodule Slownews.Crawler do
   def _fetchAll(reason) do
     Logger.info "Fetching all sites (#{reason})"
     Util.sites()
-    |> Enum.map(&Util.makeSite/1)
     |> Enum.map(&Util.fetchAndStore/1)
     Logger.info "Done fetching all sites (#{reason})"
   end
@@ -67,6 +66,7 @@ defmodule Slownews.Crawler.Util do
   end
 
   def getLinksFor([site]) do
+    IO.puts "Looking up #{site}"
     case :ets.lookup(:site_results, site) do
       [] ->
         []
@@ -82,15 +82,17 @@ defmodule Slownews.Crawler.Util do
 
   def sites() do
     Application.get_env(:slownews, :sites)
-    |> String.split(":")
+      |> String.split(":")
+      |> Enum.map(&Slownews.Site.Spec.parse/1)
+      |> Enum.map(&makeSite/1)
   end
 
-  def makeSite(site) do
-    case site do
+  defp makeSite({name, opts}) do
+    case name do
       "hn" ->
-        Slownews.Site.HackerNews.new
+        Slownews.Site.HackerNews.new opts
       _ ->
-        Slownews.Site.Reddit.new site
+        Slownews.Site.Reddit.new name, opts
     end
   end
 end

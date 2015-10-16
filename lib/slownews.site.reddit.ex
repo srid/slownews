@@ -1,19 +1,25 @@
 require Logger
 
 defmodule Slownews.Site.Reddit do
-  defstruct subreddit: "r/reddit.com"
+  defstruct subreddit: "r/reddit.com", max: 20
 
-  def new(name), do: %Slownews.Site.Reddit{subreddit: name}
+  def new(name, opts \\ []) do
+    max = Keyword.get(opts, :max, 20)
+    %Slownews.Site.Reddit{subreddit: name, max: max}
+  end
 
   defimpl Slownews.Site, for: Slownews.Site.Reddit do
     def fetch(redditSite) do
       opts = Application.get_env(:slownews, :hackney_opts)
       Slownews.Site.Reddit.Client.get!(redditSite.subreddit, [], opts).body
+      |> Enum.take(redditSite.max)
     end
   end
 
   defimpl String.Chars, for: Slownews.Site.Reddit do
-    def to_string(redditSite), do: redditSite.subreddit
+    def to_string(redditSite) do
+      Slownews.Site.Spec.new(redditSite.subreddit, max: redditSite.max)
+    end
   end
 end
 

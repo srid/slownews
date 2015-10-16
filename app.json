@@ -5,7 +5,7 @@
         "ELM_COMPILE": "make client",
         "SITES": {
             "description": "List of supported sites to fetch",
-            "value": "hn:r/programming:r/todayilearned"
+            "value": "hn:r/programming:r/todayilearned#max=5:r/funny#max=1:r/videos#max=2"
         }
     },
     "buildpacks": [
