@@ -13,4 +13,4 @@ shell:
 	SITES=${SITES} PORT=4444 iex -S mix
 
 heroku:
-	git push heroku master && heroku logs -t
+	git push -f heroku master && heroku logs -t

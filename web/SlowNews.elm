@@ -1,6 +1,8 @@
+import Debug exposing (log)
 import Http
 import Html.Attributes exposing (..)
 import Signal
+import Char
 import String
 import Result
 import Date
@@ -96,9 +98,48 @@ viewLink link =
      [ H.text <| "[" ++ (link.created |> Date.dayOfWeek |> toString) ++ "] "
      , H.a [href link.url] [H.text link.title]
      , H.text " "
-     , H.a [class "meta", href link.metaUrl] [H.text link.site] ]
+     , viewMeta link.site link.metaUrl ]
+
+viewMeta : String -> String -> Html
+viewMeta name url =
+  let
+    cssStyle = style [
+                ("class", "meta")
+               ,("color", hashToFg name)
+               ,("background-color", hashToBg name)
+               ]
+  in
+    H.a [cssStyle, href url] [H.text name]
 
 viewFooter : Html
 viewFooter =
   H.div [id "footer"]
    [ H.a [href "https://github.com/srid/slownews"] [H.text "Fork SlowNews on GitHub"]]
+
+-- View util
+
+hashToColor : String -> Int
+hashToColor s =
+  let
+    hash = s |> String.toList |> List.map Char.toCode |> List.sum
+    hue = hash % 360
+  in
+    hue
+
+hashToBg : String -> String
+hashToBg s =
+  let
+    hue = s |> hashToColor |> toString
+  in
+    "hsl(" ++ hue ++ ",40%,90%)"
+
+hashToFg : String -> String
+hashToFg s =
+  let
+    hue = s |> hashToColor |> complementColor |> toString 
+  in
+    "hsl(" ++ hue ++ ",100%,50%)"
+
+complementColor : Int -> Int
+complementColor=
+  (+) 180 >> (flip (%)) 360
