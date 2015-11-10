@@ -5,6 +5,8 @@ import Signal
 import Char
 import String
 import Result
+import List
+import Maybe
 import Date
 import Set
 import Task exposing (..)
@@ -103,13 +105,14 @@ viewLink link =
 viewMeta : String -> String -> Html
 viewMeta name url =
   let
+    shortName = shortenSiteName name
     cssStyle = style [
                 ("class", "meta")
-               ,("color", hashToFg name)
-               ,("background-color", hashToBg name)
+               ,("color", hashToFg shortName)
+               ,("background-color", hashToBg shortName)
                ]
   in
-    H.a [cssStyle, href url] [H.text name]
+    H.a [cssStyle, href url] [H.text shortName]
 
 viewFooter : Html
 viewFooter =
@@ -117,6 +120,10 @@ viewFooter =
    [ H.a [href "https://github.com/srid/slownews"] [H.text "Fork SlowNews on GitHub"]]
 
 -- View util
+
+shortenSiteName : String -> String
+shortenSiteName =
+  String.split "#" >> List.head >> Maybe.withDefault "unknown"
 
 hashToColor : String -> Int
 hashToColor s =
