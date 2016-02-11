@@ -108,8 +108,8 @@ viewMeta name url =
     shortName = shortenSiteName name
     cssStyle = style [
                 ("class", "meta")
-               ,("color", hashToFg shortName)
-               ,("background-color", hashToBg shortName)
+               ,("color", "pink")
+               ,("background-color", "#444")
                ]
   in
     H.a [cssStyle, href url] [H.text shortName]
@@ -124,29 +124,3 @@ viewFooter =
 shortenSiteName : String -> String
 shortenSiteName =
   String.split "#" >> List.head >> Maybe.withDefault "unknown"
-
-hashToColor : String -> Int
-hashToColor s =
-  let
-    hash = s |> String.toList |> List.map Char.toCode |> List.sum
-    hue = hash % 360
-  in
-    hue
-
-hashToBg : String -> String
-hashToBg s =
-  let
-    hue = s |> hashToColor |> toString
-  in
-    "hsl(" ++ hue ++ ",40%,90%)"
-
-hashToFg : String -> String
-hashToFg s =
-  let
-    hue = s |> hashToColor |> complementColor |> toString 
-  in
-    "hsl(" ++ hue ++ ",100%,50%)"
-
-complementColor : Int -> Int
-complementColor=
-  (+) 180 >> (flip (%)) 360

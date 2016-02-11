@@ -28,10 +28,11 @@ a:hover {
     background-color: #efefef;
 }
 
-a.meta {
+.meta a {
     font-size: 85%;
     text-decoration: none;
     color: gray;
+    padding: 0.2em;
 }
 
 #footer {
