@@ -13,7 +13,13 @@ defmodule Slownews.Site.Factory do
       "hn" ->
         Slownews.Site.HackerNews.new opts
       _ ->
-        Slownews.Site.Reddit.new name, opts
+        case String.starts_with? name, "hn/" do
+          true ->
+            {_, query} = String.split_at name, 3
+            Slownews.Site.HNSearch.new query, opts
+          _ ->
+            Slownews.Site.Reddit.new name, opts
+        end
     end
   end
 end
@@ -22,7 +28,7 @@ defmodule Slownews.Site.Spec do
   @re Regex.compile!("(?<name>[^#]+)(#(?<opts>.*))?")
 
   def new(name, opts \\ []) do
-    optsSpec = opts |> stringifyKeywordList |> Enum.join(":")
+    optsSpec = opts |> stringifyKeywordList |> Enum.join(",")
     case optsSpec do
       "" -> name
       _  -> Enum.join([name, optsSpec], "#")
