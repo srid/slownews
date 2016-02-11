@@ -1,10 +1,10 @@
 require Logger
 
 defmodule Slownews.Site.Reddit do
-  defstruct subreddit: "r/reddit.com", max: 20
+  defstruct subreddit: "r/reddit.com", max: 5
 
   def new(name, opts \\ []) do
-    max = Keyword.get(opts, :max, 20)
+    max = Keyword.get(opts, :max, 5)
     %Slownews.Site.Reddit{subreddit: name, max: max}
   end
 

@@ -4,7 +4,7 @@ defmodule Slownews.Site.HackerNews do
   defstruct max: 20
 
   def new(_name, opts \\ []) do
-    max = Keyword.get(opts, :max, 20)
+    max = Keyword.get(opts, :max, 7)
     %Slownews.Site.HackerNews{max: max}
   end 
 
