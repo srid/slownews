@@ -26,6 +26,8 @@ end
 defmodule Slownews.Site.HNSearch.Client do
   use HTTPoison.Base
 
+  @min_comments 5
+
   def process_url(siteSpec) do
     site = Slownews.Site.Factory.newFromSpec(siteSpec)
     now =  :os.system_time(:seconds)
@@ -37,7 +39,12 @@ defmodule Slownews.Site.HNSearch.Client do
     data
     |> Poison.decode!
     |> get_in(["hits"])
+    |> Enum.filter(&select_link/1)
     |> Enum.map(&transform_link/1)
+  end
+
+  def select_link(link) do
+    link["num_comments"] > @min_comments
   end
 
   def transform_link(link) do
