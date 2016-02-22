@@ -26,7 +26,7 @@ end
 defmodule Slownews.Site.HNSearch.Client do
   use HTTPoison.Base
 
-  @min_comments 5
+  @min_comments 3
 
   def process_url(siteSpec) do
     site = Slownews.Site.Factory.newFromSpec(siteSpec)
