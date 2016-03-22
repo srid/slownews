@@ -7,6 +7,7 @@ import String
 import Result
 import List
 import Maybe
+import Result
 import Date
 import Set
 import Task exposing (..)
@@ -28,6 +29,9 @@ type alias Link =
 
 type alias Model =
   List Link
+
+type alias Data =
+  Result Http.Error Model
 
 summarizeLinks : List Link -> String
 summarizeLinks =
@@ -58,15 +62,15 @@ decodeModel = J.list decodeLink
 
 -- Main routines
 
-getData : Task Http.Error Model
+getData : Task never Data
 getData =
-  Http.get decodeModel "/data"
+  Http.get decodeModel "/data" |> Task.toResult
 
-dataMailbox : Signal.Mailbox Model
+dataMailbox : Signal.Mailbox Data
 dataMailbox =
-  Signal.mailbox []
+  Signal.mailbox <| Ok []
 
-port runner : Task Http.Error ()
+port runner : Task never ()
 port runner =
   getData `andThen` (Signal.send dataMailbox.address)
 
@@ -77,8 +81,13 @@ main =
 
 -- View
 
-view : Model -> Html
-view links =
+view : Data -> Html
+view data =
+  case data of
+    Err error -> H.div [] [H.text <| "API Error: " ++ (toString error)]
+    Ok links -> viewData links
+
+viewData links =
   let
     mainView = viewLinks links
     allViews  = [mainView, viewFooter]
