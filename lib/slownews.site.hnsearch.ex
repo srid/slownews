@@ -49,8 +49,9 @@ defmodule Slownews.Site.HNSearch.Client do
 
   def transform_link(link) do
     meta_url = "https://news.ycombinator.com/item?id=" <> to_string(link["objectID"])
+    link_url = link["url"] || meta_url
     %{title: link["title"],
-      url: link["url"],
+      url: link_url,
       meta_url: meta_url,
       created: link["created_at_i"]}
   end
