@@ -4,7 +4,7 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-Deploy it to Heroku and **see for yourself** ... or take a look at [the demo version](http://slownews-demo.herokuapp.com/).
+Deploy it to Heroku and **see for yourself** ... or take a look at [my personal version](http://slownews-naivete.herokuapp.com).
 
 ## Running locally
 
