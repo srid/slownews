@@ -8,7 +8,7 @@ Deploy it to Heroku and **see for yourself** ... or take a look at [my personal 
 
 ## Running locally
 
-Needs Elm, Elixir and jq installed.
+Needs Elm 0.16, Elixir and jq installed.
 
 ```
 mix deps.get
