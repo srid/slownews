@@ -11,6 +11,7 @@ import           Data.Aeson.Types
 import qualified Data.Map                      as M
 import           Data.Maybe
 import           GHC.Generics
+import           JavaScript.Web.Location       (getHostname, getWindowLocation)
 import           JavaScript.Web.XMLHttpRequest
 
 import           Miso                          hiding (defaultOptions)
@@ -59,25 +60,16 @@ viewModel Model {..} = view
                 , (pack "margin", pack "200px")
                 ]
                ] [
-        h1_ [class_ $ pack "title" ] [ text $ pack "Miso XHR Example" ]
+        h1_ [class_ $ pack "title" ] [ text $ pack "SlowNews XHR Playground" ]
       , button_ attrs [
-          text $ pack "Fetch JSON from https://api.github.com via XHR"
+          text $ pack "Fetch JSON via XHR"
           ]
       , case info of
-          Nothing -> div_ [] [ text $ pack "No data" ]
-          Just APIInfo{..} ->
-            table_ [ class_ $ pack "table is-striped" ] [
-              thead_ [] [
-                tr_ [] [
-                  th_ [] [ text $ pack "URLs"]
-                ]
-              ]
-            , tbody_ [] [
-                tr_ [] [ td_ [] [ text current_user_url ] ]
-              , tr_ [] [ td_ [] [ text emojis_url ] ]
-              ]
-            ]
-          ]
+          Nothing ->
+            div_ [] [ text $ pack "No data" ]
+          Just (APIInfo links) ->
+            div_ [] [ text $ pack $ show links ]
+      ]
       where
         attrs = [ onClick FetchGitHub
                 , class_ $ pack "button is-large is-outlined"
@@ -86,26 +78,35 @@ viewModel Model {..} = view
                 | isJust info
                 ]
 
-data APIInfo
-  = APIInfo
-  { current_user_url :: MisoString
-  , emojis_url       :: MisoString
+data Link = Link
+  { url   :: MisoString
+  , title :: MisoString
   } deriving (Show, Eq, Generic)
+
+newtype APIInfo = APIInfo
+  [Link] deriving (Show, Eq, Generic)
+
+instance FromJSON Link where
+  parseJSON = genericParseJSON defaultOptions { fieldLabelModifier = camelTo '_' }
 
 instance FromJSON APIInfo where
   parseJSON = genericParseJSON defaultOptions { fieldLabelModifier = camelTo '_' }
 
 getGitHubAPIInfo :: IO APIInfo
 getGitHubAPIInfo = do
-  Just resp <- contents <$> xhrByteString req
+  loc <- getWindowLocation
+  host <- getHostname loc
+  let url = "http://" <> (unpack host) <> ":3000/data"
+  _ <- putStrLn url
+  Just resp <- contents <$> xhrByteString (req url)
   case eitherDecodeStrict resp :: Either String APIInfo of
     Left s  -> error s
     Right j -> pure j
   where
-    req = Request { reqMethod = GET
-                  , reqURI = pack "https://api.github.com"
-                  , reqLogin = Nothing
-                  , reqHeaders = []
-                  , reqWithCredentials = False
-                  , reqData = NoData
-                  }
+    req url = Request { reqMethod = GET
+                      , reqURI = pack url
+                      , reqLogin = Nothing
+                      , reqHeaders = []
+                      , reqWithCredentials = False
+                      , reqData = NoData
+                      }
