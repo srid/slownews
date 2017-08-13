@@ -1,4 +1,5 @@
 %{"calliope": {:hex, :calliope, "0.3.0"},
+  "cors_plug": {:hex, :cors_plug, "1.4.0", "c1c4fb68adf2fd1b4caccee978663edd58f62881627ab65b52ff56146945687f", [], [{:plug, "> 0.14.0", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm"},
   "cowboy": {:hex, :cowboy, "1.0.3", "101a5f826ce9a1ebb2ea53a2cdfffc74736e99807e9e492ecd5f26544c04082b", [], [{:cowlib, "~> 1.0.0", [hex: :cowlib, repo: "hexpm", optional: false]}, {:ranch, "~> 1.0", [hex: :ranch, repo: "hexpm", optional: false]}], "hexpm"},
   "cowlib": {:hex, :cowlib, "1.0.1", "175a633c472058bbeb1b238a6409766a48b52b43b7b687ed70f03cf6e854b7d9", [], [], "hexpm"},
   "hackney": {:hex, :hackney, "1.3.2", "43bd07ab88753f5e136e38fddd2a09124bee25733b03361eeb459d0173fc17ab", [], [{:idna, "~> 1.0.2", [hex: :idna, repo: "hexpm", optional: false]}, {:ssl_verify_hostname, "~> 1.0.5", [hex: :ssl_verify_hostname, repo: "hexpm", optional: false]}], "hexpm"},

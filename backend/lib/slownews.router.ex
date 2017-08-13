@@ -10,6 +10,8 @@ defmodule Slownews.Router do
   plug Plug.Logger
   plug Plug.Static, at: "/", from: "web/static"
 
+  plug CORSPlug, origin: ["*"]
+
   plug :match
   plug :dispatch
 
