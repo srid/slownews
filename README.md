@@ -1,18 +1,18 @@
 # slownews
 
-A web app that aggregates best news during last week from sites like reddit and Hacker News. Uses Elixir for backend and Elm for frontend. 
+A web app that aggregates best news during last week from sites like reddit and Hacker News. Uses Elixir for backend and Miso for frontend. 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+## TODO
 
-Deploy it to Heroku and **see for yourself** ... or take a look at [my personal version](http://slownews-naivete.herokuapp.com).
+- [ ] Migrate to Haskell Miso from Elm
 
 ## Running locally
 
-Needs Elm 0.16, Elixir and jq installed.
+Needs Elixir 1.4+:
 
 ```
-mix deps.get
-make
+cd backend && mix deps.get
+SITES="hn/github:hn/india:hn#max=5:r/programming#max=5:r/videos#max=2" make
 ```
 
 Visit http://localhost:4444/
