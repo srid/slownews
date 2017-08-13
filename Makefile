@@ -7,10 +7,10 @@ client:
 	elm make web/SlowNews.elm --output=web/static/elm.js
 
 server:
-	SITES=${SITES} PORT=4444 mix run --no-halt
+	SITES=${SITES} PORT=3000 mix run --no-halt
 
 shell:
-	SITES=${SITES} PORT=4444 iex -S mix
+	SITES=${SITES} PORT=3000 iex -S mix
 
 heroku:
 	git push -f heroku master && heroku logs -t
