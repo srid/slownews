@@ -75,12 +75,6 @@ viewModel Model {..} = view
             , tbody_ [] [
                 tr_ [] [ td_ [] [ text current_user_url ] ]
               , tr_ [] [ td_ [] [ text emojis_url ] ]
-              , tr_ [] [ td_ [] [ text emails_url ] ]
-              , tr_ [] [ td_ [] [ text events_url ] ]
-              , tr_ [] [ td_ [] [ text gists_url ] ]
-              , tr_ [] [ td_ [] [ text feeds_url ] ]
-              , tr_ [] [ td_ [] [ text followers_url ] ]
-              , tr_ [] [ td_ [] [ text following_url ] ]
               ]
             ]
           ]
@@ -94,37 +88,8 @@ viewModel Model {..} = view
 
 data APIInfo
   = APIInfo
-  { current_user_url                     :: MisoString
-  , current_user_authorizations_html_url :: MisoString
-  , authorizations_url                   :: MisoString
-  , code_search_url                      :: MisoString
-  , commit_search_url                    :: MisoString
-  , emails_url                           :: MisoString
-  , emojis_url                           :: MisoString
-  , events_url                           :: MisoString
-  , feeds_url                            :: MisoString
-  , followers_url                        :: MisoString
-  , following_url                        :: MisoString
-  , gists_url                            :: MisoString
-  , hub_url                              :: MisoString
-  , issue_search_url                     :: MisoString
-  , issues_url                           :: MisoString
-  , keys_url                             :: MisoString
-  , notifications_url                    :: MisoString
-  , organization_repositories_url        :: MisoString
-  , organization_url                     :: MisoString
-  , public_gists_url                     :: MisoString
-  , rate_limit_url                       :: MisoString
-  , repository_url                       :: MisoString
-  , repository_search_url                :: MisoString
-  , current_user_repositories_url        :: MisoString
-  , starred_url                          :: MisoString
-  , starred_gists_url                    :: MisoString
-  , team_url                             :: MisoString
-  , user_url                             :: MisoString
-  , user_organizations_url               :: MisoString
-  , user_repositories_url                :: MisoString
-  , user_search_url                      :: MisoString
+  { current_user_url :: MisoString
+  , emojis_url       :: MisoString
   } deriving (Show, Eq, Generic)
 
 instance FromJSON APIInfo where
