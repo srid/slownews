@@ -4,18 +4,10 @@
 
 For faster edit-compile-run cycle it is recommended to use `GHCJSi` as follows.
 
-First, enter the Nix configured shell environment:
+Enter the Haskell shell and automatically run the web server:
 
 ```
-nix-shell -A env
-```
-
-Then, enter the GHCJSi shell:
-
-
-```
-cabal configure --ghcjs
-cabal repl
+nix-shell -A env --command "cabal configure --ghcjs && cabal repl"
 ```
 
 GHCJSi starts up a web server. You should immediately connect to it from the web browser via http://localhost:6400/
