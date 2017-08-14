@@ -37,8 +37,11 @@ data Action
 
 -- | Link
 data Link = Link
-  { url   :: MisoString
-  , title :: MisoString
+  { url      :: MisoString
+  , title    :: MisoString
+  , meta_url :: MisoString
+  , site     :: MisoString
+  , created  :: Int
   } deriving (Show, Eq, Generic)
 
 -- | Links (Full API data)
@@ -118,14 +121,19 @@ viewModel Model {..} = view
         , button_ attrs [text $ pack "Fetch data"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
-            Just (Links links) -> list ul_ $ viewLink <$> links
+            Just (Links links) -> row $ viewLink <$> links
         ]
       where
         attrs =
           [onClick FetchLinks, class_ $ pack "button is-large is-outlined"] ++
           [disabled_ $ pack "disabled" | isJust links]
-        list tag links =
-          tag [] $ (\e -> li_ [] [e]) <$> links
+        row links =
+          tbody_ [] $ (\e -> tr_ [] [e]) <$> links
 
 viewLink :: Link -> View Action
-viewLink Link {..} = a_ [ href_ url ] [ text title ]
+viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
+  where
+    timeUI = tableCell $ text $ (pack . show) created
+    siteUI = tableCell $ a_ [href_ meta_url ] [ text site ]
+    linkUI = tableCell $ a_ [ href_ url ] [ text title ]
+    tableCell e = td_ [] [e]
