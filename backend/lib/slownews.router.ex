@@ -8,7 +8,7 @@ defmodule Slownews.Router do
   use Plug.ErrorHandler
 
   plug Plug.Logger
-  plug Plug.Static, at: "/", from: "web/static"
+  plug Plug.Static, at: "/", from: "../frontend/static"
 
   plug CORSPlug, origin: ["*"]
 
