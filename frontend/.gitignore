@@ -2,3 +2,4 @@ result
 dist
 dist-*
 cabal.project.local
+static/all.js
