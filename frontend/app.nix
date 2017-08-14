@@ -1,4 +1,5 @@
 { mkDerivation, aeson, base, containers, ghcjs-base, miso, stdenv
+, time
 }:
 mkDerivation {
   pname = "slownews-frontend";
@@ -7,7 +8,7 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base containers ghcjs-base miso
+    aeson base containers ghcjs-base miso time
   ];
   description = "SlowNews Frontend";
   license = stdenv.lib.licenses.unfree;

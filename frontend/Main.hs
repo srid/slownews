@@ -11,12 +11,17 @@ import           Data.Aeson
 import           Data.Aeson.Types
 import qualified Data.Map                      as M
 import           Data.Maybe
+import           Data.Time                     (getCurrentTime)
+import           Data.Time.Format              (defaultTimeLocale, formatTime)
 import           GHC.Generics
 import           JavaScript.Web.Location       (getHostname, getWindowLocation)
 import           JavaScript.Web.XMLHttpRequest
 
 import           Miso                          hiding (defaultOptions)
 import           Miso.String
+
+foreign import javascript unsafe "console.log ($1);"
+  consoleLog :: MisoString -> IO ()
 
 -- | Model
 data Model = Model
@@ -50,7 +55,7 @@ instance FromJSON Links where
 -- FIXME: Handle errors
 getLinks :: IO Links
 getLinks = do
-  _ <- putStrLn "Fetching.."
+  logInfo "Fetching from server"
   url <- location
   Just resp <- contents <$> xhrByteString (req url)
   case eitherDecodeStrict resp :: Either String Links of
@@ -70,9 +75,22 @@ getLinks = do
       , reqData = NoData
       }
 
+-- | Log the given message to stdout and browser console
+logInfo :: String -> IO ()
+logInfo s = do
+  now <- currentTime
+  let msg = now <> ": " <> s
+  putStrLn msg
+  consoleLog $ pack msg
+  where
+    currentTime = do
+      time <- getCurrentTime
+      return $ formatTime defaultTimeLocale "%F %T (%Z)" time
+
 -- | Main entry point
 main :: IO ()
 main = do
+  logInfo "Starting application"
   startApp App {model = Model Nothing, initialAction = FetchLinks, ..}
   where
     update = updateModel
@@ -94,15 +112,20 @@ viewModel Model {..} = view
       div_
         [ style_ $
           M.fromList
-            [(pack "text-align", pack "center"), (pack "margin", pack "200px")]
+            [(pack "margin", pack "200px")]
         ]
-        [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews XHR Playground"]
-        , button_ attrs [text $ pack "Fetch JSON via XHR"]
+        [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
+        , button_ attrs [text $ pack "Fetch data"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
-            Just (Links links) -> div_ [] [text $ pack $ show links]
+            Just (Links links) -> list ul_ $ viewLink <$> links
         ]
       where
         attrs =
           [onClick FetchLinks, class_ $ pack "button is-large is-outlined"] ++
           [disabled_ $ pack "disabled" | isJust links]
+        list tag links =
+          tag [] $ (\e -> li_ [] [e]) <$> links
+
+viewLink :: Link -> View Action
+viewLink Link {..} = a_ [ href_ url ] [ text title ]

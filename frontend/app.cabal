@@ -12,4 +12,5 @@ executable app
                      , containers
                      , ghcjs-base
                      , miso
+                     , time
   default-language:    Haskell2010
