@@ -98,8 +98,9 @@ main = do
   where
     update = updateModel
     events = defaultEvents
-    subs = []
-    view = viewModel
+    subs   = []
+    view   = viewModel
+
 
 -- | Update your model
 updateModel :: Action -> Model -> Effect Action Model
@@ -114,10 +115,12 @@ viewModel Model {..} = view
     view =
       div_
         [ style_ $
-          M.fromList
-            [(pack "margin", pack "50px")]
+            M.fromList
+              [(pack "margin", pack "50px")]
         ]
-        [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
+        [ link_ [ rel_ $ pack "stylesheet "
+                , href_ $ pack "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"] []
+        , h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
             Just (Links links) -> row $ viewLink <$> links
