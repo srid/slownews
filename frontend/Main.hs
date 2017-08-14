@@ -34,7 +34,7 @@ data Action
 main :: IO ()
 main = do
   startApp App { model = Model Nothing
-               , initialAction = NoOp
+               , initialAction = FetchGitHub
                , ..
                }
     where
@@ -94,15 +94,16 @@ instance FromJSON APIInfo where
 
 getGitHubAPIInfo :: IO APIInfo
 getGitHubAPIInfo = do
-  loc <- getWindowLocation
-  host <- getHostname loc
-  let url = "http://" <> (unpack host) <> ":3000/data"
-  _ <- putStrLn url
+  _ <- putStrLn "Fetching.."
+  url <- location
   Just resp <- contents <$> xhrByteString (req url)
   case eitherDecodeStrict resp :: Either String APIInfo of
     Left s  -> error s
     Right j -> pure j
   where
+    location = do
+      hostname <- getWindowLocation >>= getHostname
+      return $ "http://" <> (unpack hostname) <> ":3000/data"
     req url = Request { reqMethod = GET
                       , reqURI = pack url
                       , reqLogin = Nothing
