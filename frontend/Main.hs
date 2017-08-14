@@ -115,18 +115,14 @@ viewModel Model {..} = view
       div_
         [ style_ $
           M.fromList
-            [(pack "margin", pack "200px")]
+            [(pack "margin", pack "50px")]
         ]
         [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
-        , button_ attrs [text $ pack "Fetch data"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
             Just (Links links) -> row $ viewLink <$> links
         ]
       where
-        attrs =
-          [onClick FetchLinks, class_ $ pack "button is-large is-outlined"] ++
-          [disabled_ $ pack "disabled" | isJust links]
         row links =
           tbody_ [] $ (\e -> tr_ [] [e]) <$> links
 
