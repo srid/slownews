@@ -11,13 +11,11 @@ import           Data.Aeson
 import           Data.Aeson.Types
 import           Data.Function                 (on, (&))
 import           Data.List                     (reverse, sortBy)
-import qualified Data.Map                      as M
 import           Data.Maybe
 import           Data.Time                     (getCurrentTime)
 import           Data.Time.Clock.POSIX         (posixSecondsToUTCTime)
 import           Data.Time.Format              (defaultTimeLocale, formatTime)
 import           GHC.Generics
-import           JavaScript.Web.Location       (getHostname, getWindowLocation)
 import           JavaScript.Web.XMLHttpRequest
 
 import           Miso                          hiding (defaultOptions, on)
@@ -62,15 +60,11 @@ instance FromJSON Links where
 getLinks :: IO Links
 getLinks = do
   logInfo "Fetching from server"
-  url <- location
-  Just resp <- contents <$> xhrByteString (req url)
+  Just resp <- contents <$> xhrByteString (req "/data")
   case eitherDecodeStrict resp :: Either String Links of
     Left s  -> error s
     Right j -> pure j
   where
-    location = do
-      hostname <- getWindowLocation >>= getHostname
-      return $ "http://" <> (unpack hostname) <> ":3000/data"
     req url =
       Request
       { reqMethod = GET
@@ -139,5 +133,3 @@ getDayOfWeek = dayOfWeek . posixSecondsToUTCTime . fromIntegral
 
 getOrderedLinks :: [Link] -> [Link]
 getOrderedLinks = reverse . sortBy (compare `on` created)
-  where
-    created Link {..} = created
