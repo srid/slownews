@@ -120,10 +120,12 @@ viewModel Model {..} = view
         ]
         [ link_ [ rel_ $ pack "stylesheet "
                 , href_ $ pack "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"] []
+        , script_ [ src_ $ pack "https://code.jquery.com/jquery-3.2.1.min.js " ] []
+        , script_ [ src_ $ pack "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js" ] []
         , h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
-            Just (Links links) -> row $ viewLink <$> links
+            Just (Links links) -> table_ [ class_ $ pack "striped" ] [ row $ viewLink <$> links ]
         ]
       where
         row links =
