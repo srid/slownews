@@ -114,18 +114,13 @@ viewModel Model {..} = view
   where
     view =
       div_
-        [ style_ $
-            M.fromList
-              [(pack "margin", pack "50px")]
-        ]
-        [ link_ [ rel_ $ pack "stylesheet "
-                , href_ $ pack "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"] []
-        , script_ [ src_ $ pack "https://code.jquery.com/jquery-3.2.1.min.js " ] []
-        , script_ [ src_ $ pack "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js" ] []
-        , h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
+        [ ]
+        [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
         , case links of
             Nothing            -> div_ [] [text $ pack "No data"]
-            Just (Links links) -> table_ [ class_ $ pack "striped" ] [ row $ viewLink <$> links ]
+            Just (Links links) -> table_
+              [ class_ $ pack "striped" ]
+              [ row $ viewLink <$> links ]
         ]
       where
         row links =
@@ -134,7 +129,6 @@ viewModel Model {..} = view
 viewLink :: Link -> View Action
 viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
   where
-    timeUI = tableCell $ text $ (pack . show) created
-    siteUI = tableCell $ a_ [href_ meta_url ] [ text site ]
-    linkUI = tableCell $ a_ [ href_ url ] [ text title ]
-    tableCell e = td_ [] [e]
+    timeUI = td_ [] [text $ (pack . show) created]
+    siteUI = td_ [class_ $ pack "meta"] [a_ [href_ meta_url ] [ text site ]]
+    linkUI = td_ [] [a_ [ href_ url ] [ text title ]]
