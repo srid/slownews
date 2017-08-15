@@ -9,7 +9,8 @@ module Main where
 
 import           Data.Aeson
 import           Data.Aeson.Types
-import           Data.Function                 ((&))
+import           Data.Function                 (on, (&))
+import           Data.List                     (reverse, sortBy)
 import qualified Data.Map                      as M
 import           Data.Maybe
 import           Data.Time                     (getCurrentTime)
@@ -19,8 +20,8 @@ import           GHC.Generics
 import           JavaScript.Web.Location       (getHostname, getWindowLocation)
 import           JavaScript.Web.XMLHttpRequest
 
-import           Miso                          hiding (defaultOptions)
-import           Miso.String
+import           Miso                          hiding (defaultOptions, on)
+import           Miso.String                   hiding (reverse)
 
 foreign import javascript unsafe "console.log ($1);"
   consoleLog :: MisoString -> IO ()
@@ -121,7 +122,7 @@ viewModel Model {..} = view
             Nothing            -> div_ [] [text $ pack "No data"]
             Just (Links links) -> table_
               [ class_ $ pack "striped" ]
-              [ tbody_ [] $ viewLink <$> links ]
+              [ tbody_ [] $ viewLink <$> getOrderedLinks links ]
         ]
 
 viewLink :: Link -> View Action
@@ -135,3 +136,8 @@ getDayOfWeek :: Int -> String
 getDayOfWeek = dayOfWeek . posixSecondsToUTCTime . fromIntegral
   where
     dayOfWeek = formatTime defaultTimeLocale "%a"
+
+getOrderedLinks :: [Link] -> [Link]
+getOrderedLinks = reverse . sortBy (compare `on` created)
+  where
+    created Link {..} = created
