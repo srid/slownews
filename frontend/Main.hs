@@ -9,9 +9,11 @@ module Main where
 
 import           Data.Aeson
 import           Data.Aeson.Types
+import           Data.Function                 ((&))
 import qualified Data.Map                      as M
 import           Data.Maybe
 import           Data.Time                     (getCurrentTime)
+import           Data.Time.Clock.POSIX         (posixSecondsToUTCTime)
 import           Data.Time.Format              (defaultTimeLocale, formatTime)
 import           GHC.Generics
 import           JavaScript.Web.Location       (getHostname, getWindowLocation)
@@ -101,7 +103,6 @@ main = do
     subs   = []
     view   = viewModel
 
-
 -- | Update your model
 updateModel :: Action -> Model -> Effect Action Model
 updateModel FetchLinks m       = m <# do SetLinks <$> getLinks
@@ -120,15 +121,17 @@ viewModel Model {..} = view
             Nothing            -> div_ [] [text $ pack "No data"]
             Just (Links links) -> table_
               [ class_ $ pack "striped" ]
-              [ row $ viewLink <$> links ]
+              [ tbody_ [] $ viewLink <$> links ]
         ]
-      where
-        row links =
-          tbody_ [] $ (\e -> tr_ [] [e]) <$> links
 
 viewLink :: Link -> View Action
 viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
   where
-    timeUI = td_ [] [text $ (pack . show) created]
+    timeUI = td_ [] [text $ (pack . getDayOfWeek) created]
     siteUI = td_ [class_ $ pack "meta"] [a_ [href_ meta_url ] [ text site ]]
     linkUI = td_ [] [a_ [ href_ url ] [ text title ]]
+
+getDayOfWeek :: Int -> String
+getDayOfWeek = dayOfWeek . posixSecondsToUTCTime . fromIntegral
+  where
+    dayOfWeek = formatTime defaultTimeLocale "%a"

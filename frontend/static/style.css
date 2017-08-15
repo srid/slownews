@@ -10,7 +10,8 @@ html {
 
 h1 {
     font-family: 'Autour One', cursive;
-    background-color: orange;
+    font-size: 1.5em;
+    background-color: #00cc99;
     padding: 0.3em;
 }
 
@@ -34,6 +35,7 @@ a:hover {
 .meta a {
     font-size: 85%;
     text-decoration: none;
-    color: gray;
+    color: pink;
+    background-color: #444;
     padding: 0.2em;
 }
