@@ -106,18 +106,16 @@ updateModel NoOp m             = noEff m
 
 -- | View function, with routing
 viewModel :: Model -> View Action
-viewModel Model {..} = view
+viewModel Model {..} = div_ [] [title, content]
   where
-    view =
-      div_
-        [ ]
-        [ h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
-        , case links of
-            Nothing            -> div_ [] [text $ pack "No data"]
-            Just (Links links) -> table_
-              [ class_ $ pack "striped" ]
-              [ tbody_ [] $ viewLink <$> getOrderedLinks links ]
-        ]
+    title = h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
+    content = viewLinks links
+
+viewLinks :: Maybe Links -> View Action
+viewLinks Nothing = div_ [] [text $ pack "No data" ]
+viewLinks (Just (Links links)) = table_ [] [tbody_ [] body ]
+  where
+    body = viewLink <$> sortLinks links
 
 viewLink :: Link -> View Action
 viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
@@ -131,5 +129,5 @@ getDayOfWeek = dayOfWeek . posixSecondsToUTCTime . fromIntegral
   where
     dayOfWeek = formatTime defaultTimeLocale "%a"
 
-getOrderedLinks :: [Link] -> [Link]
-getOrderedLinks = reverse . sortBy (compare `on` created)
+sortLinks :: [Link] -> [Link]
+sortLinks = reverse . sortBy (compare `on` created)
