@@ -1,8 +1,8 @@
-all:	client server
+all:	server
 	@true
 
-client:
-	elm make web/SlowNews.elm --output=web/static/elm.js
+deps:
+	cd backend && mix deps.get
 
 server:
 	cd backend && PORT=3000 mix run --no-halt
