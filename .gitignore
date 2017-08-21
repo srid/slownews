@@ -1,8 +1,5 @@
-/_build
-/cover
-/deps
+/backend/_build
+/backend/deps
 erl_crash.dump
 *.ez
-
-/elm-stuff
-/web/static/elm.js
+*~

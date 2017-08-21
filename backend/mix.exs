@@ -30,6 +30,7 @@ defmodule Slownews.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:cowboy, "~> 1.0.0"},
+     {:cors_plug, "~> 1.2"},
      {:plug, "~> 1.0"},
      {:httpoison, "~> 0.7.2"},
      {:poison, "~> 1.5"},

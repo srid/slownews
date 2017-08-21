@@ -8,17 +8,21 @@ html {
     font-size: 85%;
 }
 
-div.site h2 {
+h1 {
     font-family: 'Autour One', cursive;
-    background-color: orange;
+    font-size: 1.5em;
+    background-color: #00cc99;
     padding: 0.3em;
 }
 
-div.site ul {
-    list-style-type: circle;
+td {
+    padding: 0.2em;
+    padding-bottom: 0.5em;
 }
-div.site ul li {
-    padding-bottom: 0.4em;
+
+td.meta {
+    text-align: right;
+    padding-right: 0.5em;
 }
 
 a {
@@ -31,27 +35,7 @@ a:hover {
 .meta a {
     font-size: 85%;
     text-decoration: none;
-    color: gray;
+    color: pink;
+    background-color: #444;
     padding: 0.2em;
-}
-
-#footer {
-    margin-top: 1em;
-    border-top: 1px gray solid;
-    color: gray;
-    padding-top: 0.5em;
-    text-align: center;
-    font-size: 90%;
-    margin-bottom: 2em;
-
-}
-
-td {
-    padding: 0.2em;
-    padding-bottom: 0.5em;
-}
-
-td.meta {
-    text-align: right;
-    padding-right: 0.5em;
 }

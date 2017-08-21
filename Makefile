@@ -1,16 +1,11 @@
-SITES := $(shell jq .env.SITES.value < app.json)
-
-all:	client server
+all:	server
 	@true
 
-client:
-	elm make web/SlowNews.elm --output=web/static/elm.js
+deps:
+	cd backend && mix deps.get
 
 server:
-	SITES=${SITES} PORT=4444 mix run --no-halt
+	cd backend && PORT=3000 mix run --no-halt
 
 shell:
-	SITES=${SITES} PORT=4444 iex -S mix
-
-heroku:
-	git push -f heroku master && heroku logs -t
+	cd backend && PORT=3000 iex -S mix

@@ -7,8 +7,12 @@ defmodule Slownews.Router do
 
   use Plug.ErrorHandler
 
+  @static_path "../frontend/static"
+
   plug Plug.Logger
-  plug Plug.Static, at: "/", from: "web/static"
+  plug Plug.Static, at: "/", from: @static_path
+
+  plug CORSPlug, origin: ["*"]
 
   plug :match
   plug :dispatch
@@ -16,7 +20,7 @@ defmodule Slownews.Router do
   get "/" do
     conn
     |> put_resp_header("content-type", "text/html")
-    |> send_file(200, "web/static/index.html")
+    |> send_file(200, @static_path <> "/index.html")
   end
 
   get "/data" do
