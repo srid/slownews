@@ -4,7 +4,7 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 Backend is written in **Elixir**; frontend in **Haskell**.
 
-[[https://github.com/srid/slownews/blob/master/screenshot.png|alt=Screenshot]]
+![Screenshot](screenshot.png?raw=true "Screenshot")
 
 ## Running locally
 
