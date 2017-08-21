@@ -4,6 +4,8 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 Backend is written in **Elixir**; frontend in **Haskell**.
 
+[[https://github.com/srid/slownews/blob/master/screenshot.png|alt=Screenshot]]
+
 ## Running locally
 
 Needs Elixir 1.4+:
