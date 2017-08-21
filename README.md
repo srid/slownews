@@ -4,7 +4,7 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 Backend is written in **Elixir**; frontend in **Haskell**.
 
-![Screenshot](screenshot.png?raw=true "Screenshot")
+<img src="./screenshot.png" width="75%"></img>
 
 ## Running locally
 
