@@ -1,14 +1,11 @@
-all:	configure build repl
+JSEXEDIR := .stack-work//install/x86_64-osx/lts-6.20/ghcjs-0.2.0.9006020_ghc-7.10.3/bin/app.jsexe
+
+all:	build 
 	@true
 
-# TODO: new-build is not being used, as the repl is broken. Try after
-# upgrading to cabal-install 2.0
-configure:
-	cabal configure -O0 --ghcjs
-
 build:
-	cabal build
-	cp -v  dist/build/app/app.jsexe/all.js ./static/
+	stack build
+	cp -v  ${JSEXEDIR}/all.js ./static/
 
 repl:
-	cabal repl
+	stack ghci

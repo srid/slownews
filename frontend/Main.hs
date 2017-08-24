@@ -20,9 +20,7 @@ import           JavaScript.Web.XMLHttpRequest
 
 import           Miso                          hiding (defaultOptions, on)
 import           Miso.String                   hiding (reverse)
-
-foreign import javascript unsafe "console.log ($1);"
-  consoleLog :: MisoString -> IO ()
+import Foreign (consoleLog)
 
 -- | Model
 data Model = Model
