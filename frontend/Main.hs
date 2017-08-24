@@ -18,9 +18,9 @@ import           Data.Time.Format              (defaultTimeLocale, formatTime)
 import           GHC.Generics
 import           JavaScript.Web.XMLHttpRequest
 
+import           Foreign                       (consoleLog)
 import           Miso                          hiding (defaultOptions, on)
 import           Miso.String                   hiding (reverse)
-import Foreign (consoleLog)
 
 -- | Model
 data Model = Model
@@ -49,10 +49,10 @@ newtype Links =
   deriving (Show, Eq, Generic)
 
 instance FromJSON Link where
-  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo '_'}
+  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo2 '_'}
 
 instance FromJSON Links where
-  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo '_'}
+  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo2 '_'}
 
 -- FIXME: Handle errors
 getLinks :: IO Links
@@ -128,4 +128,4 @@ getDayOfWeek = dayOfWeek . posixSecondsToUTCTime . fromIntegral
     dayOfWeek = formatTime defaultTimeLocale "%a"
 
 sortLinks :: [Link] -> [Link]
-sortLinks = reverse . sortBy (compare `on` created)
+sortLinks = sortBy (flip compare `on` created)
