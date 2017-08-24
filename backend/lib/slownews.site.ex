@@ -11,7 +11,7 @@ defmodule Slownews.Site.Factory do
   defp makeSite({name, opts}) do
     case name do
       "hn" ->
-        Slownews.Site.HackerNews.new opts
+        Slownews.Site.HackerNews.new "hn", opts
       _ ->
         case String.starts_with? name, "hn/" do
           true ->
