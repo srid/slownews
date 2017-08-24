@@ -23,7 +23,7 @@ import           Miso                          hiding (defaultOptions, on)
 import           Miso.String                   hiding (reverse)
 
 -- | Model
-data Model = Model
+newtype Model = Model
   { links :: Maybe Links
   } deriving (Eq, Show)
 
@@ -36,11 +36,11 @@ data Action
 
 -- | Link
 data Link = Link
-  { url      :: MisoString
-  , title    :: MisoString
-  , meta_url :: MisoString
-  , site     :: MisoString
-  , created  :: Int
+  { url     :: MisoString
+  , title   :: MisoString
+  , metaUrl :: MisoString
+  , site    :: MisoString
+  , created :: Int
   } deriving (Show, Eq, Generic)
 
 -- | Links (Full API data)
@@ -119,7 +119,7 @@ viewLink :: Link -> View Action
 viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
   where
     timeUI = td_ [] [text $ (pack . getDayOfWeek) created]
-    siteUI = td_ [class_ $ pack "meta"] [a_ [href_ meta_url ] [ text site ]]
+    siteUI = td_ [class_ $ pack "meta"] [a_ [href_ metaUrl ] [ text site ]]
     linkUI = td_ [] [a_ [ href_ url ] [ text title ]]
 
 getDayOfWeek :: Int -> String
