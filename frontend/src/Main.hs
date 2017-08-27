@@ -9,9 +9,8 @@ module Main where
 
 import           Data.Aeson
 import           Data.Aeson.Types
-import           Data.Function                 (on, (&))
-import           Data.List                     (reverse, sortBy)
-import           Data.Maybe
+import           Data.Function                 (on)
+import           Data.List                     (sortBy)
 import           Data.Time                     (getCurrentTime)
 import           Data.Time.Clock.POSIX         (posixSecondsToUTCTime)
 import           Data.Time.Format              (defaultTimeLocale, formatTime)
