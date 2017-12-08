@@ -11,3 +11,4 @@ executable          backend
     build-depends:  base   >= 4      && < 5
                   , scotty
                   , raw-strings-qq
+                  , wai-middleware-static
