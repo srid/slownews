@@ -4,6 +4,42 @@
 import Text.RawString.QQ
 import Web.Scotty
 import Network.Wai.Middleware.Static
+import qualified Network.Wreq as WQ
+import Control.Lens
+import Data.Text (Text)
+import Data.Aeson ((.:), Value(..), FromJSON(..))
+-- import Data.Aeson.Lens (key)
+
+type Resp = WQ.Response Body
+
+data Body =
+  Body { children :: [Post] }
+  deriving (Show, Eq)
+
+instance FromJSON Body where
+  parseJSON (Object o) = do
+    d <- o .: "data"
+    Body <$> d .: "children"
+
+data Post =
+  Post { title :: Text
+       , permalink :: Text }
+  deriving (Show, Eq)
+
+instance FromJSON Post where
+  parseJSON (Object o) = do
+    d <- o .: "data"
+    Post <$> d .: "title"
+         <*> d .: "permalink"
+
+-- Use as:
+-- b <- sample
+-- b
+sample = do
+  let url = "https://www.reddit.com/r/zerocarb/top/.json?sort=top&t=week&limit=2"
+  r <- WQ.asJSON =<< WQ.get url :: IO Resp
+  return $ r ^. WQ.responseBody
+
 
 main :: IO ()
 main = scotty 3000 $ do
