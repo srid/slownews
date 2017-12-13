@@ -2,14 +2,12 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-import Text.RawString.QQ
 import Web.Scotty
 import Network.Wai.Middleware.Static
 import qualified Network.Wreq as WQ
 import Control.Lens
-import Control.Monad.IO.Class (liftIO)
 import Data.Text (Text)
-import Data.Aeson ((.:), Value(..), FromJSON(..), ToJSON)
+import Data.Aeson ((.:), Value(..), FromJSON(..), ToJSON, withObject)
 import GHC.Generics
 
 type Resp = WQ.Response Body
@@ -19,8 +17,8 @@ data Body =
   deriving (Show, Eq)
 
 instance FromJSON Body where
-  parseJSON (Object o) = do
-    d <- o .: "data"
+  parseJSON = withObject "Body" $ \v -> do
+    d <- v .: "data"
     Body <$> d .: "children"
 
 data Post =
@@ -33,8 +31,8 @@ data Post =
   deriving (Show, Eq, Generic)
 
 instance FromJSON Post where
-  parseJSON (Object o) = do
-    d <- o .: "data"
+  parseJSON = withObject "Post" $ \v -> do
+    d <- v .: "data"
     Post <$> d .: "title"
          <*> d .: "url"
          <*> d .: "permalink"
@@ -44,7 +42,7 @@ instance FromJSON Post where
 instance ToJSON Post
 
 sample = do
-  let url = "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=3"
+  let url = "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=10"
   r <- WQ.asJSON =<< WQ.get url :: IO Resp
   return $ r ^. WQ.responseBody
 
