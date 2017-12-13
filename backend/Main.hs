@@ -50,10 +50,11 @@ sample = do
 
 
 main :: IO ()
-main = scotty 3000 $ do
+main = do
+  body <- sample
+  scotty 3000 $ do
   middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
   get "/" $ do
     redirect "/index.html"  -- TODO: Hide index.html from address bar.
   get "/data" $ do
-    body <- liftIO sample
     json $ Main.children body
