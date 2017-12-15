@@ -16,6 +16,7 @@ executable          backend
                   , lens
                   , containers
                   , aeson
+                  , aeson-casing
                   , lens-aeson
                   , text
                   , stm

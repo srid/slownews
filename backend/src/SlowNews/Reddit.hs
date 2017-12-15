@@ -9,9 +9,10 @@ import           Data.Aeson                    (FromJSON (..), ToJSON,
 import           Data.Text                     (Text)
 import           GHC.Generics
 import qualified Network.Wreq                  as WQ
+import SlowNews.Link (Link(..))
 
 data Body =
-  Body { children :: [Post] }
+  Body { children :: [Link] }
   deriving (Show, Eq)
 
 instance FromJSON Body where
@@ -19,25 +20,14 @@ instance FromJSON Body where
     d <- v .: "data"
     Body <$> d .: "children"
 
-data Post =
-  Post { title    :: Text
-       , url      :: Text
-       , meta_url :: Text
-       , created  :: Int
-       , site     :: Text
-       }
-  deriving (Show, Eq, Generic)
-
-instance FromJSON Post where
-  parseJSON = withObject "Post" $ \v -> do
+instance FromJSON Link where
+  parseJSON = withObject "Link" $ \v -> do
     d <- v .: "data"
-    Post <$> d .: "title"
+    Link <$> d .: "title"
          <*> d .: "url"
          <*> d .: "permalink"
          <*> d .: "created_utc"
          <*> d .: "subreddit_name_prefixed"
-
-instance ToJSON Post
 
 sampleBody :: IO Body
 sampleBody = do
