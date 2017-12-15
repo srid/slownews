@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Reddit where
+module SlowNews.Reddit where
 
 import           Control.Lens
 import           Data.Aeson                    (FromJSON (..), ToJSON,
@@ -9,8 +9,6 @@ import           Data.Aeson                    (FromJSON (..), ToJSON,
 import           Data.Text                     (Text)
 import           GHC.Generics
 import qualified Network.Wreq                  as WQ
-
-type Resp = WQ.Response Body
 
 data Body =
   Body { children :: [Post] }
@@ -46,5 +44,5 @@ sampleBody = do
   let
     sample_url =
       "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=10"
-  r <- WQ.asJSON =<< WQ.get sample_url :: IO Resp
+  r <- WQ.asJSON =<< WQ.get sample_url :: IO (WQ.Response Body)
   return $ r ^. WQ.responseBody

@@ -9,7 +9,7 @@ import           Network.Wai.Middleware.Static
 import qualified Network.Wreq                  as WQ
 import           Web.Scotty
 
-import Reddit
+import SlowNews.Reddit as Reddit
 
 
 main :: IO ()
