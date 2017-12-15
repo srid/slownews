@@ -3,6 +3,7 @@
 
 module SlowNews.Link where
 
+import           Control.Concurrent.STM
 import           Data.Aeson   (ToJSON(..), genericToJSON)
 import           Data.Aeson.Casing (snakeCase, aesonPrefix)
 import           Data.Text    (Text)
@@ -19,3 +20,10 @@ data Link =
 
 instance ToJSON Link where
   toJSON = genericToJSON $ aesonPrefix snakeCase
+
+type Links = TVar [Link]
+
+appendLinks :: Links -> [Link] -> STM ()
+appendLinks linksTVar newLinks = do
+  current <- readTVar linksTVar 
+  writeTVar linksTVar (current ++ newLinks)

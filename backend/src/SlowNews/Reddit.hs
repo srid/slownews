@@ -1,18 +1,15 @@
-{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module SlowNews.Reddit where
 
 import           Control.Lens
-import           Data.Aeson                    (FromJSON (..), ToJSON,
+import           Data.Aeson                    (FromJSON (..),
                                                 withObject, (.:))
-import           Data.Text                     (Text)
-import           GHC.Generics
 import qualified Network.Wreq                  as WQ
 import SlowNews.Link (Link(..))
 
 data Body =
-  Body { children :: [Link] }
+  Body { bodyChildren :: [Link] }
   deriving (Show, Eq)
 
 instance FromJSON Body where
@@ -29,10 +26,10 @@ instance FromJSON Link where
          <*> d .: "created_utc"
          <*> d .: "subreddit_name_prefixed"
 
-sampleBody :: IO Body
-sampleBody = do
+fetchSubreddit :: String -> IO [Link]
+fetchSubreddit subreddit = do
   let
-    sample_url =
-      "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=10"
-  r <- WQ.asJSON =<< WQ.get sample_url :: IO (WQ.Response Body)
-  return $ r ^. WQ.responseBody
+    url =
+      "https://www.reddit.com/r/" ++ subreddit ++ "/top/.json?sort=top&t=week"
+  r <- WQ.asJSON =<< WQ.get url :: IO (WQ.Response Body)
+  return $ r ^. WQ.responseBody & bodyChildren

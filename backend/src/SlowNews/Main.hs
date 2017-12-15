@@ -6,14 +6,14 @@ import           Network.Wai.Middleware.Static
 import           Web.Scotty
 
 import SlowNews.Reddit as Reddit
-import SlowNews.Link (Link)
+import SlowNews.Link (Link, appendLinks)
 
 
 main :: IO ()
 main = do
   links       <- atomically $ newTVar ([] :: [Link])
-  sample_body <- sampleBody
-  atomically $ writeTVar links (Reddit.children sample_body)
+  redditLinks <- Reddit.fetchSubreddit "zerocarb"
+  atomically $ appendLinks links redditLinks
 
   scotty 3000 $ do
     middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
