@@ -4,7 +4,7 @@ cabal-version: >= 1.8
 build-type:    Simple
 
 executable          backend
-    hs-source-dirs: .
+    hs-source-dirs: src
     main-is:        Main.hs
     ghc-options:    -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
