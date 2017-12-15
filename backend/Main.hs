@@ -54,14 +54,13 @@ sampleBody = do
 
 main :: IO ()
 main = do
-  posts <- atomically $ newTVar ([] :: [Post])
+  posts       <- atomically $ newTVar ([] :: [Post])
   sample_body <- sampleBody
   atomically $ writeTVar posts (Main.children sample_body)
 
   scotty 3000 $ do
     middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
-    get "/" $ 
-      redirect "/index.html"  -- TODO: Hide index.html from address bar.
-    get "/data" $ do 
+    get "/" $ redirect "/index.html" -- TODO: Hide index.html from address bar.
+    get "/data" $ do
       currentPosts <- liftIO $ atomically $ readTVar posts
       json currentPosts
