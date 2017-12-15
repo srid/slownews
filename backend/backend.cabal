@@ -18,3 +18,4 @@ executable          backend
                   , aeson
                   , lens-aeson
                   , text
+                  , stm

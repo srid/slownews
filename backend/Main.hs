@@ -2,6 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import           Control.Lens
+import           Control.Concurrent.STM
+import           Control.Monad.IO.Class
 import           Data.Aeson                    (FromJSON (..), ToJSON,
                                                 withObject, (.:))
 import           Data.Text                     (Text)
@@ -9,6 +11,7 @@ import           GHC.Generics
 import           Network.Wai.Middleware.Static
 import qualified Network.Wreq                  as WQ
 import           Web.Scotty
+
 
 type Resp = WQ.Response Body
 
@@ -41,19 +44,23 @@ instance FromJSON Post where
 
 instance ToJSON Post
 
-sample :: IO Body
-sample = do
-  let sample_url = "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=10"
+sampleBody :: IO Body
+sampleBody = do
+  let
+    sample_url =
+      "https://www.reddit.com/r/programming/top/.json?sort=top&t=week&limit=10"
   r <- WQ.asJSON =<< WQ.get sample_url :: IO Resp
   return $ r ^. WQ.responseBody
 
-
 main :: IO ()
 main = do
-  sample_body <- sample
+  posts       <- atomically $ newTVar ([] :: [Post])
+  sample_body <- sampleBody
+  atomically $ writeTVar posts (Main.children sample_body)
+
   scotty 3000 $ do
     middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
-    get "/" $
-      redirect "/index.html"  -- TODO: Hide index.html from address bar.
-    get "/data" $
-      json $ Main.children sample_body
+    get "/" $ redirect "/index.html" -- TODO: Hide index.html from address bar.
+    get "/data" $ do
+      currentPosts <- liftIO $ atomically $ readTVar posts
+      json currentPosts
