@@ -21,3 +21,4 @@ executable          backend
                   , lens-aeson
                   , text
                   , stm
+                  , bytestring
