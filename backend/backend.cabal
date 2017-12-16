@@ -12,6 +12,7 @@ executable          backend
                   , scotty
                   , raw-strings-qq
                   , wai-middleware-static
+                  , wai-extra
                   , wreq
                   , lens
                   , containers
