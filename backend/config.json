@@ -1,0 +1,8 @@
+{"sites":[
+    {"tag":"Reddit","subReddit":"zerocarb", "count":3},
+    {"tag":"Reddit","subReddit":"haskell", "count": 7},
+    {"tag":"Reddit","subReddit":"quebec", "count": 3},
+    {"tag":"Reddit","subReddit":"montreal", "count": 3},
+    {"tag":"HackerNews"}
+    ]
+}

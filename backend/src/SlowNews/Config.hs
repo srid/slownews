@@ -4,7 +4,7 @@
 module SlowNews.Config where
 
 import           GHC.Generics
-import           Data.Aeson   (ToJSON(..))
+import           Data.Aeson   (FromJSON(..), ToJSON(..))
 
 data Config =
     Config { sites :: [Site] }
@@ -13,13 +13,15 @@ data Config =
 data Site 
     = Reddit { subReddit :: String
              , count :: Maybe Int }
-    -- | HackerNews
+    | HackerNews
     deriving (Show, Eq, Generic)
     
 instance ToJSON Config
 instance ToJSON Site
-
+instance FromJSON Config
+instance FromJSON Site
 
 sample = Config 
     [ Reddit "zerocarb" $ Just 3
-    , Reddit "keto" Nothing ]
+    , Reddit "keto" Nothing
+    , HackerNews ]

@@ -28,10 +28,10 @@ instance FromJSON Link where
 
 fetchSubreddit :: String -> Maybe Int -> IO [Link]
 fetchSubreddit subreddit countMaybe = do
-  let
+  r <- WQ.asJSON =<< WQ.get (url countMaybe) :: IO (WQ.Response Body)
+  return $ r ^. WQ.responseBody & bodyChildren
+  where
     url Nothing =
       "https://www.reddit.com/r/" ++ subreddit ++ "/top/.json?sort=top&t=week"
     url (Just count) =
-      url Nothing ++ ("&limit=" ++ show count)
-  r <- WQ.asJSON =<< WQ.get (url countMaybe) :: IO (WQ.Response Body)
-  return $ r ^. WQ.responseBody & bodyChildren
+      url Nothing ++ "&limit=" ++ show count
