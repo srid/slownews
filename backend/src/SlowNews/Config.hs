@@ -7,25 +7,19 @@ import           GHC.Generics
 import           Data.Aeson   (ToJSON(..))
 
 data Config =
-    Config { sites :: [SiteConfig] }
-    deriving (Show, Eq, Generic)
-
-data SiteConfig = 
-    SiteConfig { site :: Site
-               , count :: Int 
-               }
+    Config { sites :: [Site] }
     deriving (Show, Eq, Generic)
     
 data Site 
-    = Reddit { subReddit :: String }
+    = Reddit { subReddit :: String
+             , count :: Maybe Int }
     -- | HackerNews
     deriving (Show, Eq, Generic)
     
 instance ToJSON Config
-instance ToJSON SiteConfig
 instance ToJSON Site
 
 
 sample = Config 
-    [ SiteConfig (Reddit "zerocarb") 3
-    , SiteConfig (Reddit "keto") 12]
+    [ Reddit "zerocarb" $ Just 3
+    , Reddit "keto" Nothing ]

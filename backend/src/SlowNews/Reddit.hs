@@ -26,10 +26,12 @@ instance FromJSON Link where
          <*> d .: "created_utc"
          <*> d .: "subreddit_name_prefixed"
 
-fetchSubreddit :: String -> IO [Link]
-fetchSubreddit subreddit = do
+fetchSubreddit :: String -> Maybe Int -> IO [Link]
+fetchSubreddit subreddit countMaybe = do
   let
-    url =
+    url Nothing =
       "https://www.reddit.com/r/" ++ subreddit ++ "/top/.json?sort=top&t=week"
-  r <- WQ.asJSON =<< WQ.get url :: IO (WQ.Response Body)
+    url (Just count) =
+      url Nothing ++ ("&limit=" ++ show count)
+  r <- WQ.asJSON =<< WQ.get (url countMaybe) :: IO (WQ.Response Body)
   return $ r ^. WQ.responseBody & bodyChildren

@@ -12,16 +12,15 @@ import SlowNews.Reddit as Reddit
 import SlowNews.Link (Link, Links, appendLinks)
 
 fetchSite :: Links -> Config.Site -> IO ()
-fetchSite links (Config.Reddit subReddit) = do
-  redditLinks <- Reddit.fetchSubreddit subReddit
+fetchSite links (Config.Reddit subReddit count) = do
+  redditLinks <- Reddit.fetchSubreddit subReddit count
   atomically $ appendLinks links redditLinks
 
 main :: IO ()
 main = do
   links <- atomically $ newTVar ([] :: [Link])
   let config = Config.sample
-  let sites = Config.site <$> (Config.sites config)
-  -- TODO: take 'count' into consideration
+  let sites = Config.sites config
 
   -- Fetch all sites asynchronously
   mapM_ (forkIO . fetchSite links) $ sites
