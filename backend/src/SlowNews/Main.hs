@@ -2,8 +2,8 @@
 
 import           Control.Concurrent (forkIO, threadDelay)
 import           Control.Concurrent.STM
-import           Control.Concurrent.Async (mapConcurrently_)
-import           Control.Monad (forever)
+import           Control.Concurrent.Async (mapConcurrently)
+import           Control.Monad (forever, join)
 import           Control.Monad.IO.Class (liftIO)
 import           Network.Wai.Middleware.Static
 import           Network.Wai.Middleware.RequestLogger
@@ -13,14 +13,15 @@ import qualified Data.ByteString.Lazy as B
 
 import qualified SlowNews.Config as Config
 import SlowNews.Reddit as Reddit
-import SlowNews.Link (Link, Links, appendLinks)
+import SlowNews.Link (Link)
 
-fetchSite :: Links -> Config.Site -> IO ()
-fetchSite links (Config.Reddit subReddit count) = do
+type Links = TVar [Link]
+
+fetchSite ::  Config.Site -> IO [Link]
+fetchSite (Config.Reddit subReddit count) = do
   putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
-  redditLinks <- Reddit.fetchSubreddit subReddit count
-  atomically $ appendLinks links redditLinks
-fetchSite _ Config.HackerNews = return ()  -- TODO
+  Reddit.fetchSubreddit subReddit count
+fetchSite Config.HackerNews = return []  -- TODO
 
 fetchAll :: Links -> IO ()
 fetchAll links = do
@@ -30,7 +31,9 @@ fetchAll links = do
   let sites = Config.sites config
   -- Fetch all sites asynchronously
   putStrLn $ "Fetching " ++ show (length sites) ++ " sites"
-  mapConcurrently_ (forkIO . fetchSite links) sites 
+  results <- join <$> mapConcurrently fetchSite sites 
+  _ <- atomically $ writeTVar links results
+  return ()
   
 fetchAllPeriodically :: Links -> IO ()
 fetchAllPeriodically links = forever $ do
