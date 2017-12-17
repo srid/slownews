@@ -8,8 +8,6 @@ import           Control.Monad.IO.Class (liftIO)
 import           Network.Wai.Middleware.Static
 import           Network.Wai.Middleware.RequestLogger
 import           Web.Scotty
-import           Data.Aeson (decode)
-import qualified Data.ByteString.Lazy as B
 
 import qualified SlowNews.Config as Config
 import SlowNews.Reddit as Reddit
@@ -23,31 +21,31 @@ fetchSite (Config.Reddit subReddit count) = do
   Reddit.fetchSubreddit subReddit count
 fetchSite Config.HackerNews = return []  -- TODO
 
+fetchSites :: [Config.Site] -> IO [Link]
+fetchSites sites = do 
+  putStrLn $ "Fetching " ++ show (length sites) ++ " sites in parallel"
+  join <$> mapConcurrently fetchSite sites 
+
 fetchAll :: Links -> IO ()
 fetchAll links = do
-  -- Load config file, and fail if it is invalid.
-  configB <- B.readFile "config.json"
-  let (Just config) = decode configB :: Maybe Config.Config
-  let sites = Config.sites config
+  config <- Config.load
   -- Fetch all sites asynchronously
-  putStrLn $ "Fetching " ++ show (length sites) ++ " sites"
-  results <- join <$> mapConcurrently fetchSite sites 
+  results <- fetchSites $ Config.sites config
   _ <- atomically $ writeTVar links results
   return ()
   
-fetchAllPeriodically :: Links -> IO ()
-fetchAllPeriodically links = forever $ do
-  fetchAll links 
-  sleepSecs (30 * 60)
+foreverEvery :: Int -> IO () -> IO()
+foreverEvery secs action = forever $ do
+  action
+  sleepSecs secs
   where 
     sleepSecs n = threadDelay (n * 1000 * 1000)
 
-    
 main :: IO ()
 main = do
   links <- atomically $ newTVar ([] :: [Link])
 
-  _ <- forkIO $ fetchAllPeriodically links
+  foreverEvery (30 * 60) $ fetchAll links
   
   -- Run the web server
   scotty 3000 $ do
