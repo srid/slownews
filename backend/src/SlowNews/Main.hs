@@ -1,8 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import           Control.Concurrent (forkIO)
+import           Control.Concurrent (forkIO, threadDelay)
 import           Control.Concurrent.STM
-import           Control.Monad (forM_)
+import           Control.Concurrent.Async (mapConcurrently_)
+import           Control.Monad (forever)
 import           Control.Monad.IO.Class (liftIO)
 import           Network.Wai.Middleware.Static
 import           Network.Wai.Middleware.RequestLogger
@@ -16,23 +17,35 @@ import SlowNews.Link (Link, Links, appendLinks)
 
 fetchSite :: Links -> Config.Site -> IO ()
 fetchSite links (Config.Reddit subReddit count) = do
+  putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
   redditLinks <- Reddit.fetchSubreddit subReddit count
   atomically $ appendLinks links redditLinks
 fetchSite _ Config.HackerNews = return ()  -- TODO
 
+fetchAll :: Links -> IO ()
+fetchAll links = do
+  -- Load config file, and fail if it is invalid.
+  configB <- B.readFile "config.json"
+  let (Just config) = decode configB :: Maybe Config.Config
+  let sites = Config.sites config
+  -- Fetch all sites asynchronously
+  putStrLn $ "Fetching " ++ show (length sites) ++ " sites"
+  mapConcurrently_ (forkIO . fetchSite links) sites 
+  
+fetchAllPeriodically :: Links -> IO ()
+fetchAllPeriodically links = forever $ do
+  fetchAll links 
+  sleepSecs (30 * 60)
+  where 
+    sleepSecs n = threadDelay (n * 1000 * 1000)
+
+    
 main :: IO ()
 main = do
   links <- atomically $ newTVar ([] :: [Link])
 
-  -- Load config file, and fail if it is invalid.
-  configB <- B.readFile "config.json"
-  let (Just config) = decode configB :: Maybe Config.Config
-
-  -- Fetch all sites asynchronously
-  -- TODO: Do this in a timer
-  forM_ (Config.sites config) 
-    (forkIO . fetchSite links)
-
+  _ <- forkIO $ fetchAllPeriodically links
+  
   -- Run the web server
   scotty 3000 $ do
     middleware $ logStdoutDev

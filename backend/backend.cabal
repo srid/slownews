@@ -22,3 +22,4 @@ executable          backend
                   , text
                   , stm
                   , bytestring
+                  , async
