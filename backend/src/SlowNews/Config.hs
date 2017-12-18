@@ -5,7 +5,7 @@ module SlowNews.Config where
 
 import           GHC.Generics
 import           Data.Maybe (fromJust)
-import           Data.Aeson   (decode, FromJSON(..), ToJSON(..))
+import           Data.Aeson   (decode, FromJSON(..))
 import qualified Data.ByteString.Lazy as B
 
 data Config =
@@ -18,8 +18,6 @@ data Site
     | HackerNews
     deriving (Show, Eq, Generic)
 
-instance ToJSON Config
-instance ToJSON Site
 instance FromJSON Config
 instance FromJSON Site
 
