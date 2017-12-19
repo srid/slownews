@@ -3,6 +3,7 @@
 module SlowNews.Reddit where
 
 import           Control.Lens
+import           Data.Text as T
 import           Data.Aeson                    (FromJSON (..),
                                                 withObject, (.:))
 import qualified Network.Wreq                  as WQ
@@ -20,12 +21,16 @@ instance FromJSON Body where
 instance FromJSON Link where
   parseJSON = withObject "Link" $ \v -> do
     d <- v .: "data"
-    Link <$> d .: "title"
-         <*> d .: "url"
-         <*> d .: "permalink"
-         <*> d .: "created_utc"
-         <*> d .: "subreddit_name_prefixed"
-
+    link <- Link <$> d .: "title"
+                 <*> d .: "url"
+                 <*> d .: "permalink"
+                 <*> d .: "created_utc"
+                 <*> d .: "subreddit_name_prefixed"
+    return link { linkMetaUrl = fullMetaUrl link}
+    where 
+      fullMetaUrl link = 
+        T.pack "https://reddit.com" `T.append ` linkMetaUrl link
+ 
 fetchSubreddit :: String -> Maybe Int -> IO [Link]
 fetchSubreddit subreddit countMaybe = do
   r <- WQ.asJSON =<< WQ.get (url countMaybe) :: IO (WQ.Response Body)
