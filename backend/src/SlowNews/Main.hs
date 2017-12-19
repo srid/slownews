@@ -23,20 +23,16 @@ fetchSite Config.HackerNews = return []  -- TODO
 
 fetchAll :: Links -> IO ()
 fetchAll links =
-  Config.load >>= fetchSites . Config.sites >>= storeTVar links
+  Config.loadSites >>= fetchSites >>= storeTVar links
   where 
     fetchSites = fmap join . mapConcurrently fetchSite
     storeTVar tvar = atomically . writeTVar tvar
-
-foreverEvery :: Int -> IO () -> IO ()
-foreverEvery secs action = forever (action >> sleepSecs secs)
-  where sleepSecs n = threadDelay (n * 1000 * 1000)
 
 main :: IO ()
 main = do
   links <- atomically $ newTVar mempty
 
-  _ <- forkIO $ foreverEvery (30 * 60) (fetchAll links)
+  _ <- forkIO $ forever (fetchAll links >> sleepM 30)
 
   -- Run the web server
   scotty 3000 $ do
@@ -48,5 +44,7 @@ main = do
       redirect "/index.html" -- TODO: Hide index.html from address bar.
     get "/data" $ 
       liftTVar links >>= json
-  where liftTVar = liftIO . atomically . readTVar
-
+  where 
+    liftTVar = liftIO . atomically . readTVar
+    sleepM n = threadDelay (n * 60 * 1000 * 1000)  -- sleep in minutes
+  

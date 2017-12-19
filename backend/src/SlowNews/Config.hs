@@ -23,3 +23,6 @@ instance FromJSON Site
 
 load :: IO Config
 load = fromJust . decode <$> B.readFile "config.json"
+
+loadSites :: IO [Site]
+loadSites = load >>= return . sites
