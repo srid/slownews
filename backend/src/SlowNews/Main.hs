@@ -22,29 +22,25 @@ fetchSite (Config.Reddit subReddit count) = do
 fetchSite Config.HackerNews = return []  -- TODO
 
 fetchAll :: Links -> IO ()
-fetchAll links =
-  Config.loadSites >>= fetchSites >>= storeTVar links
-  where 
-    fetchSites = fmap join . mapConcurrently fetchSite
-    storeTVar tvar = atomically . writeTVar tvar
+fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links
+ where
+  fetchSites = fmap join . mapConcurrently fetchSite
+  storeTVar tvar = atomically . writeTVar tvar
 
 main :: IO ()
 main = do
   links <- atomically $ newTVar mempty
 
-  _ <- forkIO $ forever (fetchAll links >> sleepM 30)
+  _     <- forkIO $ forever (fetchAll links >> sleepM 30)
 
   -- Run the web server
   scotty 3000 $ do
-    middleware $ 
-      logStdoutDev
-    middleware $ 
-      staticPolicy (noDots >-> addBase "../frontend/static")
+    middleware $ logStdoutDev
+    middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
     get "/" $ 
       redirect "/index.html" -- TODO: Hide index.html from address bar.
     get "/data" $ 
       liftTVar links >>= json
-  where 
-    liftTVar = liftIO . atomically . readTVar
-    sleepM n = threadDelay (n * 60 * 1000 * 1000)  -- sleep in minutes
-  
+ where
+  liftTVar = liftIO . atomically . readTVar
+  sleepM n = threadDelay (n * 60 * 1000 * 1000)  -- sleep in minutes

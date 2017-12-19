@@ -5,13 +5,11 @@
   , {"tag":"Reddit","subReddit":"quebec", "count": 3}
   , {"tag":"Reddit","subReddit":"montreal", "count": 3}
   , {"tag":"Reddit","subReddit":"programming", "count": 3}
-  , {"tag":"Reddit","subReddit":"todayilearned", "count": 1}
   , {"tag":"Reddit","subReddit":"lifeprotips", "count": 1}
-  , {"tag":"Reddit","subReddit":"askreddit", "count": 1}
   , {"tag":"Reddit","subReddit":"omad", "count": 1}
   , {"tag":"Reddit","subReddit":"emacs", "count": 1}
-  , {"tag":"Reddit","subReddit":"ketogains", "count": 3}
-  , {"tag":"Reddit","subReddit":"canada", "count": 7}
+  , {"tag":"Reddit","subReddit":"ketogains", "count": 2}
+  , {"tag":"Reddit","subReddit":"canada", "count": 1}
   , {"tag":"HackerNews"}
   ]
 }
