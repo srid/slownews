@@ -11,6 +11,7 @@ import           Web.Scotty
 
 import qualified SlowNews.Config as Config
 import SlowNews.Reddit as Reddit
+import SlowNews.HackerNews as HN
 import SlowNews.Link (Link)
 
 type Links = TVar [Link]
@@ -19,7 +20,9 @@ fetchSite :: Config.Site -> IO [Link]
 fetchSite (Config.Reddit subReddit count) = do
   putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
   Reddit.fetchSubreddit subReddit count
-fetchSite Config.HackerNews = return []  -- TODO
+fetchSite Config.HackerNews = do 
+  putStrLn $ "Fetching HN"
+  HN.fetch Nothing
 
 fetchAll :: Links -> IO ()
 fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links
