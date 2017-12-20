@@ -21,23 +21,28 @@ instance FromJSON Body where
 -- TODO: avoid orphan instances
 instance FromJSON Link where
   parseJSON = withObject "Link" $ \d -> do
+    -- https://hn.algolia.com/api
     -- TODO: process data text.
-    Link <$> d .: "title"
-         <*> d .: "url"
-         <*> d .: "objectID"
-         <*> d .: "created_at_i"
-         <*> d .: "author"
+    link <- Link <$> d .: "title"
+                 <*> d .: "url"
+                 <*> d .: "objectID"
+                 <*> d .: "created_at_i"
+                 <*> d .: "author" -- Dummy parsing
+    return link {
+        linkMetaUrl = T.pack "https://news.ycombinator.com/item?id=" `T.append` linkMetaUrl link
+      , linkSite = "HN"
+    }
 
 fetch :: Maybe Int -> IO [Link]
 fetch countMaybe = do
-  let url = "http://hn.algolia.com/api/v1/search"
-  let count = fromMaybe 10 countMaybe
-  let query = "" -- TODO
-  let opts = defaults & params .~
-             [ ("tags", "story")
-             -- , ("numericFilters", "created_at_i>#{one_week_ago}") TODO
-             , ("hitsPerPage", T.pack . show  $ count)
-             , ("query", T.pack . show $ query) ]
-  
   r <- asJSON =<< getWith opts url :: IO (Response Body)
   return $ r ^. responseBody & bodyChildren
+  where
+    url = "http://hn.algolia.com/api/v1/search"
+    count = fromMaybe 10 countMaybe
+    query = "" -- TODO
+    opts = defaults & params .~
+              [ ("tags", "story")
+              -- , ("numericFilters", "created_at_i>#{one_week_ago}") TODO
+              , ("hitsPerPage", T.pack . show  $ count)
+              , ("query", T.pack . show $ query) ]
