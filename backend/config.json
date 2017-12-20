@@ -11,5 +11,7 @@
   , {"tag":"Reddit","subReddit":"ketogains", "count": 2}
   , {"tag":"Reddit","subReddit":"canada", "count": 1}
   , {"tag":"HackerNews"}
+  , {"tag":"HackerNews", "query": "india", "count": 3}
+  , {"tag":"HackerNews", "query": "haskell", "count": 3}
   ]
 }

@@ -20,9 +20,9 @@ fetchSite :: Config.Site -> IO [Link]
 fetchSite (Config.Reddit subReddit count) = do
   putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
   Reddit.fetchSubreddit subReddit count
-fetchSite Config.HackerNews = do 
+fetchSite (Config.HackerNews query count) = do 
   putStrLn $ "Fetching HN"
-  HN.fetch Nothing
+  HN.fetch query count
 
 fetchAll :: Links -> IO ()
 fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links

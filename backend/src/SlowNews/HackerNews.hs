@@ -33,16 +33,18 @@ instance FromJSON Link where
       , linkSite = "HN"
     }
 
-fetch :: Maybe Int -> IO [Link]
-fetch countMaybe = do
+fetch :: Maybe String -> Maybe Int -> IO [Link]
+fetch queryMaybe countMaybe = do
   r <- asJSON =<< getWith opts url :: IO (Response Body)
-  return $ r ^. responseBody & bodyChildren
+  return $ fixLink <$> (r ^. responseBody & bodyChildren)
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
-    query = "" -- TODO
+    query = fromMaybe "" queryMaybe 
     opts = defaults & params .~
               [ ("tags", "story")
               -- , ("numericFilters", "created_at_i>#{one_week_ago}") TODO
               , ("hitsPerPage", T.pack . show  $ count)
-              , ("query", T.pack . show $ query) ]
+              , ("query", T.pack . show $ query) 
+              ]
+    fixLink link = link { linkSite = linkSite link `T.append` T.pack "/" `T.append` T.pack query }

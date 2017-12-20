@@ -15,7 +15,8 @@ data Config =
 data Site
     = Reddit { subReddit :: String
              , count :: Maybe Int }
-    | HackerNews
+    | HackerNews { query :: Maybe String 
+                 , count :: Maybe Int }
     deriving (Show, Eq, Generic)
 
 instance FromJSON Config
