@@ -2,8 +2,9 @@
 
 module SlowNews.Reddit where
 
+
+import           Data.Monoid
 import           Control.Lens
-import           Data.Text as T
 import           Data.Aeson                    (FromJSON (..),
                                                 withObject, (.:))
 import qualified Network.Wreq                  as WQ
@@ -28,8 +29,7 @@ instance FromJSON Link where
                  <*> d .: "subreddit_name_prefixed"
     return link { linkMetaUrl = fullMetaUrl link}
     where 
-      fullMetaUrl link = 
-        T.pack "https://reddit.com" `T.append ` linkMetaUrl link
+      fullMetaUrl link = "https://reddit.com" <> linkMetaUrl link
  
 fetchSubreddit :: String -> Maybe Int -> IO [Link]
 fetchSubreddit subreddit countMaybe = do
