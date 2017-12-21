@@ -1,5 +1,5 @@
 {"sites":
-  [ 
+  [
     {"tag":"Reddit","subReddit":"zerocarb", "count":4}
   , {"tag":"Reddit","subReddit":"haskell", "count": 7}
   , {"tag":"Reddit","subReddit":"elm", "count": 1}

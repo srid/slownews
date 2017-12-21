@@ -1,15 +1,14 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module SlowNews.Reddit where
 
-import           Data.Monoid
 import           Control.Lens
-import Data.Text (Text)
-import           Data.Aeson                    (FromJSON (..),
-                                                withObject, (.:))
-import qualified Network.Wreq                  as WQ
-import SlowNews.Link (Link(..), Linky(..))
+import           Data.Aeson    (FromJSON (..), withObject, (.:))
+import           Data.Monoid
+import           Data.Text     (Text)
+import qualified Network.Wreq  as WQ
+import           SlowNews.Link (Link (..), Linky (..))
 
 data Body =
   Body { bodyChildren :: [RLink] }
@@ -20,12 +19,12 @@ instance FromJSON Body where
     d <- v .: "data"
     Body <$> d .: "children"
 
-data RLink = RLink 
-  { rlinkTitle :: Text 
-  , rlinkUrl :: Text
-  , rlinkPermalink :: Text
-  , rlinkCreatedUtc :: Int 
-  , rlinkSubredditNamePrefixed :: Text 
+data RLink = RLink
+  { rlinkTitle                 :: Text
+  , rlinkUrl                   :: Text
+  , rlinkPermalink             :: Text
+  , rlinkCreatedUtc            :: Int
+  , rlinkSubredditNamePrefixed :: Text
   }
   deriving (Show, Eq)
 
@@ -35,14 +34,14 @@ instance FromJSON RLink where
     RLink <$> d .: "title"
           <*> d .: "url"
           <*> d .: "permalink"
-          <*> d .: "created_utc"  
-          <*> d .: "subreddit_name_prefixed"  
+          <*> d .: "created_utc"
+          <*> d .: "subreddit_name_prefixed"
 
 instance Linky RLink where
-  toLink RLink{ rlinkTitle, rlinkUrl, rlinkPermalink, rlinkCreatedUtc, rlinkSubredditNamePrefixed } = 
+  toLink RLink{ rlinkTitle, rlinkUrl, rlinkPermalink, rlinkCreatedUtc, rlinkSubredditNamePrefixed } =
     Link rlinkTitle rlinkUrl metaUrl rlinkCreatedUtc rlinkSubredditNamePrefixed
     where metaUrl = "https://reddit.com" <> rlinkPermalink
- 
+
 fetchSubreddit :: String -> Maybe Int -> IO [RLink]
 fetchSubreddit subreddit countMaybe = do
   r <- WQ.asJSON =<< WQ.get (url countMaybe) :: IO (WQ.Response Body)
