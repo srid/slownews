@@ -2,17 +2,21 @@
 
 import           Control.Concurrent                   (forkIO, threadDelay)
 import           Control.Concurrent.Async             (mapConcurrently)
-import           Control.Concurrent.STM
+import           Control.Concurrent.STM               (TVar, atomically,
+                                                       newTVar, readTVar,
+                                                       writeTVar)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
-import           Network.Wai.Middleware.RequestLogger
-import           Network.Wai.Middleware.Static
-import           Web.Scotty
+import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
+import           Network.Wai.Middleware.Static        (addBase, noDots,
+                                                       staticPolicy, (>->))
+import           Web.Scotty                           (get, json, middleware,
+                                                       redirect, scotty)
 
 import qualified SlowNews.Config                      as Config
-import           SlowNews.HackerNews                  as HN
+import qualified SlowNews.HackerNews                  as HN
 import           SlowNews.Link                        (Link, toLink)
-import           SlowNews.Reddit                      as Reddit
+import qualified SlowNews.Reddit                      as Reddit
 
 type Links = TVar [Link]
 

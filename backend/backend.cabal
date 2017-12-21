@@ -6,7 +6,8 @@ build-type:    Simple
 executable          backend
     hs-source-dirs: src
     main-is:        SlowNews/Main.hs
-    ghc-options:    -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
+    ghc-options:    -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
+                    -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
     other-modules:  SlowNews.Config
                   , SlowNews.Link
