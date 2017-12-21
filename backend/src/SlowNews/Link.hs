@@ -19,3 +19,6 @@ data Link =
 
 instance ToJSON Link where
   toJSON = genericToJSON $ aesonPrefix snakeCase
+
+class Linky a where 
+  toLink :: a -> Link
