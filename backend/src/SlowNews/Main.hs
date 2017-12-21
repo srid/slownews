@@ -19,7 +19,7 @@ type Links = TVar [Link]
 fetchSite :: Config.Site -> IO [Link]
 fetchSite (Config.Reddit subReddit count) = do
   putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
-  Reddit.fetchSubreddit subReddit count
+  fmap toLink <$> Reddit.fetchSubreddit subReddit count
 fetchSite (Config.HackerNews query count) = do 
   putStrLn $ "Fetching HN"
   fmap toLink <$> HN.fetch query count
