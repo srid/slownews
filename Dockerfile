@@ -6,7 +6,8 @@ RUN apt-get -y update && apt-get install -y xz-utils build-essential make
 
 RUN stack setup
 
-WORKDIR backend
+ADD . /app
+WORKDIR /app/backend
 RUN stack build
 
 CMD stack exec backend
