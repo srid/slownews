@@ -11,4 +11,3 @@ WORKDIR /app/backend
 RUN stack build
 
 CMD stack exec backend
-
