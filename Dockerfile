@@ -6,8 +6,13 @@ RUN apt-get -y update && apt-get install -y xz-utils build-essential make
 
 RUN stack setup
 
-ADD . /app
+# First cache the long build process
+COPY backend/backend.cabal /app/backend/
+COPY backend/stack.yaml /app/backend/
 WORKDIR /app/backend
+RUN stack install --only-dependencies
+
+COPY . /app
 RUN stack build
 
 CMD stack exec backend
