@@ -3,10 +3,10 @@
 
 module SlowNews.Config where
 
-import           Data.Aeson           (FromJSON (..), decode)
+import           Data.Aeson           (FromJSON, decode)
 import qualified Data.ByteString.Lazy as B
 import           Data.Maybe           (fromJust)
-import           GHC.Generics
+import           GHC.Generics         (Generic)
 
 data Config =
     Config { sites :: [Site] }

@@ -3,16 +3,18 @@
 
 module SlowNews.HackerNews where
 
-import           Control.Lens  ((&), (.~), (^.))
-import           Data.Aeson    (FromJSON (..), withObject, (.:))
-import           Data.Maybe    (fromMaybe)
-import           Data.Monoid
-import           Data.Text     (Text)
-import qualified Data.Text     as T
-import           Data.Time
-import           Network.Wreq  (Response, asJSON, defaults, getWith, params,
-                                responseBody)
-import           SlowNews.Link (Link (Link), Linky (..))
+import           Control.Lens          ((&), (.~), (^.))
+import           Data.Aeson            (FromJSON (parseJSON), withObject, (.:))
+import           Data.Maybe            (fromMaybe)
+import           Data.Monoid           ((<>))
+import           Data.Text             (Text)
+import qualified Data.Text             as T
+import           Data.Time             (UTCTime(UTCTime), addDays, getCurrentTime,
+                                        utctDay)
+import           Data.Time.Clock.POSIX (utcTimeToPOSIXSeconds)
+import           Network.Wreq          (Response, asJSON, defaults, getWith,
+                                        params, responseBody)
+import           SlowNews.Link         (Link (Link), Linky (toLink))
 
 data Body =
   Body { bodyChildren :: [HNLink] }
@@ -44,17 +46,17 @@ instance Linky HNLink where
 
 fetch :: Maybe String -> Maybe Int -> IO [HNLink]
 fetch queryMaybe countMaybe = do
-  created_at_i <- oneWeekAgo
+  created_at_i <- show <$> (oneWeekAgo :: IO Integer)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
   return $ r ^. responseBody & bodyChildren
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
     query = fromMaybe "" queryMaybe
-    oneWeekAgo = toTimestamp . toTime . addDays (-7) <$> now
+    oneWeekAgo = toTimestamp . addDays (-7) <$> now
       where now = utctDay <$> getCurrentTime
             toTime day = UTCTime day 0
-            toTimestamp = formatTime defaultTimeLocale "%s"
+            toTimestamp = round . utcTimeToPOSIXSeconds . toTime
     opts c = defaults & params .~
               [ ("tags", "story")
               , ("numericFilters", T.pack $ "created_at_i>" ++ c)

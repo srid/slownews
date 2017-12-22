@@ -29,10 +29,11 @@ fetchSite (Config.HackerNews query count) = do
   fmap toLink <$> HN.fetch query count
 
 fetchAll :: Links -> IO ()
-fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links
+fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links >> logIt
  where
   fetchSites = fmap join . mapConcurrently fetchSite
   storeTVar tvar = atomically . writeTVar tvar
+  logIt = putStrLn "Finished."
 
 main :: IO ()
 main = do
