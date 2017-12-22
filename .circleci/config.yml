@@ -11,3 +11,9 @@ jobs:
       - run:
           name: Print the Current Time
           command: date
+
+deployment:
+  staging:
+    branch: haskell-port-heroku-deployment
+    heroku:
+      appname: slownews-srid
