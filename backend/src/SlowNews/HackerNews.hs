@@ -38,18 +38,19 @@ instance FromJSON HNLink where
              <*> d .: "objectID"
              <*> d .: "created_at_i"
 
-toLink :: HNLink -> Link
-toLink HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
-  Link hnlinkTitle hnlinkUrl metaURL hnlinkCreatedAtI siteName
+toLink :: Maybe String -> HNLink -> Link
+toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
+  Link hnlinkTitle hnlinkUrl metaURL hnlinkCreatedAtI (siteName query)
   where
     metaURL = "https://news.ycombinator.com/item?id=" <> hnlinkObjectID
-    siteName = "hn"
+    siteName Nothing  = "hn"
+    siteName (Just q) = T.pack $ "hn" <> "/" <> q
 
 fetch :: Maybe String -> Maybe Int -> IO [Link]
 fetch queryMaybe countMaybe = do
   created_at_i <- show <$> (oneWeekAgo :: IO Integer)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
-  return $ fmap toLink $ r ^. responseBody & bodyChildren
+  return $ fmap (toLink queryMaybe) $ r ^. responseBody & bodyChildren
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
