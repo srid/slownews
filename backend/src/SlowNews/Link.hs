@@ -3,10 +3,10 @@
 
 module SlowNews.Link where
 
-import           Data.Aeson   (ToJSON(..), genericToJSON)
-import           Data.Aeson.Casing (snakeCase, aesonPrefix)
-import           Data.Text    (Text)
-import           GHC.Generics
+import           Data.Aeson        (ToJSON (toJSON), genericToJSON)
+import           Data.Aeson.Casing (aesonPrefix, snakeCase)
+import           Data.Text         (Text)
+import           GHC.Generics      (Generic)
 
 data Link =
   Link { linkTitle   :: Text

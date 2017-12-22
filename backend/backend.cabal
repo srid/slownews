@@ -1,13 +1,18 @@
 name:          backend
-version:       0.0.0
+version:       0.0.1
 cabal-version: >= 1.8
 build-type:    Simple
 
 executable          backend
     hs-source-dirs: src
     main-is:        SlowNews/Main.hs
-    ghc-options:    -Wall -threaded -O2 -rtsopts -with-rtsopts=-N
+    ghc-options:    -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
+                    -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
+    other-modules:  SlowNews.Config
+                  , SlowNews.Link
+                  , SlowNews.HackerNews
+                  , SlowNews.Reddit
     build-depends:  base   >= 4      && < 5
                   , scotty
                   , raw-strings-qq
@@ -23,3 +28,4 @@ executable          backend
                   , stm
                   , bytestring
                   , async
+                  , time
