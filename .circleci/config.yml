@@ -1,19 +1,15 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: debian:stretch
-    steps:
-      - checkout
-      - run:
-          name: Greeting
-          command: echo Hello, world.
-      - run:
-          name: Print the Current Time
-          command: date
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - ~/docker
 
 deployment:
   staging:
     branch: haskell-port-heroku-deployment
-    heroku:
-      appname: slownews-srid
+    commands:
+      - docker login --email=$HEROKU_LOGIN --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+      - docker build --rm=false -t registry.heroku.com/slownews-srid/web .
+      - docker push registry.heroku.com/slownews-srid/web:latest
