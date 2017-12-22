@@ -23,26 +23,27 @@ data Body =
 instance FromJSON Body where
   parseJSON = withObject "Body" $ \d -> Body <$> d .: "hits"
 
-data HNLink =
-  HNLink { hnlinkTitle      :: Text
-         , hnlinkUrl        :: Text
-         , hnlinkObjectID   :: Text
-         , hnlinkCreatedAtI :: Int
-         }
-  deriving (Show, Eq)
+data HNLink = HNLink
+  { hnlinkTitle      :: Text
+  , hnlinkUrl        :: Text
+  , hnlinkObjectID   :: Text
+  , hnlinkCreatedAtI :: Int
+  } deriving (Show, Eq)
 
 instance FromJSON HNLink where
-  parseJSON = withObject "HNLink" $ \d ->
-    HNLink <$> d .: "title"
-           <*> d .: "url"
-           <*> d .: "objectID"
-           <*> d .: "created_at_i"
+  parseJSON =
+    withObject "HNLink" $ \d ->
+      HNLink <$> d .: "title"
+             <*> d .: "url"
+             <*> d .: "objectID"
+             <*> d .: "created_at_i"
 
 toLink :: HNLink -> Link
-toLink HNLink{hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
+toLink HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
   Link hnlinkTitle hnlinkUrl metaURL hnlinkCreatedAtI siteName
-  where metaURL = "https://news.ycombinator.com/item?id=" <> hnlinkObjectID
-        siteName = "hn"
+  where
+    metaURL = "https://news.ycombinator.com/item?id=" <> hnlinkObjectID
+    siteName = "hn"
 
 fetch :: Maybe String -> Maybe Int -> IO [Link]
 fetch queryMaybe countMaybe = do
@@ -54,12 +55,14 @@ fetch queryMaybe countMaybe = do
     count = fromMaybe 10 countMaybe
     query = fromMaybe "" queryMaybe
     oneWeekAgo = toTimestamp . addDays (-7) <$> now
-      where now = utctDay <$> getCurrentTime
-            toTime day = UTCTime day 0
-            toTimestamp = round . utcTimeToPOSIXSeconds . toTime
-    opts c = defaults & params .~
-              [ ("tags", "story")
-              , ("numericFilters", T.pack $ "created_at_i>" ++ c)
-              , ("hitsPerPage", T.pack . show  $ count)
-              , ("query", T.pack . show $ query)
-              ]
+      where
+        now = utctDay <$> getCurrentTime
+        toTime day = UTCTime day 0
+        toTimestamp = round . utcTimeToPOSIXSeconds . toTime
+    opts c =
+      defaults & params .~
+      [ ("tags", "story")
+      , ("numericFilters", T.pack $ "created_at_i>" ++ c)
+      , ("hitsPerPage", T.pack . show $ count)
+      , ("query", T.pack . show $ query)
+      ]

@@ -8,16 +8,16 @@ import qualified Data.ByteString.Lazy as B
 import           Data.Maybe           (fromJust)
 import           GHC.Generics         (Generic)
 
-data Config =
-    Config { sites :: [Site] }
-    deriving (Show, Eq, Generic)
+data Config = Config
+  { sites :: [Site]
+  } deriving (Show, Eq, Generic)
 
 data Site
-    = Reddit { subReddit :: String
-             , count     :: Maybe Int }
-    | HackerNews { query :: Maybe String
-                 , count :: Maybe Int }
-    deriving (Show, Eq, Generic)
+  = Reddit { subReddit :: String
+           , count     :: Maybe Int }
+  | HackerNews { query :: Maybe String
+               , count :: Maybe Int }
+  deriving (Show, Eq, Generic)
 
 instance FromJSON Config
 instance FromJSON Site

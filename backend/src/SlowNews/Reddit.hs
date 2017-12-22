@@ -10,14 +10,15 @@ import           Data.Text     (Text)
 import qualified Network.Wreq  as WQ
 import           SlowNews.Link (Link (Link))
 
-data Body =
-  Body { bodyChildren :: [RLink] }
-  deriving (Show, Eq)
+data Body = Body
+  { bodyChildren :: [RLink]
+  } deriving (Show, Eq)
 
 instance FromJSON Body where
   parseJSON = withObject "Body" $ \v -> do
     d <- v .: "data"
     Body <$> d .: "children"
+
 
 data RLink = RLink
   { rlinkTitle                 :: Text
@@ -25,9 +26,7 @@ data RLink = RLink
   , rlinkPermalink             :: Text
   , rlinkCreatedUtc            :: Int
   , rlinkSubredditNamePrefixed :: Text
-  }
-  deriving (Show, Eq)
-
+  } deriving (Show, Eq)
 instance FromJSON RLink where
   parseJSON = withObject "RLink" $ \v -> do
     d <- v .: "data"
