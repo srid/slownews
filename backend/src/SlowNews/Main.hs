@@ -1,16 +1,26 @@
+{-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
-{-# LANGUAGE FlexibleContexts  #-}
 
 import           Control.Concurrent.Async.Lifted      (mapConcurrently)
 import           Control.Concurrent.Lifted            (fork, threadDelay)
 import           Control.Concurrent.STM               (TVar, atomically,
                                                        newTVar, readTVar,
                                                        writeTVar)
-import           Control.Exception
+import           Control.Exception                    (bracket)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
-import           Katip
+import           Katip                                (ColorStrategy (ColorIfTerminal),
+                                                       KatipContextT,
+                                                       LogContexts,
+                                                       Severity (InfoS),
+                                                       Verbosity (V2),
+                                                       closeScribes,
+                                                       defaultScribeSettings,
+                                                       initLogEnv, logTM,
+                                                       mkHandleScribe,
+                                                       registerScribe,
+                                                       runKatipContextT)
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
