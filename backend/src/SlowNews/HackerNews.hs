@@ -37,7 +37,7 @@ instance FromJSON Body where
 
 data HNLink = HNLink
   { hnlinkTitle       :: Text
-  , hnlinkUrl         :: Text
+  , hnlinkUrl         :: Maybe Text
   , hnlinkObjectID    :: Text
   , hnlinkCreatedAtI  :: Int
   } deriving (Show, Eq)
@@ -52,8 +52,9 @@ instance FromJSON HNLink where
 
 toLink :: Maybe String -> HNLink -> Link
 toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
-  Link hnlinkTitle hnlinkUrl metaURL hnlinkCreatedAtI (siteName query)
+  Link hnlinkTitle url metaURL hnlinkCreatedAtI (siteName query)
   where
+    url = fromMaybe metaURL hnlinkUrl
     metaURL = "https://news.ycombinator.com/item?id=" <> hnlinkObjectID
     siteName Nothing  = "hn"
     siteName (Just q) = T.pack $ "hn" <> "/" <> q
