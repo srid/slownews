@@ -10,6 +10,7 @@ import           Control.Concurrent.STM               (TVar, atomically,
 import           Control.Exception                    (bracket)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
+import           Data.Monoid                          ((<>))
 import           Katip                                (ColorStrategy (ColorIfTerminal),
                                                        KatipContextT,
                                                        LogContexts,
@@ -20,7 +21,7 @@ import           Katip                                (ColorStrategy (ColorIfTer
                                                        initLogEnv, logTM,
                                                        mkHandleScribe,
                                                        registerScribe,
-                                                       runKatipContextT)
+                                                       runKatipContextT, showLS)
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
@@ -39,7 +40,7 @@ type Links = TVar [Link]
 
 fetchSite :: Config.Site -> Stack [Link]
 fetchSite site = do
-  $(logTM) InfoS $ "Fetching " -- ++ show site
+  $(logTM) InfoS $ "Fetching " <> showLS site
   liftIO $ fetch site
   where
     fetch (Config.Reddit s)     = Reddit.fetch s
