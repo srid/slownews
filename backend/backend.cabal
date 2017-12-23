@@ -21,9 +21,9 @@ executable          backend
                   , containers
                   , katip
                   , lens
+                  , lens-aeson
                   , lifted-async
                   , lifted-base
-                  , lens-aeson
                   , raw-strings-qq
                   , scotty
                   , stm

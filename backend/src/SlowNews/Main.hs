@@ -10,8 +10,6 @@ import           Control.Concurrent.STM               (TVar, atomically,
 import           Control.Exception
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
-import           Control.Monad.Trans.Reader
-import           Data.IORef
 import           Katip
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
@@ -25,7 +23,7 @@ import qualified SlowNews.HackerNews                  as HN
 import           SlowNews.Link                        (Link)
 import qualified SlowNews.Reddit                      as Reddit
 
-type Stack a = ReaderT (IORef Int) (KatipContextT IO) a
+type Stack a = KatipContextT IO a
 
 type Links = TVar [Link]
 
@@ -49,12 +47,11 @@ fetchAll links = do
 
 main :: IO ()
 main = do
-  ref <- newIORef 0
   handleScribe <- mkHandleScribe ColorIfTerminal stdout InfoS V2
   let mkLogEnv = registerScribe "stdout" handleScribe defaultScribeSettings =<< initLogEnv "SlowNews" "development"
 
-  bracket mkLogEnv closeScribes $ \le -> do
-    runKatipContextT le (mempty :: LogContexts) mempty $ runReaderT main_ ref
+  bracket mkLogEnv closeScribes $ \le ->
+    runKatipContextT le (mempty :: LogContexts) mempty main_
 
 main_ :: Stack()
 main_ = do
