@@ -36,10 +36,10 @@ instance FromJSON Body where
   parseJSON = withObject "Body" $ \d -> Body <$> d .: "hits"
 
 data HNLink = HNLink
-  { hnlinkTitle      :: Text
-  , hnlinkUrl        :: Text
-  , hnlinkObjectID   :: Text
-  , hnlinkCreatedAtI :: Int
+  { hnlinkTitle       :: Text
+  , hnlinkUrl         :: Maybe Text
+  , hnlinkObjectID    :: Text
+  , hnlinkCreatedAtI  :: Int
   } deriving (Show, Eq)
 
 instance FromJSON HNLink where
@@ -52,8 +52,9 @@ instance FromJSON HNLink where
 
 toLink :: Maybe String -> HNLink -> Link
 toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
-  Link hnlinkTitle hnlinkUrl metaURL hnlinkCreatedAtI (siteName query)
+  Link hnlinkTitle url metaURL hnlinkCreatedAtI (siteName query)
   where
+    url = fromMaybe metaURL hnlinkUrl
     metaURL = "https://news.ycombinator.com/item?id=" <> hnlinkObjectID
     siteName Nothing  = "hn"
     siteName (Just q) = T.pack $ "hn" <> "/" <> q
@@ -62,7 +63,8 @@ fetch :: Site -> IO [Link]
 fetch (Site queryMaybe countMaybe) = do
   created_at_i <- show <$> (oneWeekAgo :: IO Integer)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
-  return $ fmap (toLink queryMaybe) $ r ^. responseBody & bodyChildren
+  let results = r ^. responseBody & bodyChildren
+  return $ toLink queryMaybe <$> results
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
@@ -75,7 +77,7 @@ fetch (Site queryMaybe countMaybe) = do
     opts c =
       defaults & params .~
       [ ("tags", "story")
-      , ("numericFilters", T.pack $ "created_at_i>" ++ c)
+      , ("filters", T.pack $ "num_comments>2 AND created_at_i>" ++ c)
       , ("hitsPerPage", T.pack . show $ count)
       , ("query", T.pack . show $ query)
       ]
