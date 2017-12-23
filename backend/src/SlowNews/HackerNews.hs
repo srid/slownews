@@ -36,10 +36,10 @@ instance FromJSON Body where
   parseJSON = withObject "Body" $ \d -> Body <$> d .: "hits"
 
 data HNLink = HNLink
-  { hnlinkTitle       :: Text
-  , hnlinkUrl         :: Maybe Text
-  , hnlinkObjectID    :: Text
-  , hnlinkCreatedAtI  :: Int
+  { hnlinkTitle      :: Text
+  , hnlinkUrl        :: Maybe Text
+  , hnlinkObjectID   :: Text
+  , hnlinkCreatedAtI :: Int
   } deriving (Show, Eq)
 
 instance FromJSON HNLink where

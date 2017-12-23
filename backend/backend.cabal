@@ -14,18 +14,22 @@ executable          backend
                   , SlowNews.HackerNews
                   , SlowNews.Reddit
     build-depends:  base   >= 4      && < 5
-                  , scotty
-                  , raw-strings-qq
-                  , wai-middleware-static
-                  , wai-extra
-                  , wreq
-                  , lens
-                  , containers
                   , aeson
                   , aeson-casing
-                  , lens-aeson
-                  , text
-                  , stm
-                  , bytestring
                   , async
+                  , bytestring
+                  , containers
+                  , katip
+                  , lens
+                  , lens-aeson
+                  , lifted-async
+                  , lifted-base
+                  , raw-strings-qq
+                  , scotty
+                  , stm
+                  , text
                   , time
+                  , transformers
+                  , wai-extra
+                  , wai-middleware-static
+                  , wreq
