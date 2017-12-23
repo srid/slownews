@@ -21,12 +21,12 @@ import qualified SlowNews.Reddit                      as Reddit
 type Links = TVar [Link]
 
 fetchSite :: Config.Site -> IO [Link]
-fetchSite (Config.Reddit subReddit count) = do
-  putStrLn $ "Fetching " ++ show subReddit -- TODO: Use logging here
-  Reddit.fetchSubreddit subReddit count
-fetchSite (Config.HackerNews query count) = do
-  putStrLn "Fetching HN"
-  HN.fetch query count
+fetchSite site = do
+  putStrLn $ "Fetching " ++ show site -- TODO: Use logging here
+  fetch site
+  where
+    fetch (Config.Reddit s)     = Reddit.fetch s
+    fetch (Config.HackerNews s) = HN.fetch s
 
 fetchAll :: Links -> IO ()
 fetchAll links = Config.loadSites >>= fetchSites >>= storeTVar links >> logIt

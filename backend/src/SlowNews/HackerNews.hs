@@ -1,10 +1,12 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module SlowNews.HackerNews where
 
 import           Control.Lens          ((&), (.~), (^.))
-import           Data.Aeson            (FromJSON (parseJSON), withObject, (.:))
+import           Data.Aeson            (FromJSON (parseJSON), ToJSON,
+                                        withObject, (.:))
 import           Data.Maybe            (fromMaybe)
 import           Data.Monoid           ((<>))
 import           Data.Text             (Text)
@@ -12,9 +14,19 @@ import qualified Data.Text             as T
 import           Data.Time             (UTCTime (UTCTime), addDays,
                                         getCurrentTime, utctDay)
 import           Data.Time.Clock.POSIX (utcTimeToPOSIXSeconds)
+import           GHC.Generics          (Generic)
 import           Network.Wreq          (Response, asJSON, defaults, getWith,
                                         params, responseBody)
 import           SlowNews.Link         (Link (Link))
+
+data Site = Site
+  { query :: Maybe String
+  , count :: Maybe Int
+  }
+  deriving (Show, Eq, Generic)
+
+instance FromJSON Site
+instance ToJSON Site
 
 data Body =
   Body { bodyChildren :: [HNLink] }
@@ -46,8 +58,8 @@ toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
     siteName Nothing  = "hn"
     siteName (Just q) = T.pack $ "hn" <> "/" <> q
 
-fetch :: Maybe String -> Maybe Int -> IO [Link]
-fetch queryMaybe countMaybe = do
+fetch :: Site -> IO [Link]
+fetch (Site queryMaybe countMaybe) = do
   created_at_i <- show <$> (oneWeekAgo :: IO Integer)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
   return $ fmap (toLink queryMaybe) $ r ^. responseBody & bodyChildren

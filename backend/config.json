@@ -1,20 +1,11 @@
 {"sites":
   [
-    {"tag":"Reddit","subReddit":"zerocarb", "count":4}
-  , {"tag":"Reddit","subReddit":"haskell", "count": 7}
-  , {"tag":"Reddit","subReddit":"elm", "count": 1}
-  , {"tag":"Reddit","subReddit":"purescript", "count": 2}
-  , {"tag":"Reddit","subReddit":"quebec", "count": 1}
-  , {"tag":"Reddit","subReddit":"montreal", "count": 1}
-  , {"tag":"Reddit","subReddit":"programming", "count": 1}
-  , {"tag":"Reddit","subReddit":"lifeprotips", "count": 1}
-  , {"tag":"Reddit","subReddit":"omad", "count": 1}
-  , {"tag":"Reddit","subReddit":"emacs", "count": 1}
-  , {"tag":"Reddit","subReddit":"ketogains", "count": 2}
-  , {"tag":"Reddit","subReddit":"canada", "count": 1}
-  , {"tag":"HackerNews"}
-  , {"tag":"HackerNews", "query": "india", "count": 2}
-  , {"tag":"HackerNews", "query": "haskell", "count": 3}
-  , {"tag":"HackerNews", "query": "elm", "count": 3}
+    {"tag":"HackerNews", "contents": {}}
+  , {"tag":"HackerNews", "contents": {"query": "elm", "count": 1}}
+  , {"tag":"HackerNews", "contents": {"query": "india", "count": 1}}
+  , {"tag":"HackerNews", "contents": {"query": "haskell", "count": 3}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 3}}
+  , {"tag":"Reddit", "contents": {"subReddit": "haskell"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "ketogains", "count": 2}}
   ]
 }
