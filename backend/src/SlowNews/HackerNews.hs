@@ -36,10 +36,10 @@ instance FromJSON Body where
   parseJSON = withObject "Body" $ \d -> Body <$> d .: "hits"
 
 data HNLink = HNLink
-  { hnlinkTitle      :: Text
-  , hnlinkUrl        :: Text
-  , hnlinkObjectID   :: Text
-  , hnlinkCreatedAtI :: Int
+  { hnlinkTitle       :: Text
+  , hnlinkUrl         :: Text
+  , hnlinkObjectID    :: Text
+  , hnlinkCreatedAtI  :: Int
   } deriving (Show, Eq)
 
 instance FromJSON HNLink where
@@ -61,8 +61,12 @@ toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
 fetch :: Site -> IO [Link]
 fetch (Site queryMaybe countMaybe) = do
   created_at_i <- show <$> (oneWeekAgo :: IO Integer)
+  putStrLn $ show (opts created_at_i)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
-  return $ fmap (toLink queryMaybe) $ r ^. responseBody & bodyChildren
+  putStrLn $ "Returned" ++ show queryMaybe
+  let results = r ^. responseBody & bodyChildren
+  putStrLn $ "Done" ++ show queryMaybe
+  return $ toLink queryMaybe <$> results
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
@@ -75,7 +79,8 @@ fetch (Site queryMaybe countMaybe) = do
     opts c =
       defaults & params .~
       [ ("tags", "story")
-      , ("numericFilters", T.pack $ "created_at_i>" ++ c)
+      , ("filters", T.pack $ "created_at_i>" ++ c)
+      , ("numericFilters", T.pack $ "num_comments>2")
       , ("hitsPerPage", T.pack . show $ count)
       , ("query", T.pack . show $ query)
       ]
