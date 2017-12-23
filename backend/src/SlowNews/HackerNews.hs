@@ -62,11 +62,8 @@ toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
 fetch :: Site -> IO [Link]
 fetch (Site queryMaybe countMaybe) = do
   created_at_i <- show <$> (oneWeekAgo :: IO Integer)
-  putStrLn $ show (opts created_at_i)
   r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
-  putStrLn $ "Returned" ++ show queryMaybe
   let results = r ^. responseBody & bodyChildren
-  putStrLn $ "Done" ++ show queryMaybe
   return $ toLink queryMaybe <$> results
   where
     url = "http://hn.algolia.com/api/v1/search"
@@ -80,8 +77,7 @@ fetch (Site queryMaybe countMaybe) = do
     opts c =
       defaults & params .~
       [ ("tags", "story")
-      , ("filters", T.pack $ "created_at_i>" ++ c)
-      , ("numericFilters", T.pack $ "num_comments>2")
+      , ("filters", T.pack $ "num_comments>2 AND created_at_i>" ++ c)
       , ("hitsPerPage", T.pack . show $ count)
       , ("query", T.pack . show $ query)
       ]
