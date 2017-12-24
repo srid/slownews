@@ -25,7 +25,7 @@ instance ToJSON Config
 instance ToJSON Site
 
 load :: IO Config
-load = fromJust . decode <$> B.readFile "config.json"
+load = fromJust . decode <$> B.readFile "config/config.json"
 
 loadSites :: IO [Site]
 loadSites = sites <$> load
