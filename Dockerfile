@@ -16,3 +16,5 @@ COPY . /app
 RUN stack build
 
 CMD stack exec backend
+
+EXPOSE 3000
