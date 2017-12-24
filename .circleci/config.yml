@@ -1,0 +1,16 @@
+version: 1
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - ~/docker
+
+deployment:
+  staging:
+    branch: haskell-port-heroku-deployment
+    commands:
+      - docker login --email=$HEROKU_LOGIN --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+      - docker build --rm=false -t registry.heroku.com/slownews-srid/web .
+      - docker push registry.heroku.com/slownews-srid/web:latest

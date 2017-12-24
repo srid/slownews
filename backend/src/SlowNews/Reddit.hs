@@ -30,7 +30,6 @@ instance FromJSON Body where
     d <- v .: "data"
     Body <$> d .: "children"
 
-
 data RLink = RLink
   { rlinkTitle                 :: Text
   , rlinkUrl                   :: Text
