@@ -12,3 +12,10 @@ cd backend && make
 ```
 
 Visit http://localhost:3000/
+
+## Deploying to Heroku
+
+```
+cd backend 
+make deploy
+```

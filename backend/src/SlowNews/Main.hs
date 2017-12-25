@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
@@ -11,6 +12,7 @@ import           Control.Exception                    (bracket)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
 import           Data.Monoid                          ((<>))
+import           GHC.Generics                         (Generic)
 import           Katip                                (ColorStrategy (ColorIfTerminal),
                                                        KatipContextT,
                                                        LogContexts,
@@ -18,13 +20,15 @@ import           Katip                                (ColorStrategy (ColorIfTer
                                                        Verbosity (V2),
                                                        closeScribes,
                                                        defaultScribeSettings,
-                                                       initLogEnv, logTM,
+                                                       initLogEnv, logTM, ls,
                                                        mkHandleScribe,
                                                        registerScribe,
                                                        runKatipContextT, showLS)
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
+import           System.Envy                          (DefConfig (defConfig),
+                                                       FromEnv, decodeEnv)
 import           System.IO                            (stdout)
 import           Web.Scotty                           (get, json, middleware,
                                                        redirect, scotty)
@@ -37,6 +41,15 @@ import qualified SlowNews.Reddit                      as Reddit
 type Stack a = KatipContextT IO a
 
 type Links = TVar [Link]
+
+data AppEnv = AppEnv
+  { port :: Int -- "PORT"
+  } deriving (Generic, Show)
+
+instance DefConfig AppEnv where
+  defConfig = AppEnv 3000
+
+instance FromEnv AppEnv
 
 fetchSite :: Config.Site -> Stack [Link]
 fetchSite site = do
@@ -59,20 +72,26 @@ fetchAll links = do
 main :: IO ()
 main = do
   handleScribe <- mkHandleScribe ColorIfTerminal stdout InfoS V2
-  let mkLogEnv = registerScribe "stdout" handleScribe defaultScribeSettings =<< initLogEnv "SlowNews" "development"
+  let mkLogEnv =
+        registerScribe "stdout" handleScribe defaultScribeSettings =<<
+        initLogEnv "SlowNews" "development"
+  appEnvE <- decodeEnv :: IO (Either String AppEnv)
+  case appEnvE of
+    Left err -> putStrLn $ "Error reading env: " <> err
+    Right appEnv ->
+      bracket mkLogEnv closeScribes $ \le ->
+        runKatipContextT le (mempty :: LogContexts) mempty $ main_ appEnv
 
-  bracket mkLogEnv closeScribes $ \le ->
-    runKatipContextT le (mempty :: LogContexts) mempty main_
-
-main_ :: Stack()
-main_ = do
+main_ :: AppEnv -> Stack()
+main_ appEnv = do
+  $(logTM) InfoS $ showLS appEnv
   links <- liftIO $ atomically $ newTVar mempty
   _ <- fork $ forever (fetchAll links >> sleepM 30)
   -- Run the web server
-  liftIO $ scotty 3000 $ do
+  liftIO $ scotty (port appEnv) $ do
     middleware $ logStdoutDev
     middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
-    get "/" $ redirect "/index.html" -- TODO: Hide index.html from address bar.
+    get "/" $ redirect "/index.html"
     get "/data" $ liftTVar links >>= json
   where
     liftTVar = liftIO . atomically . readTVar

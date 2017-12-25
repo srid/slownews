@@ -1,0 +1,10 @@
+resolver: lts-10.0
+docker:
+  enable: true
+image:
+  container:
+    base: "slownews-base"
+    name: "registry.heroku.com/slownews-srid/web"
+    add:
+      config: /opt/app/config
+      ../frontend/static: /opt/frontend/static

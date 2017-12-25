@@ -19,6 +19,7 @@ executable          backend
                   , async
                   , bytestring
                   , containers
+                  , envy
                   , katip
                   , lens
                   , lens-aeson
