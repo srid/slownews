@@ -11,7 +11,7 @@ html {
 h1 {
     font-family: 'Autour One', cursive;
     font-size: 1.5em;
-    background-color: #00cc99;
+    background-color: pink;
     padding: 0.3em;
 }
 
@@ -38,4 +38,12 @@ a:hover {
     color: pink;
     background-color: #444;
     padding: 0.2em;
+}
+
+.footer {
+    text-align: center;
+    padding-top: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-top: solid gray;
 }

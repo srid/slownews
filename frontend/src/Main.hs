@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies        #-}
@@ -103,10 +104,17 @@ updateModel NoOp m             = noEff m
 
 -- | View function, with routing
 viewModel :: Model -> View Action
-viewModel Model {..} = div_ [] [title, content]
+viewModel Model {..} = div_ [] [title, content, footer]
   where
-    title = h1_ [class_ $ pack "title"] [text $ pack "SlowNews"]
+    title = h1_ [class_ "title"] [text "SlowNews"]
     content = viewLinks links
+    footer =
+      div_
+        [class_ $ "footer"]
+        [ a_
+            [href_ "https://github.com/srid/slownews"]
+            [text "SlowNews on GitHub"]
+        ]
 
 viewLinks :: Maybe Links -> View Action
 viewLinks Nothing = div_ [] [text $ pack "No data" ]
