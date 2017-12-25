@@ -1,6 +1,6 @@
-JSEXEDIR := .stack-work//install/x86_64-osx/lts-6.20/ghcjs-0.2.0.9006020_ghc-7.10.3/bin/app.jsexe
+JSEXEDIR := .stack-work//install/x86_64-osx/lts-6.30/ghcjs-0.2.0.9006030_ghc-7.10.3/bin/app.jsexe
 
-all:	build 
+all:	build
 	@true
 
 build:
