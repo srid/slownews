@@ -9,20 +9,14 @@ import           Data.Maybe           (fromJust)
 import           GHC.Generics         (Generic)
 import qualified SlowNews.HackerNews  as HackerNews
 import qualified SlowNews.Reddit      as Reddit
+import           SlowNews.Site        (Site)
 
 data Config = Config
   { sites :: [Site]
   } deriving (Show, Eq, Generic)
 
-data Site
-  = Reddit Reddit.Site
-  | HackerNews HackerNews.Site
-  deriving (Show, Eq, Generic)
-
 instance FromJSON Config
-instance FromJSON Site
 instance ToJSON Config
-instance ToJSON Site
 
 load :: IO Config
 load = fromJust . decode <$> B.readFile "config/config.json"

@@ -10,6 +10,8 @@ executable          backend
                     -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
     other-modules:  SlowNews.Config
+                  , SlowNews.App
+                  , SlowNews.Site
                   , SlowNews.Link
                   , SlowNews.HackerNews
                   , SlowNews.Reddit

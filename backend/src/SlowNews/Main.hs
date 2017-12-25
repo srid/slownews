@@ -8,56 +8,24 @@ import           Control.Concurrent.Lifted            (fork, threadDelay)
 import           Control.Concurrent.STM               (TVar, atomically,
                                                        newTVar, readTVar,
                                                        writeTVar)
-import           Control.Exception                    (bracket)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
-import           Data.Monoid                          ((<>))
-import           GHC.Generics                         (Generic)
-import           Katip                                (ColorStrategy (ColorIfTerminal),
-                                                       KatipContextT,
-                                                       LogContexts,
-                                                       Severity (InfoS),
-                                                       Verbosity (V2),
-                                                       closeScribes,
-                                                       defaultScribeSettings,
-                                                       initLogEnv, logTM, ls,
-                                                       mkHandleScribe,
-                                                       registerScribe,
-                                                       runKatipContextT, showLS)
+import           Katip                                (Severity (InfoS), logTM,
+                                                       showLS)
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
-import           System.Envy                          (DefConfig (defConfig),
-                                                       FromEnv, decodeEnv)
-import           System.IO                            (stdout)
 import           Web.Scotty                           (get, json, middleware,
                                                        redirect, scotty)
 
+import           SlowNews.App                         (AppEnv (port), Stack,
+                                                       runApp)
 import qualified SlowNews.Config                      as Config
-import qualified SlowNews.HackerNews                  as HN
 import           SlowNews.Link                        (Link)
-import qualified SlowNews.Reddit                      as Reddit
+import qualified SlowNews.Site                        as Site
 
-type Stack a = KatipContextT IO a
 
 type Links = TVar [Link]
-
-data AppEnv = AppEnv
-  { port :: Int -- "PORT"
-  } deriving (Generic, Show)
-
-instance DefConfig AppEnv where
-  defConfig = AppEnv 3000
-
-instance FromEnv AppEnv
-
-fetchSite :: Config.Site -> Stack [Link]
-fetchSite site = do
-  $(logTM) InfoS $ "Fetching " <> showLS site
-  liftIO $ fetch site
-  where
-    fetch (Config.Reddit s)     = Reddit.fetch s
-    fetch (Config.HackerNews s) = HN.fetch s
 
 fetchAll :: Links -> Stack ()
 fetchAll links = do
@@ -66,21 +34,8 @@ fetchAll links = do
   liftIO $ storeTVar links results
   $(logTM) InfoS "Finished"
   where
-    fetchSites = fmap join . mapConcurrently fetchSite
+    fetchSites = fmap join . mapConcurrently Site.fetchSite
     storeTVar tvar = atomically . writeTVar tvar
-
-main :: IO ()
-main = do
-  handleScribe <- mkHandleScribe ColorIfTerminal stdout InfoS V2
-  let mkLogEnv =
-        registerScribe "stdout" handleScribe defaultScribeSettings =<<
-        initLogEnv "SlowNews" "development"
-  appEnvE <- decodeEnv :: IO (Either String AppEnv)
-  case appEnvE of
-    Left err -> putStrLn $ "Error reading env: " <> err
-    Right appEnv ->
-      bracket mkLogEnv closeScribes $ \le ->
-        runKatipContextT le (mempty :: LogContexts) mempty $ main_ appEnv
 
 main_ :: AppEnv -> Stack()
 main_ appEnv = do
@@ -96,3 +51,6 @@ main_ appEnv = do
   where
     liftTVar = liftIO . atomically . readTVar
     sleepM n = threadDelay (n * 60 * 1000 * 1000) -- sleep in minutes
+
+main :: IO ()
+main = runApp main_

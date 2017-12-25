@@ -61,23 +61,23 @@ toLink query HNLink {hnlinkTitle, hnlinkUrl, hnlinkObjectID, hnlinkCreatedAtI} =
 
 fetch :: Site -> IO [Link]
 fetch (Site queryMaybe countMaybe) = do
-  created_at_i <- show <$> (oneWeekAgo :: IO Integer)
-  r <- asJSON =<< getWith (opts created_at_i) url :: IO (Response Body)
+  createdAfter <- show <$> (oneWeekAgo :: IO Integer)
+  r <- asJSON =<< getWith (searchOpts createdAfter) url :: IO (Response Body)
   let results = r ^. responseBody & bodyChildren
   return $ toLink queryMaybe <$> results
   where
     url = "http://hn.algolia.com/api/v1/search"
     count = fromMaybe 10 countMaybe
     query = fromMaybe "" queryMaybe
+    searchOpts createdAfter =
+      defaults & params .~
+      [ ("tags", "story")
+      , ("filters", T.pack $ "num_comments>2 AND created_at_i>" ++ createdAfter)
+      , ("hitsPerPage", T.pack . show $ count)
+      , ("query", T.pack . show $ query)
+      ]
     oneWeekAgo = toTimestamp . addDays (-7) <$> now
       where
         now = utctDay <$> getCurrentTime
         toTime day = UTCTime day 0
         toTimestamp = round . utcTimeToPOSIXSeconds . toTime
-    opts c =
-      defaults & params .~
-      [ ("tags", "story")
-      , ("filters", T.pack $ "num_comments>2 AND created_at_i>" ++ c)
-      , ("hitsPerPage", T.pack . show $ count)
-      , ("query", T.pack . show $ query)
-      ]

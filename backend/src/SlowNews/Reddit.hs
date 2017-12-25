@@ -30,7 +30,6 @@ instance FromJSON Body where
     d <- v .: "data"
     Body <$> d .: "children"
 
-
 data RLink = RLink
   { rlinkTitle                 :: Text
   , rlinkUrl                   :: Text
@@ -38,6 +37,7 @@ data RLink = RLink
   , rlinkCreatedUtc            :: Int
   , rlinkSubredditNamePrefixed :: Text
   } deriving (Show, Eq)
+
 instance FromJSON RLink where
   parseJSON = withObject "RLink" $ \v -> do
     d <- v .: "data"
