@@ -7,8 +7,6 @@ import           Data.Aeson           (FromJSON, ToJSON, decode)
 import qualified Data.ByteString.Lazy as B
 import           Data.Maybe           (fromJust)
 import           GHC.Generics         (Generic)
-import qualified SlowNews.HackerNews  as HackerNews
-import qualified SlowNews.Reddit      as Reddit
 import           SlowNews.Site        (Site)
 
 data Config = Config
