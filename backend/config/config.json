@@ -1,0 +1,11 @@
+{"sites":
+  [
+    {"tag":"HackerNews", "contents": {}}
+  , {"tag":"HackerNews", "contents": {"query": "elm", "count": 1}}
+  , {"tag":"HackerNews", "contents": {"query": "india", "count": 1}}
+  , {"tag":"HackerNews", "contents": {"query": "haskell", "count": 3}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 3}}
+  , {"tag":"Reddit", "contents": {"subReddit": "haskell"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "ketogains", "count": 2}}
+  ]
+}
