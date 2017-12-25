@@ -8,19 +8,29 @@
 
 module Main where
 
-import           Data.Aeson
-import           Data.Aeson.Types
+import           Data.Aeson                    (FromJSON (parseJSON),
+                                                defaultOptions,
+                                                eitherDecodeStrict,
+                                                genericParseJSON)
+import           Data.Aeson.Types              (Options (fieldLabelModifier),
+                                                camelTo2)
 import           Data.Function                 (on)
 import           Data.List                     (sortBy)
 import           Data.Time                     (getCurrentTime)
 import           Data.Time.Clock.POSIX         (posixSecondsToUTCTime)
 import           Data.Time.Format              (defaultTimeLocale, formatTime)
-import           GHC.Generics
-import           JavaScript.Web.XMLHttpRequest
-
 import           Foreign                       (consoleLog)
-import           Miso                          hiding (defaultOptions, on)
-import           Miso.String                   hiding (reverse)
+import           GHC.Generics                  (Generic)
+import           JavaScript.Web.XMLHttpRequest (Method (GET), Request (Request, reqData, reqHeaders, reqLogin, reqMethod, reqURI, reqWithCredentials),
+                                                RequestData (NoData),
+                                                Response (contents),
+                                                xhrByteString)
+import           Miso                          (App (App, events, initialAction, model, subs, update, view),
+                                                Effect, View, a_, class_,
+                                                defaultEvents, div_, h1_, href_,
+                                                noEff, startApp, table_, tbody_,
+                                                td_, text, tr_, (<#))
+import           Miso.String                   (MisoString, pack, (<>))
 
 -- | Model
 newtype Model = Model
@@ -66,7 +76,7 @@ getLinks = do
     req url =
       Request
       { reqMethod = GET
-      , reqURI = pack url
+      , reqURI = url
       , reqLogin = Nothing
       , reqHeaders = []
       , reqWithCredentials = False
@@ -117,7 +127,7 @@ viewModel Model {..} = div_ [] [title, content, footer]
         ]
 
 viewLinks :: Maybe Links -> View Action
-viewLinks Nothing = div_ [] [text $ pack "No data" ]
+viewLinks Nothing = div_ [] [text "No data" ]
 viewLinks (Just (Links links)) = table_ [] [tbody_ [] body ]
   where
     body = viewLink <$> sortLinks links
@@ -126,7 +136,7 @@ viewLink :: Link -> View Action
 viewLink Link {..} = tr_ [] [timeUI, siteUI, linkUI]
   where
     timeUI = td_ [] [text $ (pack . getDayOfWeek) created]
-    siteUI = td_ [class_ $ pack "meta"] [a_ [href_ metaUrl ] [ text site ]]
+    siteUI = td_ [class_ "meta"] [a_ [href_ metaUrl ] [ text site ]]
     linkUI = td_ [] [a_ [ href_ url ] [ text title ]]
 
 getDayOfWeek :: Int -> String
