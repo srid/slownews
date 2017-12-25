@@ -16,7 +16,7 @@ import           GHC.Generics                         (Generic)
 import           Katip                                (ColorStrategy (ColorIfTerminal),
                                                        KatipContextT,
                                                        LogContexts,
-                                                       Severity (ErrorS, InfoS),
+                                                       Severity (InfoS),
                                                        Verbosity (V2),
                                                        closeScribes,
                                                        defaultScribeSettings,
@@ -72,27 +72,27 @@ fetchAll links = do
 main :: IO ()
 main = do
   handleScribe <- mkHandleScribe ColorIfTerminal stdout InfoS V2
-  let mkLogEnv = registerScribe "stdout" handleScribe defaultScribeSettings =<< initLogEnv "SlowNews" "development"
-
-  bracket mkLogEnv closeScribes $ \le ->
-    runKatipContextT le (mempty :: LogContexts) mempty main_
-
-main_ :: Stack()
-main_ = do
-  appEnvE <- liftIO (decodeEnv :: IO (Either String AppEnv))
+  let mkLogEnv =
+        registerScribe "stdout" handleScribe defaultScribeSettings =<<
+        initLogEnv "SlowNews" "development"
+  appEnvE <- decodeEnv :: IO (Either String AppEnv)
   case appEnvE of
-    Left err ->
-      $(logTM) ErrorS $ ls ("Error reading env: " <> err)
-    Right appEnv -> do
-      $(logTM) InfoS $ showLS appEnv
-      links <- liftIO $ atomically $ newTVar mempty
-      _ <- fork $ forever (fetchAll links >> sleepM 30)
-      -- Run the web server
-      liftIO $ scotty (port appEnv) $ do
-        middleware $ logStdoutDev
-        middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
-        get "/" $ redirect "/index.html"
-        get "/data" $ liftTVar links >>= json
-      where
-        liftTVar = liftIO . atomically . readTVar
-        sleepM n = threadDelay (n * 60 * 1000 * 1000) -- sleep in minutes
+    Left err -> putStrLn $ "Error reading env: " <> err
+    Right appEnv ->
+      bracket mkLogEnv closeScribes $ \le ->
+        runKatipContextT le (mempty :: LogContexts) mempty $ main_ appEnv
+
+main_ :: AppEnv -> Stack()
+main_ appEnv = do
+  $(logTM) InfoS $ showLS appEnv
+  links <- liftIO $ atomically $ newTVar mempty
+  _ <- fork $ forever (fetchAll links >> sleepM 30)
+  -- Run the web server
+  liftIO $ scotty (port appEnv) $ do
+    middleware $ logStdoutDev
+    middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
+    get "/" $ redirect "/index.html"
+    get "/data" $ liftTVar links >>= json
+  where
+    liftTVar = liftIO . atomically . readTVar
+    sleepM n = threadDelay (n * 60 * 1000 * 1000) -- sleep in minutes
