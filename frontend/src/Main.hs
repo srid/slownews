@@ -28,8 +28,9 @@ import           JavaScript.Web.XMLHttpRequest (Method (GET), Request (Request, 
 import           Miso                          (App (App, events, initialAction, model, subs, update, view),
                                                 Effect, View, a_, class_,
                                                 defaultEvents, div_, h1_, href_,
-                                                noEff, startApp, table_, tbody_,
-                                                td_, text, tr_, (<#))
+                                                mountPoint, noEff, startApp,
+                                                table_, tbody_, td_, text, tr_,
+                                                (<#))
 import           Miso.String                   (MisoString, pack, (<>))
 
 -- | Model
@@ -98,13 +99,17 @@ logInfo s = do
 -- | Main entry point
 main :: IO ()
 main = do
-  logInfo "Starting application"
+  logInfo "Starting application (Miso v0.10.0.0)"
   startApp App {model = Model Nothing, initialAction = FetchLinks, ..}
+  startApp App {..}
   where
+    initialAction = FetchLinks
+    model = Model Nothing
     update = updateModel
+    view = viewModel
     events = defaultEvents
-    subs   = []
-    view   = viewModel
+    mountPoint = Nothing
+    subs = []
 
 -- | Update your model
 updateModel :: Action -> Model -> Effect Action Model
@@ -120,7 +125,7 @@ viewModel Model {..} = div_ [] [title, content, footer]
     content = viewLinks links
     footer =
       div_
-        [class_ $ "footer"]
+        [class_ "footer"]
         [ a_
             [href_ "https://github.com/srid/slownews"]
             [text "SlowNews on GitHub"]
