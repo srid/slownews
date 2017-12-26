@@ -92,9 +92,7 @@ logInfo s = do
   putStrLn msg
   consoleLog $ pack msg
   where
-    currentTime = do
-      time <- getCurrentTime
-      return $ formatTime defaultTimeLocale "%F %T (%Z)" time
+    currentTime = formatTime defaultTimeLocale "%F %T (%Z)" <$> getCurrentTime
 
 -- | Main entry point
 main :: IO ()
