@@ -10,10 +10,10 @@ import           Data.Monoid            ((<>))
 import           GHC.Generics           (Generic)
 import           Katip                  (Severity (InfoS), logTM, showLS)
 
-import           SlowNews.App           (Stack)
 import qualified SlowNews.HackerNews    as HackerNews
 import           SlowNews.Link          (Link)
 import qualified SlowNews.Reddit        as Reddit
+import           SlowNews.Stack         (Stack)
 
 data Site
   = Reddit Reddit.Site

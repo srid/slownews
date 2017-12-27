@@ -9,7 +9,7 @@ executable          backend
     ghc-options:    -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
                     -threaded -O2 -rtsopts -with-rtsopts=-N
     extensions:     OverloadedStrings
-    other-modules:  SlowNews.Config
+    other-modules:  SlowNews.Stack
                   , SlowNews.App
                   , SlowNews.Site
                   , SlowNews.Link
