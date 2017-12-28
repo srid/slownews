@@ -6,8 +6,15 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 ## Running locally
 
+First compile the frontend. This takes quite a while for GHCJS to bootstrap:
+
 ```
 cd frontend && make
+```
+
+Then build the frontend:
+
+```
 cd backend && make
 ```
 
@@ -15,7 +22,8 @@ Visit http://localhost:3000/
 
 ## Deploying to Heroku
 
+
 ```
-cd backend 
-make deploy
+cd frontend && make
+cd backend && make deploy
 ```
