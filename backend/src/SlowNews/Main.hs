@@ -8,10 +8,13 @@ import           Control.Concurrent.Lifted            (fork, threadDelay)
 import           Control.Concurrent.STM               (TVar, atomically,
                                                        newTVar, readTVar,
                                                        writeTVar)
+import           Control.Exception.Lifted             (handle)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
-import           Katip                                (Severity (InfoS), logTM,
-                                                       showLS)
+import           Data.Monoid                          ((<>))
+import           Katip                                (Severity (ErrorS, InfoS),
+                                                       logTM, showLS)
+import           Network.HTTP.Client                  (HttpException)
 import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
@@ -35,12 +38,20 @@ fetchAll app links = do
     fetchSites = fmap join . mapConcurrently Site.fetchSite
     storeTVar tvar = atomically . writeTVar tvar
 
+handleHttpException :: HttpException -> Stack ()
+handleHttpException e = do
+  $(logTM) ErrorS $ "Http exception:" <> showLS e
+  return ()
+
+fetchAll' :: App.App -> Links -> Stack ()
+fetchAll' app links = handle handleHttpException (fetchAll app links)
+
 main :: IO ()
 main = App.runApp $ do
   app <- App.makeApp
   $(logTM) InfoS $ showLS app
   links <- liftIO $ atomically $ newTVar mempty
-  _ <- fork $ forever (fetchAll app links >> sleepM 30)
+  _ <- fork $ forever (fetchAll' app links >> sleepM 30)
   -- Run the web server
   liftIO $ scotty (port app) $ do
     middleware $ logStdoutDev

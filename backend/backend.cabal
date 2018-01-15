@@ -22,6 +22,7 @@ executable          backend
                   , bytestring
                   , containers
                   , envy
+                  , http-client >= 0.5
                   , katip
                   , lens
                   , lens-aeson
