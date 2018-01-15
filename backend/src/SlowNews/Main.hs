@@ -8,7 +8,7 @@ import           Control.Concurrent.Lifted            (fork, threadDelay)
 import           Control.Concurrent.STM               (TVar, atomically,
                                                        newTVar, readTVar,
                                                        writeTVar)
-import           Control.Exception.Lifted             (handle)
+import           Control.Exception.Safe               (handle)
 import           Control.Monad                        (forever, join)
 import           Control.Monad.IO.Class               (liftIO)
 import           Data.Monoid                          ((<>))

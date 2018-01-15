@@ -5,7 +5,7 @@
 
 module SlowNews.App where
 
-import           Control.Exception      (bracket)
+import           Control.Exception.Safe (bracket)
 import           Control.Monad.IO.Class (liftIO)
 import           Data.Aeson             (FromJSON, ToJSON, eitherDecode)
 import qualified Data.ByteString.Lazy   as B
