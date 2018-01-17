@@ -1,9 +1,7 @@
-result
-dist
-dist-*
 cabal.project.local
-.stack-work
-node_modules
 
 # We require ghcjs to compile all.js before running
 all.js
+
+*.js_*
+*.jsexe
