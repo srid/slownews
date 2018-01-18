@@ -20,6 +20,7 @@ executable          backend
                   , aeson-casing
                   , async
                   , bytestring
+                  , common
                   , containers
                   , envy
                   , http-client >= 0.5
@@ -29,6 +30,7 @@ executable          backend
                   , lifted-async
                   , lifted-base
                   , raw-strings-qq
+                  , reflex-dom
                   , safe-exceptions >= 0.1
                   , scotty
                   , stm
