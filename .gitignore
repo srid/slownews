@@ -1,5 +1,1 @@
-/backend/_build
-/backend/deps
-erl_crash.dump
-*.ez
-*~
+result

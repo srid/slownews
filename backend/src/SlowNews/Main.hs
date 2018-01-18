@@ -53,9 +53,10 @@ main = App.runApp $ do
   links <- liftIO $ atomically $ newTVar mempty
   _ <- fork $ forever (fetchAll' app links >> sleepM 30)
   -- Run the web server
+  let webroot = "result/ghcjs/frontend/bin/app.jsexe"
   liftIO $ scotty (port app) $ do
     middleware $ logStdoutDev
-    middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
+    middleware $ staticPolicy (noDots >-> addBase webroot)
     get "/" $ redirect "/index.html"
     get "/data" $ liftTVar links >>= json
   where
