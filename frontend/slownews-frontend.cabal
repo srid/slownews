@@ -17,6 +17,8 @@ executable app
                      , base
                      , common
                      , containers
+                     , jsaddle-warp
                      , reflex-dom
+                     , reflex-dom-core
                      , time
   default-language:    Haskell2010
