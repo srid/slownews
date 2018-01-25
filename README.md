@@ -18,13 +18,24 @@ Visit http://localhost:3000/
 
 Our workflow is based on reflex-platform's [project development](https://github.com/reflex-frp/reflex-platform/blob/develop/docs/project-development.md#building-with-cabal).
 
-To start the shells:
+Let's start by entering the GHC environment:
 
 ```
-# Backend
 nix-shell -A shells.ghc
+```
 
-# Frontend
-nix-shell -A shells.ghcjs
+To develop the frontend, launch ghci and start the jsaddle warp server:
+
+```
+cabal new-repl frontend
+> main  # Starts server on port 3001
+```
+
+Edit-compile-run cycle then looks like:
+
+```
+> ^C   # kill warp server
+> :r   # reload code 
+> main # start sever again
 ```
 

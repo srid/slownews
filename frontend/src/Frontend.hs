@@ -8,4 +8,4 @@ main :: IO ()
 main = JSaddle.run 3001 app
 
 app = mainWidget $ el "div" $ do
- text "SlowNews Port in development!"
+ text "SlowNews Port in development [reflex-port]"
