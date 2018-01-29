@@ -17,6 +17,7 @@ executable app
                      , base
                      , common
                      , containers
+                     , file-embed
                      , jsaddle-warp
                      , reflex-dom
                      , reflex-dom-core
