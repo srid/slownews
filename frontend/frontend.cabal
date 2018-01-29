@@ -1,6 +1,6 @@
 name:                frontend
 version:             1.0.0.0
-synopsis:            SlowNews Frontend
+synopsis:            SlowNews Frontend in Reflex
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.10

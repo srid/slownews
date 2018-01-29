@@ -1,15 +1,17 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
 
 import           Data.Monoid                      ((<>))
 import           Data.Text                        as T
-import qualified Language.Javascript.JSaddle.Warp as JSaddle
-import           Reflex.Dom                       hiding (Link, mainWidget)
+import           Language.Javascript.JSaddle.Warp (run)
+import           Reflex.Dom                       hiding (Link, mainWidget, run)
 import           Reflex.Dom.Core                  (mainWidget)
 import           SlowNews.Link                    (Link (Link))
 
 main :: IO ()
-main = JSaddle.run 3001 app
+main = run 3001 $ mainWidget app
 
-app = mainWidget $ el "div" $ do
+app :: MonadWidget t m => m ()
+app = el "div" $ do
   let link = Link "foo" "url" "mu" 0 "site"
   text $ "SlowNews Port in development [reflex-port]" <> (T.pack . show) link
