@@ -18,6 +18,30 @@ Visit http://localhost:3000/
 
 Our workflow is based on reflex-platform's [project development](https://github.com/reflex-frp/reflex-platform/blob/develop/docs/project-development.md#building-with-cabal).
 
+### Developing backend (and frontend)
+
+Build the backend:
+
+```
+make b
+```
+
+Build the frontend:
+
+```
+make f
+```
+
+These commands will place the artifacts under the `./dist-makefile` directory. The backend directly serves the static files copied over in that directory.
+
+Run it:
+
+```
+make r
+```
+
+### Developing frontend (only)
+
 Let's start by entering the GHC environment:
 
 ```

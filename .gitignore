@@ -1,3 +1,4 @@
 cabal.project.local
 result
 dist*
+frontend/all.js

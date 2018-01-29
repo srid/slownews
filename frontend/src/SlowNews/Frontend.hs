@@ -8,10 +8,10 @@ import Reflex.Dom hiding (Link, mainWidgetWithCss, run)
 import Reflex.Dom.Core (mainWidgetWithCss)
 import SlowNews.Link (Link (..))
 
--- TODO
--- 1. Write basic UI
--- 2. XHR
--- 3. Complete UI
+-- 1. DONE Write basic UI
+-- 2. TODO Shell + normal mode
+-- 2. TODO XHR
+-- 3. TODO Complete UI
 
 main :: IO ()
 main = run 3001 $ mainWidgetWithCss css app

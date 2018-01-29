@@ -53,7 +53,8 @@ main = App.runApp $ do
   links <- liftIO $ atomically $ newTVar mempty
   _ <- fork $ forever (fetchAll' app links >> sleepM 30)
   -- Run the web server
-  let webroot = "result/ghcjs/frontend/bin/app.jsexe"
+  let webroot = "dist-makefile/static"
+  $(logTM) InfoS $ "Static directory: " <> showLS webroot
   liftIO $ scotty (port app) $ do
     middleware $ logStdoutDev
     middleware $ staticPolicy (noDots >-> addBase webroot)
