@@ -12,7 +12,6 @@ executable          backend
     other-modules:  SlowNews.Stack
                   , SlowNews.App
                   , SlowNews.Site
-                  , SlowNews.Link
                   , SlowNews.HackerNews
                   , SlowNews.Reddit
     build-depends:  base   >= 4      && < 5
