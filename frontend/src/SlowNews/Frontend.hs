@@ -1,12 +1,10 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings     #-}
 
-import           Data.Monoid                      ((<>))
-import qualified Data.Text                        as T
-import           Language.Javascript.JSaddle.Warp (run)
-import           Reflex.Dom                       hiding (Link, mainWidget, run)
-import           Reflex.Dom.Core                  (mainWidget)
-import           SlowNews.Link                    (Link (Link))
+import Language.Javascript.JSaddle.Warp
+import Reflex.Dom hiding (Link, mainWidget, run)
+import Reflex.Dom.Core (mainWidget)
+import SlowNews.Link (Link (Link))
 
 -- TODO
 -- 1. Write basic UI
@@ -25,10 +23,10 @@ app = el "div" $ do
       text "SlowNews on GitHub"
 
 linkUI :: MonadWidget t m => Dynamic t Link -> m ()
-linkUI link = do
-  elAttr "a" ("href" =: url) $ display link
+linkUI link_ = do
+  elAttr "a" ("href" =: url) $ display link_
     where url = "TODO" -- need to study the dyn html stuff
 
 sampleLinks :: [Link]
 sampleLinks = do
-  return $ Link "Link 123" "url" "murl" 0 "siteA"
+  pure $ Link "Link 123" "url" "murl" 0 "siteA"
