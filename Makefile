@@ -18,4 +18,4 @@ b:
 
 # Run stylish-haskell over modified files
 stylish:
-	stylish-haskell -i `git diff --name-only | grep .hs`
+	nix-shell -p haskellPackages.stylish-haskell --run "stylish-haskell -i `git diff --name-only | grep .hs`"
