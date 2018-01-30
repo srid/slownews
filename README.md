@@ -42,16 +42,13 @@ make r
 
 ### Developing frontend (only)
 
-Let's start by entering the GHC environment:
-
 ```
-nix-shell -A shells.ghc
+make fi
 ```
 
-To develop the frontend, launch ghci and start the jsaddle warp server:
+Start the frontend server (backend is not running):
 
 ```
-cabal new-repl frontend
 > main  # Starts server on port 3001
 ```
 
