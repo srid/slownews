@@ -16,11 +16,9 @@ executable app
                      , base
                      , common
                      , containers
-                     , data-default
                      , file-embed
                      , jsaddle
                      , jsaddle-warp
-                     , lens
                      , reflex-dom
                      , reflex-dom-core
                      , text

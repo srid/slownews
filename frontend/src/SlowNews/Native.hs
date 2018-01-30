@@ -11,7 +11,7 @@ import Data.Text as T
 import Reflex.Dom hiding (Link)
 run2 = id
 appTitle :: T.Text
-appTitle = "SlowNews [ghcjs]"
+appTitle = "SlowNews"
 #elif defined(MIN_VERSION_jsaddle_warp)
 -- We are on jsaddle-warp
 import Language.Javascript.JSaddle.Warp (run)

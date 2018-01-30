@@ -3,14 +3,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-import Control.Lens
-import Control.Monad
-import Data.Default
 import Data.FileEmbed
 import Data.Function (on)
 import Data.List (sortBy)
-import Data.Maybe
-import Data.Monoid
 import Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
