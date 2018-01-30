@@ -1,29 +1,23 @@
-{-# LANGUAGE CPP #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 -- 1. DONE Write basic UI
 -- 2. DONE Shell + normal mode
 -- 2. TODO XHR
 -- 3. TODO Complete UI
 
 import Data.FileEmbed
+import Data.Maybe
+import Data.Text as T
+import Control.Lens
+import Control.Monad
+import Data.Default
+import Data.Monoid
+import Reflex.Dom hiding (Link, mainWidgetWithCss)
 
 import SlowNews.Link (Link (..))
-
--- Temporary fix to address mismatch in `run` declaration between platforms.
-#if defined(MIN_VERSION_jsaddle_warp)
-import Language.Javascript.JSaddle.Warp (run)
-import Language.Javascript.JSaddle (JSM)
-import Reflex.Dom hiding (Link, mainWidgetWithCss, run)
-import Reflex.Dom.Core (mainWidgetWithCss)
-run2 :: JSM () -> IO ()
-run2 = run 3001
-#else
-import Reflex.Dom hiding (Link)
-run2 = id
-#endif
-
+import SlowNews.Native
 
 main :: IO ()
 main = run2 $ mainWidgetWithCss css app
@@ -31,14 +25,24 @@ main = run2 $ mainWidgetWithCss css app
 
 app :: MonadWidget t m => m ()
 app = el "div" $ do
-  elClass "h1" "title" $ text "SlowNews"
+  elClass "h1" "title" $ text appTitle
+  getLinks
   el "tr" $ do
     simpleList
       (constDyn sampleLinks)
       (\d -> dyn $ displayLink <$> d)
   divClass "footer" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
-      text "SlowNews on GitHub"
+      text "SlowNews source on GitHub"
+
+-- | Fetch links from the server
+getLinks :: MonadWidget t m => m ()
+getLinks = do
+  pb <- getPostBuild
+  let req = xhrRequest "GET" "/data" def
+  resp :: Event t (Maybe T.Text) <- fmap (fmap _xhrResponse_responseText) $ performRequestAsync $ req <$ pb
+  text "XHR Response => "
+  dynText <=< holdDyn "" $ fmapMaybe (id <$>) resp
 
 displayLink :: MonadWidget t m => Link -> m ()
 displayLink link_ = do

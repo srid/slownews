@@ -15,6 +15,7 @@ nixrun:
 # Compile frontend
 # From emacs: SPC p c.
 f:
+	rm -f ${OUTPUT_DIR}/static
 	nix-shell -A shells.ghcjs --run "cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build frontend"
 	mkdir -p ${OUTPUT_DIR}
 	ln -sf `pwd`/${CABAL_BUILD_DIR_F} ${OUTPUT_DIR}/static
