@@ -29,7 +29,6 @@ executable          backend
                   , lifted-async
                   , lifted-base
                   , raw-strings-qq
-                  , reflex-dom
                   , safe-exceptions >= 0.1
                   , scotty
                   , stm
