@@ -21,7 +21,9 @@ executable          backend
                   , bytestring
                   , common
                   , containers
+                  , directory
                   , envy
+                  , filepath
                   , http-client >= 0.5
                   , katip
                   , lens

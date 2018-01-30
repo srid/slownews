@@ -34,8 +34,9 @@ getLinks = do
   pb <- getPostBuild
   let urlEvent = "/data" <$ pb
   -- TODO: error handling
+  ---    : ideally, create a widget that handles remote data with errors
   resp :: Event t (Maybe [Link]) <- getAndDecode urlEvent
-  holdDyn [loadingLink] $ fmapMaybe (id <$>) resp
+  holdDyn [loadingLink] $ fmapMaybe id resp
     where loadingLink = Link "Loading..." "" "" 0 ""
 
 sortLinks :: [Link] -> [Link]

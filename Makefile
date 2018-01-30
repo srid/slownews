@@ -1,4 +1,4 @@
-# TODO: do this from nix 
+# TODO: do this from nix cp
 CABAL_BUILD_DIR_B:=/home/srid/code/slownews/dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-0.0.1/c/backend/build/backend/backend
 CABAL_BUILD_DIR_F:=./dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-1.0.0.0/c/app/build/app/app.jsexe
 OUTPUT_DIR:=dist-makefile
@@ -27,12 +27,16 @@ fi:
 # Compile backend
 b:
 	nix-shell -A shells.ghc --run "cabal new-build backend"
-	mkdir -p ${OUTPUT_DIR}
+	mkdir -p ${OUTPUT_DIR}/
 	cp ${CABAL_BUILD_DIR_B} ${OUTPUT_DIR}/
+	cp -v backend/config/config.json ${OUTPUT_DIR}/
 
 # Run backend (assuming frontend is also built)
 r:
-	${OUTPUT_DIR}/backend
+	cd ${OUTPUT_DIR}/ && ./backend
+
+dist:
+	zip -r dist.zip dist-makefile/ -x *.jsexe*
 
 # Run stylish-haskell over modified files
 stylish:
