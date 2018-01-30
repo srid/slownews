@@ -1,20 +1,32 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
-
-import Data.FileEmbed
-import Language.Javascript.JSaddle.Warp
-import Reflex.Dom hiding (Link, mainWidgetWithCss, run)
-import Reflex.Dom.Core (mainWidgetWithCss)
-import SlowNews.Link (Link (..))
-
 -- 1. DONE Write basic UI
--- 2. TODO Shell + normal mode
+-- 2. DONE Shell + normal mode
 -- 2. TODO XHR
 -- 3. TODO Complete UI
 
+import Data.FileEmbed
+
+import SlowNews.Link (Link (..))
+
+-- Temporary fix to address mismatch in `run` declaration between platforms.
+#if defined(MIN_VERSION_jsaddle_warp)
+import Language.Javascript.JSaddle.Warp (run)
+import Language.Javascript.JSaddle (JSM)
+import Reflex.Dom hiding (Link, mainWidgetWithCss, run)
+import Reflex.Dom.Core (mainWidgetWithCss)
+run2 :: JSM () -> IO ()
+run2 = run 3001
+#else
+import Reflex.Dom hiding (Link)
+run2 = id
+#endif
+
+
 main :: IO ()
-main = run 3001 $ mainWidgetWithCss css app
+main = run2 $ mainWidgetWithCss css app
   where css = $(embedFile "style.css")
 
 app :: MonadWidget t m => m ()
