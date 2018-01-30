@@ -28,9 +28,7 @@ app = el "div" $ do
   elClass "h1" "title" $ text appTitle
   linksDyn <- getLinks
   el "tr" $ do
-    simpleList
-      linksDyn
-      (\d -> dyn $ displayLink <$> d)
+    simpleList linksDyn displayLink
   divClass "footer" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
       text "SlowNews source on GitHub"
@@ -45,18 +43,11 @@ getLinks = do
   holdDyn [loadingLink] $ fmapMaybe (id <$>) resp
     where loadingLink = Link "Loading..." "" "" 0 ""
 
-displayLink :: MonadWidget t m => Link -> m ()
-displayLink link_ = do
-  el "tr" $ do
-    el "td" blank  -- Time
-    elClass "td" "meta" blank -- Comments Url
-    el "td" $ do
-      elAttr "a" ("href" =: url) $ text title
-        where url = linkUrl link_
-              title = linkTitle link_
-
-sampleLinks :: [Link]
-sampleLinks =
-  [ Link "Latest hipster story title" "url" "murl" 0 "siteA"
-  , Link "Something politics and boring" "url" "murl" 0 "siteA"
-  ]
+displayLink :: MonadWidget t m => Dynamic t Link -> m ()
+displayLink dLink = el "tr" $ do
+  el "td" blank  -- Time
+  elClass "td" "meta" blank -- Comments Url
+  el "td" $ do
+    elDynAttr "a" dAttr $ dynText dTitle
+      where dTitle = linkTitle <$> dLink
+            dAttr = ffor dLink $ \l -> "href" =: linkUrl l
