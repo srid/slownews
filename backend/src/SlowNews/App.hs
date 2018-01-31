@@ -45,7 +45,7 @@ instance FromJSON Config
 instance ToJSON Config
 
 loadConfig :: IO (Either String Config)
-loadConfig = eitherDecode <$> B.readFile "config/config.json"
+loadConfig = eitherDecode <$> B.readFile "config.json"
 
 -- Application data structure
 

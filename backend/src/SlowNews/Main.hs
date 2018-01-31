@@ -20,6 +20,8 @@ import           Network.Wai.Middleware.Static        (addBase, noDots,
                                                        staticPolicy, (>->))
 import           Web.Scotty                           (get, json, middleware,
                                                        redirect, scotty)
+import           System.Directory (getCurrentDirectory, doesFileExist)
+import           System.FilePath (FilePath, joinPath)
 
 import qualified SlowNews.App                         as App
 import           SlowNews.Link                        (Link)
@@ -46,16 +48,28 @@ handleHttpException e = do
 fetchAll' :: App.App -> Links -> Stack ()
 fetchAll' app links = handle handleHttpException (fetchAll app links)
 
+getStaticDir :: Stack FilePath
+getStaticDir = do
+  -- ./static has static files, from frontend
+  cwd <- liftIO $ getCurrentDirectory
+  let staticDir = joinPath [cwd, "static"]
+  -- index.html and friends must have been generated from frontend
+  hasIndex <- liftIO $ doesFileExist (joinPath [staticDir, "index.html"])
+  case hasIndex of
+    True  -> liftIO $ return staticDir
+    False -> App.quitApp $ staticDir <> " is not a valid static directory"
+
 main :: IO ()
 main = App.runApp $ do
   app <- App.makeApp
   $(logTM) InfoS $ showLS app
   links <- liftIO $ atomically $ newTVar mempty
   _ <- fork $ forever (fetchAll' app links >> sleepM 30)
-  -- Run the web server
+  webroot <- getStaticDir
+  $(logTM) InfoS $ "Static directory: " <> showLS webroot
   liftIO $ scotty (port app) $ do
     middleware $ logStdoutDev
-    middleware $ staticPolicy (noDots >-> addBase "../frontend/static")
+    middleware $ staticPolicy (noDots >-> addBase webroot)
     get "/" $ redirect "/index.html"
     get "/data" $ liftTVar links >>= json
   where

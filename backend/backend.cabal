@@ -1,5 +1,5 @@
 name:          backend
-version:       0.0.1
+version:       1.0.0
 cabal-version: >= 1.8
 build-type:    Simple
 
@@ -12,7 +12,6 @@ executable          backend
     other-modules:  SlowNews.Stack
                   , SlowNews.App
                   , SlowNews.Site
-                  , SlowNews.Link
                   , SlowNews.HackerNews
                   , SlowNews.Reddit
     build-depends:  base   >= 4      && < 5
@@ -20,8 +19,11 @@ executable          backend
                   , aeson-casing
                   , async
                   , bytestring
+                  , common
                   , containers
+                  , directory
                   , envy
+                  , filepath
                   , http-client >= 0.5
                   , katip
                   , lens

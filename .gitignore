@@ -1,5 +1,4 @@
-/backend/_build
-/backend/deps
-erl_crash.dump
-*.ez
-*~
+cabal.project.local
+result
+dist*
+frontend/all.js
