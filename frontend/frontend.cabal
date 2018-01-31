@@ -13,7 +13,8 @@ executable app
                        -fwarn-incomplete-record-updates
                        -ddump-minimal-imports
   build-depends:       aeson
-                     , base
+                     , bytestring
+                     , base >= 4.8.0.0
                      , common
                      , containers
                      , file-embed

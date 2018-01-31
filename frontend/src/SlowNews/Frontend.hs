@@ -1,8 +1,10 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+import Control.Monad (void)
 import Data.FileEmbed
 import Data.Function (on)
 import Data.List (sortBy)
@@ -13,6 +15,7 @@ import Reflex.Dom hiding (Link, mainWidgetWithCss)
 
 import SlowNews.Link (Link (..))
 import SlowNews.Native
+import SlowNews.ReflexUtil
 
 main :: IO ()
 main = run2 $ mainWidgetWithCss css app
@@ -21,23 +24,23 @@ main = run2 $ mainWidgetWithCss css app
 app :: MonadWidget t m => m ()
 app = el "div" $ do
   elClass "h1" "title" $ text appTitle
-  linksDyn <- getLinks
+  dLinksE <- getLinks >>= eitherDyn
   el "tr" $ do
-    simpleList (sortLinks <$> linksDyn) displayLink
+    void $ dyn $ ffor dLinksE
+      (\case
+          Left dError -> dynText $ T.pack <$> dError
+          Right dLinks -> void $ simpleList (sortLinks <$> dLinks) displayLink)
   divClass "footer" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
-      text "SlowNews source on GitHub"
+      text "SlowNews on GitHub (powered by Haskell and Reflex)"
 
 -- | Fetch links from the server
-getLinks :: MonadWidget t m => m (Dynamic t [Link])
+getLinks :: MonadWidget t m => m (Dynamic t (Either String [Link]))
 getLinks = do
   pb <- getPostBuild
   let urlEvent = "/data" <$ pb
-  -- TODO: error handling
-  ---    : ideally, create a widget that handles remote data with errors
-  resp :: Event t (Maybe [Link]) <- getAndDecode urlEvent
-  holdDyn [loadingLink] $ fmapMaybe id resp
-    where loadingLink = Link "Loading..." "" "" 0 ""
+  resp :: Event t (Either String [Link]) <- getAndDecodeWithError urlEvent
+  holdDyn (Left "Loading...") resp
 
 sortLinks :: [Link] -> [Link]
 sortLinks = sortBy (flip compare `on` linkCreated)
