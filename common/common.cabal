@@ -11,7 +11,7 @@ cabal-version:       >=1.10
 library
   exposed-modules: SlowNews.Link
   
-  build-depends: base >=4.9 && <4.10
+  build-depends: base
                , aeson
                , aeson-casing
                , text

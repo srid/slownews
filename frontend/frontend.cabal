@@ -8,18 +8,19 @@ cabal-version:       >=1.10
 executable app
   hs-source-dirs:      src 
   main-is:             SlowNews/Frontend.hs
+  other-modules:       SlowNews.ReflexUtil
+                     , SlowNews.Native
   ghc-options:         -Wall
                        -fwarn-incomplete-uni-patterns
                        -fwarn-incomplete-record-updates
                        -ddump-minimal-imports
   build-depends:       aeson
                      , bytestring
-                     , base >= 4.8.0.0
+                     , base
                      , common
                      , containers
                      , file-embed
                      , jsaddle
-                     , jsaddle-warp
                      , reflex-dom
                      , reflex-dom-core
                      , text
