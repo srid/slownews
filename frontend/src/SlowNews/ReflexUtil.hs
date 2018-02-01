@@ -3,7 +3,6 @@
 
 module SlowNews.ReflexUtil (getAndDecodeWithError, matchMaybe, matchEither) where
 
-import Control.Monad (void)
 import Control.Monad (sequence)
 import Data.Aeson (FromJSON, eitherDecode)
 import Data.Bifunctor (Bifunctor (bimap))
@@ -12,7 +11,7 @@ import Data.Maybe (fromMaybe)
 import Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 
-import Reflex.Dom hiding (Link, mainWidgetWithCss)
+import Reflex.Dom
 
 -- | A version of `getAndDecode` that handles JSON error in either monad. Also
 -- converts XhrException to String for consistency.
@@ -35,7 +34,7 @@ eitherMaybeHandle :: a -> Either a (Maybe b) -> Either a b
 eitherMaybeHandle err = fromMaybe (Left err) . sequence
 
 
--- | These functions to simplify nested either/maybe data types.
+-- | These functions exist to simplify nested either/maybe data types.
 
 matchMaybe :: MonadWidget t m
            => Dynamic t (Maybe a)
@@ -43,7 +42,7 @@ matchMaybe :: MonadWidget t m
            -> m ()
 matchMaybe m f = do
   v <- maybeDyn m
-  void $ dyn $ ffor v f
+  dyn_ $ ffor v f
 
 matchEither :: MonadWidget t m
             => Dynamic t (Either a b)
@@ -51,5 +50,4 @@ matchEither :: MonadWidget t m
             -> m ()
 matchEither e f = do
   v <- eitherDyn e
-  void $ dyn $ ffor v f
-
+  dyn_ $ ffor v f

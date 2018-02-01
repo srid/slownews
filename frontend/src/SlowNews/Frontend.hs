@@ -11,7 +11,7 @@ import Data.List (sortBy)
 import Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
-import Reflex.Dom hiding (Link, mainWidgetWithCss)
+import Reflex.Dom hiding (Link)
 
 import SlowNews.Link (Link (..))
 import SlowNews.Native
@@ -20,7 +20,7 @@ import SlowNews.ReflexUtil
 type CurrentLinks = Maybe (Either String [Link])
 
 main :: IO ()
-main = run2 $ mainWidgetWithCss css app
+main = mainWidgetWithCss css app
   where css = $(embedFile "style.css")
 
 app :: MonadWidget t m => m ()
