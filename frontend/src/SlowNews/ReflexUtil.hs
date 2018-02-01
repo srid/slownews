@@ -1,8 +1,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module SlowNews.ReflexUtil (getAndDecodeWithError) where
+module SlowNews.ReflexUtil (getAndDecodeWithError, matchMaybe, matchEither) where
 
+import Control.Monad (void)
 import Control.Monad (sequence)
 import Data.Aeson (FromJSON, eitherDecode)
 import Data.Bifunctor (Bifunctor (bimap))
@@ -32,4 +33,23 @@ decodeXhrResponseWithError =
 
 eitherMaybeHandle :: a -> Either a (Maybe b) -> Either a b
 eitherMaybeHandle err = fromMaybe (Left err) . sequence
+
+
+-- | These functions to simplify nested either/maybe data types.
+
+matchMaybe :: MonadWidget t m
+           => Dynamic t (Maybe a)
+           -> (Maybe (Dynamic t a) -> m b)
+           -> m ()
+matchMaybe m f = do
+  v <- maybeDyn m
+  void $ dyn $ ffor v f
+
+matchEither :: MonadWidget t m
+            => Dynamic t (Either a b)
+            -> (Either (Dynamic t a) (Dynamic t b) -> m c)
+            -> m ()
+matchEither e f = do
+  v <- eitherDyn e
+  void $ dyn $ ffor v f
 
