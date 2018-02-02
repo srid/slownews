@@ -5,7 +5,7 @@ category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
 
-executable app
+executable slownews-frontend
   hs-source-dirs:      src 
   main-is:             SlowNews/Frontend.hs
   other-modules:       SlowNews.ReflexUtil

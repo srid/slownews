@@ -3,7 +3,7 @@ version:       1.0.0
 cabal-version: >= 1.8
 build-type:    Simple
 
-executable          backend
+executable          slownews-backend
     hs-source-dirs: src
     main-is:        SlowNews/Main.hs
     ghc-options:    -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists

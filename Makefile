@@ -1,6 +1,6 @@
 # TODO: do this from nix cp
-CABAL_BUILD_DIR_B:=/home/srid/code/slownews/dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-0.0.1/c/backend/build/backend/backend
-CABAL_BUILD_DIR_F:=./dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-1.0.0.0/c/app/build/app/app.jsexe
+CABAL_BUILD_DIR_B:=/home/srid/code/slownews/dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-1.0.0/c/slownews-backend/build/slownews-backend/slownews-backend
+CABAL_BUILD_DIR_F:=./dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-1.0.0.0/c/slownews-frontend/build/slownews-frontend/slownews-frontend.jsexe
 OUTPUT_DIR:=dist-makefile
 
 all:	nixbuild	nixrun
@@ -33,7 +33,7 @@ b:
 
 # Run backend (assuming frontend is also built)
 r:
-	cd ${OUTPUT_DIR}/ && ./backend
+	cd ${OUTPUT_DIR}/ && ./slownews-backend
 
 dist:
 	zip -r dist.zip dist-makefile/ -x *.jsexe*
