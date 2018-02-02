@@ -44,4 +44,15 @@ cssInline = "\
 \     font-size: 85%; \
 \     text-decoration: none; \
 \     color: pink; \
+\     background-color: #444; \
+\     padding: 0.2em 1em; \
+\ } \
+\  \
+\ .footer { \
+\     text-align: center; \
+\     padding-top: 1em; \
+\     margin-top: 2em; \
+\     margin-bottom: 2em; \
+\     border-top: solid gray; \
+\ } \
 \ "
