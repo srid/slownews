@@ -2,10 +2,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell #-}
 
 import Control.Monad (void)
-import Data.FileEmbed
 import Data.Function (on)
 import Data.List (sortBy)
 import Data.Text as T
@@ -14,14 +12,14 @@ import Data.Time.Format (defaultTimeLocale, formatTime)
 import Reflex.Dom hiding (Link)
 
 import SlowNews.Link (Link (..))
+import SlowNews.CSS
 import SlowNews.Native
 import SlowNews.ReflexUtil
 
 type CurrentLinks = Maybe (Either String [Link])
 
 main :: IO ()
-main = mainWidgetWithCss css app
-  where css = $(embedFile "style.css")
+main = mainWidgetWithCss cssInline app
 
 app :: MonadWidget t m => m ()
 app = el "div" $ do

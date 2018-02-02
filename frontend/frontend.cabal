@@ -9,6 +9,7 @@ executable app
   hs-source-dirs:      src 
   main-is:             SlowNews/Frontend.hs
   other-modules:       SlowNews.ReflexUtil
+                     , SlowNews.CSS
                      , SlowNews.Native
   ghc-options:         -Wall
                        -fwarn-incomplete-uni-patterns
@@ -19,7 +20,6 @@ executable app
                      , base
                      , common
                      , containers
-                     , file-embed
                      , jsaddle
                      , reflex-dom
                      , reflex-dom-core
