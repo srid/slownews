@@ -26,8 +26,7 @@ getAndDecodeWithError url = do
 decodeXhrResponseWithError :: FromJSON a => XhrResponse -> Either String a
 decodeXhrResponseWithError =
   eitherMaybeHandle "Empty response"
-  . sequence
-  . fmap (eitherDecode . BL.fromStrict . encodeUtf8)
+  . traverse (eitherDecode . BL.fromStrict . encodeUtf8)
   . _xhrResponse_responseText
 
 eitherMaybeHandle :: a -> Either a (Maybe b) -> Either a b

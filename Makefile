@@ -16,17 +16,17 @@ nixrun:
 # From emacs: SPC p c.
 f:
 	rm -f ${OUTPUT_DIR}/static
-	nix-shell -A shells.ghcjs --run "cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build frontend"
+	nix-shell -A shells.ghcjs --run "cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build frontend" default.nix
 	mkdir -p ${OUTPUT_DIR}
 	ln -sf `pwd`/${CABAL_BUILD_DIR_F} ${OUTPUT_DIR}/static
 
 # Interactive frontend compilation
 fi:
-	nix-shell -A shells.ghc --run "cabal new-repl frontend"
+	nix-shell -A shells.ghc --run "cabal new-repl frontend" default.nix
 
 # Compile backend
 b:
-	nix-shell -A shells.ghc --run "cabal new-build backend"
+	nix-shell -A shells.ghc --run "cabal new-build backend" default.nix
 	mkdir -p ${OUTPUT_DIR}/
 	cp ${CABAL_BUILD_DIR_B} ${OUTPUT_DIR}/
 	cp -v backend/config/config.json ${OUTPUT_DIR}/
@@ -40,4 +40,4 @@ dist:
 
 # Run stylish-haskell over modified files
 stylish:
-	nix-shell -p haskellPackages.stylish-haskell --run "stylish-haskell -i `git diff --name-only | grep .hs`"
+	nix-shell -p haskellPackages.stylish-haskell --run "stylish-haskell -i `git diff --name-only | grep .hs`" default.nix
