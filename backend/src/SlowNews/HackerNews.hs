@@ -1,23 +1,20 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module SlowNews.HackerNews where
 
-import           Control.Lens          ((&), (.~), (^.))
-import           Data.Aeson            (FromJSON (parseJSON), ToJSON,
-                                        withObject, (.:))
-import           Data.Maybe            (fromMaybe)
-import           Data.Monoid           ((<>))
-import           Data.Text             (Text)
-import qualified Data.Text             as T
-import           Data.Time             (UTCTime (UTCTime), addDays,
-                                        getCurrentTime, utctDay)
-import           Data.Time.Clock.POSIX (utcTimeToPOSIXSeconds)
-import           GHC.Generics          (Generic)
-import           Network.Wreq          (Response, asJSON, defaults, getWith,
-                                        params, responseBody)
-import           SlowNews.Link         (Link (Link))
+import Control.Lens ((&), (.~), (^.))
+import Data.Aeson (FromJSON (parseJSON), ToJSON, withObject, (.:))
+import Data.Maybe (fromMaybe)
+import Data.Monoid ((<>))
+import Data.Text (Text)
+import qualified Data.Text as T
+import Data.Time (UTCTime (UTCTime), addDays, getCurrentTime, utctDay)
+import Data.Time.Clock.POSIX (utcTimeToPOSIXSeconds)
+import GHC.Generics (Generic)
+import Network.Wreq (Response, asJSON, defaults, getWith, params, responseBody)
+import SlowNews.Link (Link (Link))
 
 data Site = Site
   { query :: Maybe String

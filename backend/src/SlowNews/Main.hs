@@ -1,32 +1,27 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-import           Control.Concurrent.Async.Lifted      (mapConcurrently)
-import           Control.Concurrent.Lifted            (fork, threadDelay)
-import           Control.Concurrent.STM               (TVar, atomically,
-                                                       newTVar, readTVar,
-                                                       writeTVar)
-import           Control.Exception.Safe               (handle)
-import           Control.Monad                        (forever, join)
-import           Control.Monad.IO.Class               (liftIO)
-import           Data.Monoid                          ((<>))
-import           Katip                                (Severity (ErrorS, InfoS),
-                                                       logTM, showLS)
-import           Network.HTTP.Client                  (HttpException)
-import           Network.Wai.Middleware.RequestLogger (logStdoutDev)
-import           Network.Wai.Middleware.Static        (addBase, noDots,
-                                                       staticPolicy, (>->))
-import           Web.Scotty                           (get, json, middleware,
-                                                       redirect, scotty)
-import           System.Directory (getCurrentDirectory, doesFileExist)
-import           System.FilePath (FilePath, joinPath)
+import Control.Concurrent.Async.Lifted (mapConcurrently)
+import Control.Concurrent.Lifted (fork, threadDelay)
+import Control.Concurrent.STM (TVar, atomically, newTVar, readTVar, writeTVar)
+import Control.Exception.Safe (handle)
+import Control.Monad (forever, join)
+import Control.Monad.IO.Class (liftIO)
+import Data.Monoid ((<>))
+import Katip (Severity (ErrorS, InfoS), logTM, showLS)
+import Network.HTTP.Client (HttpException)
+import Network.Wai.Middleware.RequestLogger (logStdoutDev)
+import Network.Wai.Middleware.Static (addBase, noDots, staticPolicy, (>->))
+import System.Directory (doesFileExist, getCurrentDirectory)
+import System.FilePath (FilePath, joinPath)
+import Web.Scotty (get, json, middleware, redirect, scotty)
 
-import qualified SlowNews.App                         as App
-import           SlowNews.Link                        (Link)
-import qualified SlowNews.Site                        as Site
-import           SlowNews.Stack                       (Stack)
+import qualified SlowNews.App as App
+import SlowNews.Link (Link)
+import qualified SlowNews.Site as Site
+import SlowNews.Stack (Stack)
 
 type Links = TVar [Link]
 

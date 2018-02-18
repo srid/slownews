@@ -11,8 +11,8 @@ import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import Reflex.Dom hiding (Link)
 
-import SlowNews.Link (Link (..))
 import SlowNews.CSS
+import SlowNews.Link (Link (..))
 import SlowNews.Native
 import SlowNews.ReflexUtil
 

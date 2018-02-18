@@ -1,19 +1,19 @@
-{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module SlowNews.Site where
 
-import           Control.Monad.IO.Class (liftIO)
-import           Data.Aeson             (FromJSON, ToJSON)
-import           Data.Monoid            ((<>))
-import           GHC.Generics           (Generic)
-import           Katip                  (Severity (InfoS), logTM, showLS)
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (FromJSON, ToJSON)
+import Data.Monoid ((<>))
+import GHC.Generics (Generic)
+import Katip (Severity (InfoS), logTM, showLS)
 
-import qualified SlowNews.HackerNews    as HackerNews
-import           SlowNews.Link          (Link)
-import qualified SlowNews.Reddit        as Reddit
-import           SlowNews.Stack         (Stack)
+import qualified SlowNews.HackerNews as HackerNews
+import SlowNews.Link (Link)
+import qualified SlowNews.Reddit as Reddit
+import SlowNews.Stack (Stack)
 
 data Site
   = Reddit Reddit.Site

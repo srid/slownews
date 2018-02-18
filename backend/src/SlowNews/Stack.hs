@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module SlowNews.Stack where
 
-import           Katip (KatipContextT)
+import Katip (KatipContextT)
 
 type Stack a = KatipContextT IO a

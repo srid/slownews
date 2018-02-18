@@ -1,28 +1,25 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module SlowNews.App where
 
-import           Control.Exception.Safe (bracket)
-import           Control.Monad.IO.Class (liftIO)
-import           Data.Aeson             (FromJSON, ToJSON, eitherDecode)
-import qualified Data.ByteString.Lazy   as B
-import           Data.Either            (either)
-import           Data.Monoid            ((<>))
-import           GHC.Generics           (Generic)
-import           Katip                  (LogContexts,
-                                         Severity (CriticalS, InfoS),
-                                         Verbosity (V2), closeScribes, logTM,
-                                         ls, runKatipContextT)
-import           Katip.Scribes.Handle   (ioLogEnv)
-import           System.Envy            (DefConfig (defConfig), FromEnv,
-                                         decodeEnv)
-import           System.Exit            (die)
+import Control.Exception.Safe (bracket)
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (FromJSON, ToJSON, eitherDecode)
+import qualified Data.ByteString.Lazy as B
+import Data.Either (either)
+import Data.Monoid ((<>))
+import GHC.Generics (Generic)
+import Katip (LogContexts, Severity (CriticalS, InfoS), Verbosity (V2), closeScribes, logTM, ls,
+              runKatipContextT)
+import Katip.Scribes.Handle (ioLogEnv)
+import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
+import System.Exit (die)
 
-import           SlowNews.Site          (Site)
-import           SlowNews.Stack         (Stack)
+import SlowNews.Site (Site)
+import SlowNews.Stack (Stack)
 
 -- Application environment variables
 

@@ -1,16 +1,16 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module SlowNews.Reddit where
 
-import           Control.Lens  ((&), (^.))
-import           Data.Aeson    (FromJSON (parseJSON), ToJSON, withObject, (.:))
-import           Data.Monoid   ((<>))
-import           Data.Text     (Text)
-import           GHC.Generics  (Generic)
-import qualified Network.Wreq  as WQ
-import           SlowNews.Link (Link (Link))
+import Control.Lens ((&), (^.))
+import Data.Aeson (FromJSON (parseJSON), ToJSON, withObject, (.:))
+import Data.Monoid ((<>))
+import Data.Text (Text)
+import GHC.Generics (Generic)
+import qualified Network.Wreq as WQ
+import SlowNews.Link (Link (Link))
 
 data Site = Site
   { subReddit :: String
