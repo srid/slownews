@@ -1,4 +1,4 @@
 #!/bin/sh -e
-nix-shell -A shells.ghc --run "cd backend && ghcid -W -c 'cabal new-repl backend'" default.nix
+nix-shell -A shells.ghc --run "cd backend && ghcid -W -c 'cabal new-repl backend'"
 
 # FIXME: doesn't auto compile when common/ changes
