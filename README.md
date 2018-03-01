@@ -1,6 +1,6 @@
 # slownews
 
-A web app that aggregates best news during last week from sites like reddit and Hacker News. Uses **Haskell** for backend and **GHCJS** (via [Reflex](https://github.com/reflex-frp/reflex-platform)) for frontend. 
+A web app that aggregates best news during last week from sites like reddit and Hacker News. Uses **Haskell** for backend and **GHCJS** (via [Reflex](https://github.com/reflex-frp/reflex-platform)) for frontend.
 
 <img src="./screenshot.png" width="75%"></img>
 
@@ -9,7 +9,8 @@ A web app that aggregates best news during last week from sites like reddit and 
 Compilation is all done by Nix. Build and run the app:
 
 ```
-make
+nix-build
+./result/ghc/backend/bin/backend
 ```
 
 Visit http://localhost:3000/
@@ -23,13 +24,13 @@ Our workflow is based on reflex-platform's [project development](https://github.
 Build the backend:
 
 ```
-make b
+bin/build-backend
 ```
 
 Build the frontend:
 
 ```
-make f
+bin/build-frontend
 ```
 
 These commands will place the artifacts under the `./dist-makefile` directory. The backend directly serves the static files copied over in that directory.
@@ -37,16 +38,16 @@ These commands will place the artifacts under the `./dist-makefile` directory. T
 Run it:
 
 ```
-make r
+bin/run
 ```
 
 ### Developing frontend (only)
 
 ```
-make fi
+bin/ghci-frontend
 ```
 
-Start the frontend server (backend is not running):
+Start the frontend server (Note: backend is not running):
 
 ```
 > main  # Starts server on port 3001
@@ -56,7 +57,6 @@ Edit-compile-run cycle then looks like:
 
 ```
 > ^C   # kill warp server
-> :r   # reload code 
+> :r   # reload code
 > main # start sever again
 ```
-

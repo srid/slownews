@@ -1,0 +1,2 @@
+#!/bin/sh -e
+nix-shell -p haskellPackages.stylish-haskell --run "stylish-haskell -i `git diff --name-only | grep .hs`"

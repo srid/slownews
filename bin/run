@@ -1,0 +1,3 @@
+#!/bin/sh -e
+source bin/common.sh
+cd ${OUTPUT_DIR}/ && ./slownews-backend

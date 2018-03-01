@@ -4,3 +4,4 @@ dist*
 frontend/all.js
 android-result
 ios-result
+frontend-js

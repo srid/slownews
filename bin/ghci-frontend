@@ -1,0 +1,2 @@
+#!/bin/sh -e
+nix-shell -A shells.ghc --run "cabal new-repl frontend"
