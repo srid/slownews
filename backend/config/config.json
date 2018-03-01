@@ -1,13 +1,19 @@
 {"sites":
   [
-    {"tag":"HackerNews", "contents": {}}
+    {"tag":"HackerNews", "contents": {"count": 4}}
   , {"tag":"HackerNews", "contents": {"query": "india", "count": 1}}
   , {"tag":"HackerNews", "contents": {"query": "haskell", "count": 3}}
-  , {"tag":"HackerNews", "contents": {"query": "canada", "count": 3}}
-  , {"tag":"HackerNews", "contents": {"query": "quebec", "count": 3}}
-  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 2}}
-  , {"tag":"Reddit", "contents": {"subReddit": "haskell"}}
+  , {"tag":"HackerNews", "contents": {"query": "canada", "count": 1}}
+  , {"tag":"HackerNews", "contents": {"query": "quebec", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "haskell", "count": 20}}
   , {"tag":"Reddit", "contents": {"subReddit": "reflexfrp", "count": 2}}
-  , {"tag":"Reddit", "contents": {"subReddit": "ketogains", "count": 2}}
+  , {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 5}}
+  , {"tag":"Reddit", "contents": {"subReddit": "thinkpad", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "linuxonthinkpad", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "xmonad", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 2}}
+  , {"tag":"Reddit", "contents": {"subReddit": "fasting", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "omad", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "bodyweightfitness", "count": 1}}
   ]
 }
