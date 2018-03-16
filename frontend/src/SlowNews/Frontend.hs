@@ -2,6 +2,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+module Main where
 
 import Control.Monad (void)
 import Data.Function (on)
@@ -9,11 +10,10 @@ import Data.List (sortBy)
 import Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
-import Reflex.Dom hiding (Link, mainWidgetWithCss)
+import Reflex.Dom hiding (Link)
 
 import Reflex.Dom.SemanticUI hiding (Link)
 
-import SlowNews.CSS
 import SlowNews.Link (Link (..))
 import SlowNews.Native
 import SlowNews.ReflexUtil
@@ -22,7 +22,7 @@ import SlowNews.ReflexUtil
 type CurrentLinks = Maybe (Either String [Link])
 
 main :: IO ()
-main = mainWidgetWithCss cssInline app
+main = appMain app
 
 app :: MonadWidget t m => m ()
 app = container def $ do

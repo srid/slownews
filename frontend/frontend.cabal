@@ -21,6 +21,7 @@ executable slownews-frontend
                      , common
                      , containers
                      , jsaddle
+                     , jsaddle-warp
                      , reflex-dom
                      , reflex-dom-core
                      , semantic-reflex
