@@ -7,10 +7,10 @@ cabal-version:       >=1.10
 
 executable slownews-frontend
   hs-source-dirs:      src 
-  main-is:             SlowNews/Frontend.hs
-  other-modules:       SlowNews.ReflexUtil
-                     , SlowNews.CSS
+  main-is:             SlowNews/Main.hs
+  other-modules:       SlowNews.CSS
                      , SlowNews.Native
+                     , SlowNews.ReflexUtil
   ghc-options:         -Wall
                        -fwarn-incomplete-uni-patterns
                        -fwarn-incomplete-record-updates
