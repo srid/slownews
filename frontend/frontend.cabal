@@ -23,6 +23,7 @@ executable slownews-frontend
                      , jsaddle
                      , reflex-dom
                      , reflex-dom-core
+                     , semantic-reflex
                      , text
                      , time
   default-language:    Haskell2010

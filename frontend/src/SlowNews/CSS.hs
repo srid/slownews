@@ -8,6 +8,7 @@ cssInline :: ByteString
 cssInline = "\
 \ @import url(https://fonts.googleapis.com/css?family=Muli); \
 \ @import url(https://fonts.googleapis.com/css?family=Autour+One); \
+\ @import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css); \
 \  \
 \ html { \
 \     margin:    0 auto; \

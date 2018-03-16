@@ -9,23 +9,29 @@ import Data.List (sortBy)
 import Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
-import Reflex.Dom hiding (Link)
+import Reflex.Dom hiding (Link, mainWidgetWithCss)
+
+import Reflex.Dom.SemanticUI hiding (Link)
 
 import SlowNews.CSS
 import SlowNews.Link (Link (..))
 import SlowNews.Native
 import SlowNews.ReflexUtil
 
+-- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
 
 main :: IO ()
 main = mainWidgetWithCss cssInline app
 
 app :: MonadWidget t m => m ()
-app = el "div" $ do
-  elClass "h1" "title" $ text appTitle
+app = container def $ do
   links'' <- getLinks
-  currentLinks links''
+  segment def $ do
+    header def $ do
+      el "h1" $ text appTitle
+    divClass "content" $ do
+      currentLinks links''
   divClass "footer" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
       text "SlowNews on GitHub (powered by Haskell and Reflex)"
@@ -33,9 +39,9 @@ app = el "div" $ do
 currentLinks :: MonadWidget t m
              => Dynamic t CurrentLinks
              -> m ()
-currentLinks links'' = el "tr" $ matchMaybe links''
+currentLinks links'' = divClass "ui very basic table" $ matchMaybe links''
   (\case
-      Nothing -> elClass "div" "loader" $ text "Loading..."
+      Nothing -> divClass "ui text loader" $ text "Loading..."
       Just links' -> matchEither links'
         (\case
             (Left err) -> dynText $ T.pack <$> err
