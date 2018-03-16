@@ -1,4 +1,4 @@
 #!/bin/sh -e
-nix-shell -A shells.ghc --run "cd frontend && ghcid -W -c 'cabal new-repl frontend'"
+nix-shell -A shells.ghc --run "cd frontend && ghcid -W -c 'cabal new-repl frontend' -T'Main.main'"
 
 # FIXME: doesn't auto compile when common/ changes

@@ -20,7 +20,7 @@ Visit http://localhost:3000/
 
 Our workflow is based on reflex-platform's [project development](https://github.com/reflex-frp/reflex-platform/blob/develop/docs/project-development.md#building-with-cabal).
 
-### Developing backend (and frontend)
+### Developing backend
 
 Build the backend:
 
@@ -42,7 +42,15 @@ Run it:
 bin/run
 ```
 
-### Developing frontend (only)
+### Developing frontend
+
+Run the backend (for API):
+
+```
+bin/run
+```
+
+Run frontend ghci:
 
 ```
 bin/ghci-frontend
@@ -61,3 +69,5 @@ Edit-compile-run cycle then looks like:
 > :r   # reload code
 > main # start sever again
 ```
+
+Alternatively run `bin/ghcid-frontend` which automatically runs the frontend server.
