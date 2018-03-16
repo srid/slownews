@@ -16,7 +16,7 @@ import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import Network.Wai.Middleware.Static (addBase, noDots, staticPolicy, (>->))
 import System.Directory (doesFileExist, getCurrentDirectory)
 import System.FilePath (FilePath, joinPath)
-import Web.Scotty (get, json, middleware, redirect, scotty)
+import Web.Scotty (get, json, middleware, redirect, scotty, setHeader)
 
 import qualified SlowNews.App as App
 import SlowNews.Link (Link)
@@ -66,7 +66,10 @@ main = App.runApp $ do
     middleware $ logStdoutDev
     middleware $ staticPolicy (noDots >-> addBase webroot)
     get "/" $ redirect "/index.html"
-    get "/data" $ liftTVar links >>= json
+    get "/data" $ do
+      d <- liftTVar links
+      setHeader "Access-Control-Allow-Origin" "*"
+      json d
   where
     port = App.port . App.env
     liftTVar = liftIO . atomically . readTVar

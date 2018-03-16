@@ -1,11 +1,7 @@
-{-# LANGUAGE CPP #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE OverloadedStrings #-}
-
 module SlowNews.ReflexUtil
-  ( appMain
-  , getAndDecodeWithError
+  ( getAndDecodeWithError
   , matchMaybe
   , matchEither) where
 
@@ -18,24 +14,6 @@ import Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 
 import Reflex.Dom hiding (Link, run, mainWidgetWithCss)
-import qualified Reflex.Dom.Main as Main
-
-import SlowNews.CSS
-
-#if defined(ghcjs_HOST_OS)
-run :: a -> a
-run = id
-#elif defined(MIN_VERSION_jsaddle_warp)
-import Language.Javascript.JSaddle (JSM)
-import qualified Language.Javascript.JSaddle.Warp as JW
-run :: JSM () -> IO()
-run jsm = do
-  putStrLn $ "Running jsaddle-warp server on port 3003"
-  JW.run 3003 jsm
-#endif
-
-appMain :: (forall x. Widget x ()) -> IO ()
-appMain w = run $ Main.mainWidgetWithCss cssInline w
 
 -- | A version of `getAndDecode` that handles JSON error in either monad. Also
 -- converts XhrException to String for consistency.

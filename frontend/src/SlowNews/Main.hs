@@ -12,17 +12,19 @@ import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import Reflex.Dom hiding (Link)
 
-import Reflex.Dom.SemanticUI hiding (Link)
+
+import Reflex.Dom.SemanticUI hiding (Link, mainWidgetWithCss)
 
 import SlowNews.Link (Link (..))
 import SlowNews.Native
 import SlowNews.ReflexUtil
+import qualified SlowNews.Development as Dev
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
 
 main :: IO ()
-main = appMain app
+main = Dev.appMain app
 
 app :: MonadWidget t m => m ()
 app = container def $ do
@@ -70,6 +72,6 @@ dynA url title = elDynAttr "a" dAttr $ dynText title
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
 getLinks = do
   pb <- getPostBuild
-  let urlEvent = "/data" <$ pb
+  let urlEvent = Dev.dataUrl <$ pb
   resp :: Event t (Either String [Link]) <- getAndDecodeWithError urlEvent
   holdDyn Nothing $ Just <$> resp

@@ -11,6 +11,7 @@ executable slownews-frontend
   other-modules:       SlowNews.CSS
                      , SlowNews.Native
                      , SlowNews.ReflexUtil
+                     , SlowNews.Development
   ghc-options:         -Wall
                        -fwarn-incomplete-uni-patterns
                        -fwarn-incomplete-record-updates
