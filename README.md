@@ -10,7 +10,8 @@ Compilation is all done by Nix. Build and run the app:
 
 ```
 nix-build
-./result/ghc/backend/bin/backend
+# TODO: Fix config.json / static path location; Perhaps as command line args
+./result/ghc/backend/bin/slownews-backend
 ```
 
 Visit http://localhost:3000/
