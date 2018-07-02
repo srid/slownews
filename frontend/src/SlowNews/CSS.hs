@@ -37,6 +37,10 @@ cssInline = "\
 \ a { \
 \     text-decoration: none; \
 \ } \
+\ a:visited { \
+\     text-decoration: line-through; \
+\     color: gray; \
+\ } \
 \ a:hover { \
 \     background-color: #efefef; \
 \ } \

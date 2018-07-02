@@ -6,12 +6,17 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 ## Running locally
 
+Do this once:
+
+```
+cp backend/config/config.json ~/.config/slownews.json
+```
+
 Compilation is all done by Nix. Build and run the app:
 
 ```
-nix-build
-# TODO: Fix config.json / static path location; Perhaps as command line args
-./result/ghc/backend/bin/slownews-backend
+nix-build release.nix
+( cd result; ./slownews-backend )
 ```
 
 Visit http://localhost:3000/
