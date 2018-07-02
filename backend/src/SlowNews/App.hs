@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
@@ -15,6 +16,7 @@ import GHC.Generics (Generic)
 import Katip (LogContexts, Severity (CriticalS, InfoS), Verbosity (V2), closeScribes, logTM, ls,
               runKatipContextT)
 import Katip.Scribes.Handle (ioLogEnv)
+import System.Directory
 import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
 import System.Exit (die)
 
@@ -42,7 +44,13 @@ instance FromJSON Config
 instance ToJSON Config
 
 loadConfig :: IO (Either String Config)
-loadConfig = eitherDecode <$> B.readFile "config.json"
+loadConfig = do
+  userConfig <- getXdgDirectory XdgConfig "slownews.json"
+  f <- doesPathExist userConfig >>= \case
+    True -> pure userConfig
+    False -> pure "config.json"
+  content <- B.readFile f
+  pure $ eitherDecode content
 
 -- Application data structure
 
