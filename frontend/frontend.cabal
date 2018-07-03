@@ -1,0 +1,39 @@
+name: frontend
+version: 0.1
+cabal-version: >= 1.8
+build-type: Simple
+
+library
+  hs-source-dirs: src
+  build-depends: base
+               , common
+               , reflex-dom
+               , static
+               , text
+  exposed-modules:
+    Frontend
+  other-modules:
+    Frontend.ReflexUtil
+    Frontend.CSS
+    Frontend.App
+  ghc-options: -Wall
+
+executable frontend
+  main-is: main.hs
+  hs-source-dirs: src
+  build-depends:  aeson
+                , bytestring
+                , base
+                , common
+                , containers
+                , jsaddle
+                , jsaddle-warp
+                , reflex-dom
+                , reflex-dom-core
+                , semantic-reflex
+                , text
+                , time
+  --TODO: Make these ghc-options optional
+  ghc-options: -threaded
+  if os(darwin)
+     ghc-options: -dynamic

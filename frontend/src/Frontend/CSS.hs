@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module SlowNews.CSS (cssInline) where
+module Frontend.CSS (cssInline) where
 
-import Data.ByteString (ByteString)
+import Data.Text (Text)
 
-cssInline :: ByteString
+cssInline :: Text
 cssInline = "\
 \ @import url(https://fonts.googleapis.com/css?family=Muli); \
 \ @import url(https://fonts.googleapis.com/css?family=Autour+One); \

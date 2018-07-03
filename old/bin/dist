@@ -1,0 +1,2 @@
+#!/bin/sh -e
+nix-shell -p zip --run 'zip -r dist.zip dist-makefile/ -x *.jsexe*'

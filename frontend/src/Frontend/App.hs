@@ -2,7 +2,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-module Main where
+module Frontend.App where
 
 import Control.Monad (void)
 import Data.Function (on)
@@ -10,28 +10,22 @@ import Data.List (sortBy)
 import Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
-import Reflex.Dom hiding (Link)
 
-
+import Reflex.Dom.Core hiding (Link)
 import Reflex.Dom.SemanticUI hiding (Link, mainWidgetWithCss)
 
-import SlowNews.Link (Link (..))
-import SlowNews.Native
-import SlowNews.ReflexUtil
-import qualified SlowNews.Development as Dev
+import Common.Link (Link (..))
+import Frontend.ReflexUtil
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
-
-main :: IO ()
-main = Dev.appMain app
 
 app :: MonadWidget t m => m ()
 app = container def $ do
   links'' <- getLinks
   segment def $ do
     header def $ do
-      el "h1" $ text appTitle
+      el "h1" $ text "SlowNews"
     divClass "content" $ do
       currentLinks links''
   divClass "footer" $ do
@@ -72,6 +66,7 @@ dynA url title = elDynAttr "a" dAttr $ dynText title
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
 getLinks = do
   pb <- getPostBuild
-  let urlEvent = Dev.dataUrl <$ pb
+  -- XXX: change this after fixing the backend
+  let urlEvent = "https://slownews.srid.ca/data" <$ pb
   resp :: Event t (Either String [Link]) <- getAndDecodeWithError urlEvent
   holdDyn Nothing $ Just <$> resp

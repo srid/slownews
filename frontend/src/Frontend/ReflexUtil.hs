@@ -1,6 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
-module SlowNews.ReflexUtil
+module Frontend.ReflexUtil
   ( getAndDecodeWithError
   , matchMaybe
   , matchEither) where
@@ -13,7 +13,7 @@ import Data.Maybe (fromMaybe)
 import Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 
-import Reflex.Dom hiding (Link, run, mainWidgetWithCss)
+import Reflex.Dom hiding (Link, mainWidgetWithCss, run)
 
 -- | A version of `getAndDecode` that handles JSON error in either monad. Also
 -- converts XhrException to String for consistency.

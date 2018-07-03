@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module SlowNews.Link where
+module Common.Link where
 
 import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericParseJSON, genericToJSON)
 import Data.Aeson.Casing (aesonPrefix, snakeCase)
