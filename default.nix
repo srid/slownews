@@ -1,29 +1,12 @@
-{}:
-
-# default.nix
-(import ./reflex-platform {}).project ({ pkgs, ... }: {
-  packages = {
-    common = ./common;
-    backend = ./backend;
-    frontend = ./frontend;
-  };
-
-  shells = {
-    ghc = ["common" "backend" "frontend"];
-    ghcjs = ["common" "frontend"];
-  };
-
-  android.frontend = {
-    executableName = "slownews-frontend";
-    applicationId = "ca.srid.slownews";
-    displayName = "SlowNews";
-  };
-
-  ios.frontend = {
-    executableName = "slownews-frontend";
-    bundleIdentifier = "ca.srid.slownews";
-    bundleName = "SlowNews";
-  };
+{ system ? builtins.currentSystem # TODO: Get rid of this system cruft
+, iosSdkVersion ? "10.2"
+}:
+with import ./.obelisk/impl { inherit system iosSdkVersion; };
+project ./. ({ pkgs, ... }: {
+  android.applicationId = "ca.srid.slownews";
+  android.displayName = "SlowNews";
+  ios.bundleIdentifier = "ca.srid.slownews";
+  ios.bundleName = "SlowNews";
 
   overrides = self: super: {
     semantic-reflex =

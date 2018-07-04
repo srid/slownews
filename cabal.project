@@ -1,4 +1,2 @@
-packages:
-  common/
-  backend/
-  frontend/
+optional-packages:
+  *

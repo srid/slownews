@@ -1,7 +1,0 @@
-cabal.project.local
-
-# We require ghcjs to compile all.js before running
-all.js
-
-*.js_*
-*.jsexe

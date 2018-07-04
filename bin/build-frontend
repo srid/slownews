@@ -1,6 +1,0 @@
-#!/bin/sh -e
-source bin/common.sh
-rm -f ${OUTPUT_DIR}/static
-nix-shell -A shells.ghcjs --run "cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build frontend"
-mkdir -p ${OUTPUT_DIR}
-ln -sf ${CABAL_BUILD_DIR_F} ${OUTPUT_DIR}/static
