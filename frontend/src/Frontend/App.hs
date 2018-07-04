@@ -69,8 +69,8 @@ getBaseUrl = do
   -- FIXME: change this after fixing the backend
   -- We need to inject from Obelisk.
   -- cf. https://github.com/obsidiansystems/obelisk/pull/91
-  pure "https://slownews.srid.ca"
-  -- pure "http://localhost:3001" (need backend routes!)
+  -- pure "https://slownews.srid.ca"
+  pure ""
 
 -- | Fetch links from the server
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)

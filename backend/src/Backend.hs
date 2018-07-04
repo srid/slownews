@@ -1,8 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Backend where
 
 import Control.Lens
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson
 import qualified Data.ByteString.Char8 as BSC8
+import qualified Data.ByteString.Lazy as BSL
 import Data.Default (Default (..))
 import Data.Text (Text)
 import System.IO (BufferMode (..), hSetBuffering, stderr)
@@ -18,16 +22,19 @@ import Obelisk.Snap
 
 import Frontend
 
-import Backend.Entrypoint
+import Backend.Entrypoint (start)
 
 backend :: IO ()
-backend = obBackend ("/data", serveData) cfg
+backend = do
+  getLinks <- start
+  obBackend ("/data", serveData getLinks) cfg
   where
     cfg = Ob.def
       { Ob._backendConfig_head = fst frontend
       }
-    serveData = do
-      writeBS $ BSC8.pack "TODO data"
+    serveData getLinks = do
+      links <- liftIO getLinks
+      writeBS $ BSL.toStrict $ encode links
 
 
 -- | Fork of Ob.backend with a first argument that customizes it.
