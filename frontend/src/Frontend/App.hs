@@ -7,7 +7,9 @@ module Frontend.App where
 import Control.Monad (void)
 import Data.Function (on)
 import Data.List (sortBy)
-import Data.Text as T
+import Data.Semigroup ((<>))
+import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 
@@ -62,11 +64,19 @@ dynA :: MonadWidget t m => Dynamic t T.Text -> Dynamic t T.Text -> m ()
 dynA url title = elDynAttr "a" dAttr $ dynText title
   where dAttr = ffor url $ \u -> "href" =: u
 
+getBaseUrl :: Monad m => m Text
+getBaseUrl = do
+  -- FIXME: change this after fixing the backend
+  -- We need to inject from Obelisk.
+  -- cf. https://github.com/obsidiansystems/obelisk/pull/91
+  pure "https://slownews.srid.ca"
+  -- pure "http://localhost:3001" (need backend routes!)
+
 -- | Fetch links from the server
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
 getLinks = do
+  baseUrl <- getBaseUrl
   pb <- getPostBuild
-  -- XXX: change this after fixing the backend
-  let urlEvent = "https://slownews.srid.ca/data" <$ pb
+  let urlEvent = baseUrl <> "/data" <$ pb
   resp :: Event t (Either String [Link]) <- getAndDecodeWithError urlEvent
   holdDyn Nothing $ Just <$> resp

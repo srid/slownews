@@ -6,73 +6,16 @@ A web app that aggregates best news during last week from sites like reddit and 
 
 ## Running locally
 
-Do this once:
+Install [obelisk](https://github.com/obsidiansystems/obelisk) and run:
 
 ```
-cp backend/config/config.json ~/.config/slownews.json
+ob run
 ```
 
-Compilation is all done by Nix. Build and run the app:
+Visit http://localhost:3001/
 
-```
-nix-build release.nix
-( cd result; ./slownews-backend )
-```
+NOTE: The frontend uses a hardcoded backend URL (see `Frontend/App.hs:getBaseUrl`), which needs to be changed when deploying SlowNews elsewhere. This will be addressed in the near future as Obelisk improves.
 
-Visit http://localhost:3000/
+## Release & deploy
 
-## Developing
-
-Our workflow is based on reflex-platform's [project development](https://github.com/reflex-frp/reflex-platform/blob/develop/docs/project-development.md#building-with-cabal).
-
-### Developing backend
-
-Build the backend:
-
-```
-bin/build-backend
-```
-
-Build the frontend:
-
-```
-bin/build-frontend
-```
-
-These commands will place the artifacts under the `./dist-makefile` directory. The backend directly serves the static files copied over in that directory.
-
-Run it:
-
-```
-bin/run
-```
-
-### Developing frontend
-
-Run the backend (for API):
-
-```
-bin/run
-```
-
-Run frontend ghci:
-
-```
-bin/ghci-frontend
-```
-
-Start the frontend server (Note: backend is not running):
-
-```
-> main  # Starts server on port 3001
-```
-
-Edit-compile-run cycle then looks like:
-
-```
-> ^C   # kill warp server
-> :r   # reload code
-> main # start sever again
-```
-
-Alternatively run `bin/ghcid-frontend` which automatically runs the frontend server.
+TODO: `ob deploy` and `nix-build -A exe`
