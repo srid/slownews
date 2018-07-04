@@ -13,8 +13,7 @@ library
                , obelisk-backend
   exposed-modules:
     Backend
-  other-modules:  Backend.Stack
-                , Backend.App
+  other-modules:  Backend.App
                 , Backend.Site
                 , Backend.HackerNews
                 , Backend.Reddit
@@ -38,7 +37,6 @@ executable backend
                 , filepath
                 , frontend
                 , http-client >= 0.5
-                , katip
                 , lens
                 , lens-aeson
                 , lifted-async

@@ -13,15 +13,11 @@ import qualified Data.ByteString.Lazy as B
 import Data.Either (either)
 import Data.Monoid ((<>))
 import GHC.Generics (Generic)
-import Katip (LogContexts, Severity (CriticalS, InfoS), Verbosity (V2), closeScribes, logTM, ls,
-              runKatipContextT)
-import Katip.Scribes.Handle (ioLogEnv)
 import System.Directory
 import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
 import System.Exit (die)
 
 import Backend.Site (Site)
-import Backend.Stack (Stack)
 
 -- Application environment variables
 
@@ -59,21 +55,8 @@ data App = App
   , config :: Config
   } deriving (Show, Eq)
 
-makeApp :: Stack App
+makeApp :: IO App
 makeApp = do
-  appEnvE <- liftIO decodeEnv
-  configE <- liftIO loadConfig
-  either quitApp return $ App <$> appEnvE <*> configE
-
-runApp :: Stack () -> IO ()
-runApp f = do
-  let mkLogEnv = ioLogEnv InfoS V2
-  bracket mkLogEnv closeScribes $ \le ->
-    runKatipContextT le (mempty :: LogContexts) mempty f
-
-quitApp :: String -> Stack a
-quitApp err = do
-  $(logTM) CriticalS $ ls err'
-  liftIO $ die err'
-  where
-    err' = "Application error: " <> err
+  appEnvE <- decodeEnv
+  configE <- loadConfig
+  either fail pure $ App <$> appEnvE <*> configE
