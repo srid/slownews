@@ -28,7 +28,7 @@ To run it:
 
 ```
 cd result
-./backend  # TODO: this is failing
+./backend
 ```
 
-TODO: `ob deploy`
+To deploy a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
