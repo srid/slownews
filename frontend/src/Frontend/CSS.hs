@@ -4,6 +4,7 @@ module Frontend.CSS (cssInline) where
 
 import Data.Text (Text)
 
+-- TODO: Switch to clay
 cssInline :: Text
 cssInline = "\
 \ @import url(https://fonts.googleapis.com/css?family=Muli); \

@@ -6,10 +6,14 @@ build-type: Simple
 library
   hs-source-dirs: src
   build-depends: base
+               , aeson
+               , bytestring
                , common
                , reflex-dom
+               , semantic-reflex
                , static
                , text
+               , time
   exposed-modules:
     Frontend
   other-modules:
@@ -22,8 +26,8 @@ executable frontend
   main-is: main.hs
   hs-source-dirs: src
   build-depends:  aeson
-                , bytestring
                 , base
+                , bytestring
                 , common
                 , containers
                 , jsaddle

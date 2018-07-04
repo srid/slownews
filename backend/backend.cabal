@@ -8,9 +8,40 @@ library
   if impl(ghcjs)
     buildable: False
   build-depends: base
-               , common
-               , frontend
-               , obelisk-backend
+                , aeson
+                , aeson-casing
+                , async
+                , bytestring
+                , common
+                , containers
+                , data-default
+                , directory
+                , envy
+                , filepath
+                , frontend
+                , http-client >= 0.5
+                , lens
+                , lens-aeson
+                , lifted-async
+                , lifted-base
+                , modern-uri
+                , obelisk-backend
+                , obelisk-asset-serve-snap
+                , obelisk-snap
+                , snap-server
+                , snap
+                , reflex-dom
+                , obelisk-executable-config
+                , obelisk-executable-config-inject
+                , raw-strings-qq
+                , safe-exceptions >= 0.1
+                , stm
+                , text
+                , time
+                , transformers
+                , wai-extra
+                , wai-middleware-static
+                , wreq
   exposed-modules:
     Backend
   other-modules:  Backend.App
@@ -32,6 +63,7 @@ executable backend
                 , bytestring
                 , common
                 , containers
+                , data-default
                 , directory
                 , envy
                 , filepath
@@ -43,11 +75,15 @@ executable backend
                 , lifted-base
                 , modern-uri
                 , obelisk-backend
+                , obelisk-snap
+                , obelisk-asset-serve-snap
+                , snap-server
+                , snap
+                , reflex-dom
                 , obelisk-executable-config
                 , obelisk-executable-config-inject
                 , raw-strings-qq
                 , safe-exceptions >= 0.1
-                , scotty
                 , stm
                 , text
                 , time

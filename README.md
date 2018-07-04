@@ -1,6 +1,6 @@
 # slownews
 
-A web app that aggregates best news during last week from sites like reddit and Hacker News. Uses **Haskell** for backend and **GHCJS** (via [Reflex](https://github.com/reflex-frp/reflex-platform)) for frontend.
+A web app that aggregates top news during the last week from sites like reddit and Hacker News. Written in **Haskell** and using **Reflex** (via [Obelisk](https://github.com/obsidiansystems/obelisk)).
 
 <img src="./screenshot.png" width="75%"></img>
 
@@ -18,4 +18,17 @@ NOTE: The frontend uses a hardcoded backend URL (see `Frontend/App.hs:getBaseUrl
 
 ## Release & deploy
 
-TODO: `ob deploy` and `nix-build -A exe`
+To create a release for running locally, run:
+
+```
+nix-build -A exe
+```
+
+To run it:
+
+```
+cd result
+./backend  # TODO: this is failing
+```
+
+TODO: `ob deploy`

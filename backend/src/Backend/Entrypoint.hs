@@ -11,7 +11,6 @@ import Control.Exception.Safe (handle)
 import Control.Monad (forever, join, void)
 import Data.Monoid ((<>))
 import Network.HTTP.Client (HttpException)
-import System.Directory (doesFileExist, getCurrentDirectory)
 import System.FilePath (FilePath, joinPath)
 import System.IO (BufferMode (..), hSetBuffering, stdout)
 

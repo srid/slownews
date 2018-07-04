@@ -6,16 +6,12 @@
 
 module Backend.App where
 
-import Control.Exception.Safe (bracket)
-import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON, ToJSON, eitherDecode)
 import qualified Data.ByteString.Lazy as B
 import Data.Either (either)
-import Data.Monoid ((<>))
 import GHC.Generics (Generic)
 import System.Directory
 import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
-import System.Exit (die)
 
 import Backend.Site (Site)
 
