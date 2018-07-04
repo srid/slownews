@@ -2,7 +2,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module SlowNews.Reddit where
+module Backend.Reddit where
 
 import Control.Lens ((&), (^.))
 import Data.Aeson (FromJSON (parseJSON), ToJSON, withObject, (.:))
@@ -10,7 +10,8 @@ import Data.Monoid ((<>))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 import qualified Network.Wreq as WQ
-import SlowNews.Link (Link (Link))
+
+import Common.Link (Link (Link))
 
 data Site = Site
   { subReddit :: String

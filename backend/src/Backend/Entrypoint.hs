@@ -3,6 +3,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
+module Backend.Entrypoint where
 import Control.Concurrent.Async.Lifted (mapConcurrently)
 import Control.Concurrent.Lifted (fork, threadDelay)
 import Control.Concurrent.STM (TVar, atomically, newTVar, readTVar, writeTVar)
@@ -18,10 +19,10 @@ import System.Directory (doesFileExist, getCurrentDirectory)
 import System.FilePath (FilePath, joinPath)
 import Web.Scotty (get, json, middleware, redirect, scotty, setHeader)
 
-import qualified SlowNews.App as App
-import SlowNews.Link (Link)
-import qualified SlowNews.Site as Site
-import SlowNews.Stack (Stack)
+import qualified Backend.App as App
+import qualified Backend.Site as Site
+import Backend.Stack (Stack)
+import Common.Link (Link)
 
 type Links = TVar [Link]
 
@@ -53,6 +54,27 @@ getStaticDir = do
   case hasIndex of
     True  -> liftIO $ return staticDir
     False -> App.quitApp $ staticDir <> " is not a valid static directory"
+
+start :: IO ()
+start = App.runApp $ do
+  app <- App.makeApp
+  $(logTM) InfoS $ showLS app
+  links <- liftIO $ atomically $ newTVar mempty
+  _ <- fork $ forever (fetchAll' app links >> sleepM 30)
+  webroot <- getStaticDir
+  $(logTM) InfoS $ "Static directory: " <> showLS webroot
+  liftIO $ scotty (port app) $ do
+    middleware $ logStdoutDev
+    middleware $ staticPolicy (noDots >-> addBase webroot)
+    get "/" $ redirect "/index.html"
+    get "/data" $ do
+      d <- liftTVar links
+      setHeader "Access-Control-Allow-Origin" "*"
+      json d
+  where
+    port = App.port . App.env
+    liftTVar = liftIO . atomically . readTVar
+    sleepM n = threadDelay (n * 60 * 1000 * 1000) -- sleep in minutes
 
 main :: IO ()
 main = App.runApp $ do

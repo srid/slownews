@@ -2,7 +2,7 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module SlowNews.HackerNews where
+module Backend.HackerNews where
 
 import Control.Lens ((&), (.~), (^.))
 import Data.Aeson (FromJSON (parseJSON), ToJSON, withObject, (.:))
@@ -14,7 +14,8 @@ import Data.Time (UTCTime (UTCTime), addDays, getCurrentTime, utctDay)
 import Data.Time.Clock.POSIX (utcTimeToPOSIXSeconds)
 import GHC.Generics (Generic)
 import Network.Wreq (Response, asJSON, defaults, getWith, params, responseBody)
-import SlowNews.Link (Link (Link))
+
+import Common.Link (Link (Link))
 
 data Site = Site
   { query :: Maybe String

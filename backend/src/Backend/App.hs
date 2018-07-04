@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module SlowNews.App where
+module Backend.App where
 
 import Control.Exception.Safe (bracket)
 import Control.Monad.IO.Class (liftIO)
@@ -20,8 +20,8 @@ import System.Directory
 import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
 import System.Exit (die)
 
-import SlowNews.Site (Site)
-import SlowNews.Stack (Stack)
+import Backend.Site (Site)
+import Backend.Stack (Stack)
 
 -- Application environment variables
 

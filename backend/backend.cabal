@@ -13,6 +13,11 @@ library
                , obelisk-backend
   exposed-modules:
     Backend
+  other-modules:  Backend.Stack
+                , Backend.App
+                , Backend.Site
+                , Backend.HackerNews
+                , Backend.Reddit
   ghc-options: -Wall
 
 executable backend
@@ -21,12 +26,34 @@ executable backend
   if impl(ghcjs)
     buildable: False
   build-depends: base
-               , backend
-               , common
-               , frontend
-               , lens
-               , modern-uri
-               , obelisk-backend
-               , obelisk-executable-config
-               , obelisk-executable-config-inject
-               , text
+                , aeson
+                , aeson-casing
+                , async
+                , backend
+                , bytestring
+                , common
+                , containers
+                , directory
+                , envy
+                , filepath
+                , frontend
+                , http-client >= 0.5
+                , katip
+                , lens
+                , lens-aeson
+                , lifted-async
+                , lifted-base
+                , modern-uri
+                , obelisk-backend
+                , obelisk-executable-config
+                , obelisk-executable-config-inject
+                , raw-strings-qq
+                , safe-exceptions >= 0.1
+                , scotty
+                , stm
+                , text
+                , time
+                , transformers
+                , wai-extra
+                , wai-middleware-static
+                , wreq

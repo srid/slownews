@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module SlowNews.Site where
+module Backend.Site where
 
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
@@ -10,10 +10,10 @@ import Data.Monoid ((<>))
 import GHC.Generics (Generic)
 import Katip (Severity (InfoS), logTM, showLS)
 
-import qualified SlowNews.HackerNews as HackerNews
-import SlowNews.Link (Link)
-import qualified SlowNews.Reddit as Reddit
-import SlowNews.Stack (Stack)
+import qualified Backend.HackerNews as HackerNews
+import qualified Backend.Reddit as Reddit
+import Backend.Stack (Stack)
+import Common.Link (Link)
 
 data Site
   = Reddit Reddit.Site

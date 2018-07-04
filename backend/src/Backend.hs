@@ -18,6 +18,8 @@ import Obelisk.Snap
 
 import Frontend
 
+import Backend.Entrypoint
+
 backend :: IO ()
 backend = obBackend ("/data", serveData) cfg
   where

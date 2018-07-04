@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module SlowNews.Stack where
+module Backend.Stack where
 
 import Katip (KatipContextT)
 
