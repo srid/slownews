@@ -1,6 +1,0 @@
-#!/bin/sh -e
-source bin/common.sh
-nix-shell -A shells.ghc --run "cabal new-build backend"
-mkdir -p ${OUTPUT_DIR}/
-cp ${CABAL_BUILD_DIR_B} ${OUTPUT_DIR}/
-cp -v backend/config/config.json ${OUTPUT_DIR}/

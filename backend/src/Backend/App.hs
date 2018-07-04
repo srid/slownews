@@ -40,7 +40,7 @@ loadConfig = do
   userConfig <- getXdgDirectory XdgConfig "slownews.json"
   f <- doesPathExist userConfig >>= \case
     True -> pure userConfig
-    False -> pure "config.json"
+    False -> pure "config/backend/slownews.json"
   content <- B.readFile f
   pure $ eitherDecode content
 
