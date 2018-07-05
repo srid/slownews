@@ -10,7 +10,6 @@ library
                , bytestring
                , common
                , reflex-dom
-               , semantic-reflex
                , static
                , text
                , time
@@ -34,7 +33,6 @@ executable frontend
                 , jsaddle-warp
                 , reflex-dom
                 , reflex-dom-core
-                , semantic-reflex
                 , text
                 , time
   --TODO: Make these ghc-options optional

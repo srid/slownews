@@ -9,7 +9,7 @@ cssInline :: Text
 cssInline = "\
 \ @import url(https://fonts.googleapis.com/css?family=Muli); \
 \ @import url(https://fonts.googleapis.com/css?family=Autour+One); \
-\ @import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css); \
+\ @import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css); \
 \  \
 \ html { \
 \     margin:    0 auto; \
@@ -21,7 +21,7 @@ cssInline = "\
 \ h1 { \
 \     font-family: 'Autour One', cursive; \
 \     font-size: 1.5em; \
-\     background-color: pink; \
+\     background-color: lightgreen; \
 \     padding: 0.3em; \
 \ } \
 \  \
@@ -49,7 +49,7 @@ cssInline = "\
 \ .meta a { \
 \     font-size: 85%; \
 \     text-decoration: none; \
-\     color: pink; \
+\     color: lightgreen; \
 \     background-color: #444; \
 \     padding: 0.2em 1em; \
 \ } \

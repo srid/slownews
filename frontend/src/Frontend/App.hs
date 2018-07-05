@@ -14,7 +14,6 @@ import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 
 import Reflex.Dom.Core hiding (Link)
-import Reflex.Dom.SemanticUI hiding (Link, mainWidgetWithCss)
 
 import Common.Link (Link (..))
 import Frontend.ReflexUtil
@@ -23,11 +22,10 @@ import Frontend.ReflexUtil
 type CurrentLinks = Maybe (Either String [Link])
 
 app :: MonadWidget t m => m ()
-app = container def $ do
+app = divClass "ui container" $ do
   links'' <- getLinks
-  segment def $ do
-    header def $ do
-      el "h1" $ text "SlowNews"
+  divClass "ui segment" $ do
+    elClass "h1" "header" $ text "SlowNews"
     divClass "content" $ do
       currentLinks links''
   divClass "footer" $ do
