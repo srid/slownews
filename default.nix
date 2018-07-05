@@ -7,4 +7,13 @@ project ./. ({ pkgs, ... }: {
   android.displayName = "SlowNews";
   ios.bundleIdentifier = "ca.srid.slownews";
   ios.bundleName = "SlowNews";
+
+  packages = {
+    clay = pkgs.fetchFromGitHub {
+      owner = "sebastiaanvisser";
+      repo = "clay";
+      rev = "54dc9eaf0abd180ef9e35d97313062d99a02ee75";
+      sha256 = "0y38hyd2gvr7lrbxkrjwg4h0077a54m7gxlvm9s4kk0995z1ncax";
+    };
+  };
 })

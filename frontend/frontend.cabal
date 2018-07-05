@@ -7,6 +7,8 @@ library
   hs-source-dirs: src
   build-depends: base
                , aeson
+               , string-conv
+               , clay
                , bytestring
                , common
                , reflex-dom
@@ -26,6 +28,7 @@ executable frontend
   hs-source-dirs: src
   build-depends:  aeson
                 , base
+                , clay
                 , bytestring
                 , common
                 , containers
@@ -34,6 +37,7 @@ executable frontend
                 , reflex-dom
                 , reflex-dom-core
                 , text
+                , string-conv
                 , time
   --TODO: Make these ghc-options optional
   ghc-options: -threaded

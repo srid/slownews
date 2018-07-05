@@ -1,8 +1,31 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Frontend.CSS (cssInline) where
+module Frontend.CSS (cssInline, appCssStr) where
 
 import Data.Text (Text)
+import Data.String.Conv (toS)
+
+import Clay
+
+appCssStr :: Text
+appCssStr = toS $ render appCss
+
+themeColor :: Color
+themeColor = lightgreen
+
+appCss :: Css
+appCss = do
+  html ? do
+    sym2 margin (px 0) auto
+    fontFamily ["Muli"] [sansSerif]
+
+  h1 ? do
+    fontFamily ["Autour One"] [cursive]
+    fontSize $ em 1.5
+    backgroundColor themeColor
+    sym padding $ em 0.3
+
+-- TODO: Include semantic.min.css in repo
 
 -- TODO: Switch to clay
 cssInline :: Text
@@ -10,20 +33,6 @@ cssInline = "\
 \ @import url(https://fonts.googleapis.com/css?family=Muli); \
 \ @import url(https://fonts.googleapis.com/css?family=Autour+One); \
 \ @import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css); \
-\  \
-\ html { \
-\     margin:    0 auto; \
-\     max-width: 960px; \
-\     font-family: 'Muli', sans-serif; \
-\     font-size: 85%; \
-\ } \
-\  \
-\ h1 { \
-\     font-family: 'Autour One', cursive; \
-\     font-size: 1.5em; \
-\     background-color: lightgreen; \
-\     padding: 0.3em; \
-\ } \
 \  \
 \ td { \
 \     padding: 0.2em; \
