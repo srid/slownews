@@ -31,4 +31,4 @@ cd result
 ./backend
 ```
 
-To deploy a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
+To deploy to a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
