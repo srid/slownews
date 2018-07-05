@@ -16,40 +16,34 @@ import Data.Time.Format (defaultTimeLocale, formatTime)
 import Reflex.Dom.Core hiding (Link)
 
 import Common.Link (Link (..))
-import Frontend.ReflexUtil
+import Frontend.ReflexUtil (matchMaybe, matchEither, getAndDecodeWithError)
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
 
 app :: MonadWidget t m => m ()
 app = divClass "ui container" $ do
-  links'' <- getLinks
   divClass "ui segment" $ do
     elClass "h1" "header" $ text "SlowNews"
     divClass "content" $ do
-      currentLinks links''
+      viewLinks =<< getLinks
   divClass "footer" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
       text "SlowNews on GitHub (powered by Haskell and Reflex)"
 
-currentLinks :: MonadWidget t m
-             => Dynamic t CurrentLinks
-             -> m ()
-currentLinks links'' = divClass "ui very basic table" $ matchMaybe links''
-  (\case
-      Nothing -> divClass "ui text loader" $ text "Loading..."
-      Just links' -> matchEither links'
-        (\case
-            (Left err) -> dynText $ T.pack <$> err
-            (Right links) ->
-              void $ simpleList (sortLinks <$> links) displayLink))
+viewLinks :: MonadWidget t m => Dynamic t CurrentLinks -> m ()
+viewLinks links'' = divClass "ui very basic table" $ matchMaybe links'' $ \case
+  Nothing -> divClass "ui text loader" $ text "Loading..."
+  Just links' -> matchEither links' $ \case
+    Left err -> dynText $ T.pack <$> err
+    Right links -> void $ simpleList (sortLinks <$> links) viewLink
   where
     sortLinks = sortBy (flip compare `on` linkCreated)
 
-displayLink :: MonadWidget t m => Dynamic t Link -> m ()
-displayLink dLink = el "tr" $ do
+viewLink :: MonadWidget t m => Dynamic t Link -> m ()
+viewLink dLink = el "tr" $ do
   el "td" $ do
-    dynText (dayOfWeek . linkCreated <$> dLink)
+    dynText $ dayOfWeek . linkCreated <$> dLink
   elClass "td" "meta" $ do
     dynA (linkMetaUrl <$> dLink) (linkSite <$> dLink)
   el "td" $ do
@@ -76,5 +70,5 @@ getLinks = do
   baseUrl <- getBaseUrl
   pb <- getPostBuild
   let urlEvent = baseUrl <> "/data" <$ pb
-  resp :: Event t (Either String [Link]) <- getAndDecodeWithError urlEvent
+  resp <- getAndDecodeWithError urlEvent
   holdDyn Nothing $ Just <$> resp

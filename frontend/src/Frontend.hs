@@ -10,7 +10,6 @@ import Reflex.Dom.Core
 import Frontend.App (app)
 import Frontend.CSS (cssInline, appCssStr)
 
-
 frontend :: (StaticWidget x (), Widget x ())
 frontend = (head', body)
   where

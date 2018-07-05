@@ -3,7 +3,8 @@
 module Frontend.ReflexUtil
   ( getAndDecodeWithError
   , matchMaybe
-  , matchEither) where
+  , matchEither
+  ) where
 
 import Control.Monad (sequence)
 import Data.Aeson (FromJSON, eitherDecode)
@@ -33,7 +34,6 @@ decodeXhrResponseWithError =
 
 eitherMaybeHandle :: a -> Either a (Maybe b) -> Either a b
 eitherMaybeHandle err = fromMaybe (Left err) . sequence
-
 
 -- | These functions exist to simplify nested either/maybe data types.
 
