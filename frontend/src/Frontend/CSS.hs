@@ -2,6 +2,8 @@
 
 module Frontend.CSS (appCssStr) where
 
+import Prelude hiding (rem)
+
 import Data.Semigroup ((<>))
 import Data.String.Conv (toS)
 import Data.Text (Text)
@@ -38,13 +40,13 @@ appCss = do
     important $ color themeColor
     sym padding $ em 0.3
 
-  "tr, td" ? do
-    important $ sym padding $ em 0.3
+  ".row" ? do
+    important $ paddingTop $ rem 0.3
+    important $ paddingBottom $ rem 0.3
     important $ sym margin $ px 0
-    important $ borderWidth 0
 
-  "td.meta" ? do
-    important $ textAlign $ alignSide sideRight
+  ".meta" ? do
+    textAlign $ alignSide sideRight
     important $ paddingRight $ em 0.5
 
   a ? do
@@ -54,7 +56,7 @@ appCss = do
     textDecoration lineThrough
     color gray
 
-  "tr:hover" ? do
+  ".row:hover" ? do
     backgroundColor themeLighterColor -- "#efefef"
 
   ".meta a" ? do

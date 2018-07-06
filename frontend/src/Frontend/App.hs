@@ -32,7 +32,7 @@ app = divClass "ui container" $ do
       text "SlowNews on GitHub (powered by Haskell and Reflex)"
 
 viewLinks :: MonadWidget t m => Dynamic t CurrentLinks -> m ()
-viewLinks links'' = divClass "ui very basic table" $ matchMaybe links'' $ \case
+viewLinks links'' = matchMaybe links'' $ \case
   Nothing -> divClass "ui text loader" $ text "Loading..."
   Just links' -> matchEither links' $ \case
     Left err -> dynText $ T.pack <$> err
@@ -41,12 +41,12 @@ viewLinks links'' = divClass "ui very basic table" $ matchMaybe links'' $ \case
     sortLinks = sortBy (flip compare `on` linkCreated)
 
 viewLink :: MonadWidget t m => Dynamic t Link -> m ()
-viewLink dLink = el "tr" $ do
-  el "td" $ do
+viewLink dLink = divClass "ui three column stackable grid" $ divClass "row" $ do
+  divClass "one wide column" $ do
     dynText $ dayOfWeek . linkCreated <$> dLink
-  elClass "td" "meta" $ do
+  divClass "two wide column meta" $ do
     dynA (linkMetaUrl <$> dLink) (linkSite <$> dLink)
-  el "td" $ do
+  divClass "ten wide column" $ do
     dynA (linkUrl <$> dLink) (linkTitle <$> dLink)
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
