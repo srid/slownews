@@ -4,7 +4,6 @@
 module Frontend where
 
 import Data.Semigroup ((<>))
-import qualified Data.Text as T
 
 import Reflex.Dom.Core
 

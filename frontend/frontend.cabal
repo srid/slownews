@@ -36,6 +36,7 @@ executable frontend
                 , jsaddle-warp
                 , reflex-dom
                 , reflex-dom-core
+                , static
                 , text
                 , string-conv
                 , time

@@ -27,8 +27,7 @@ nix-build -A exe
 To run it:
 
 ```
-cd result
-./backend
+(cd result && ./backend)
 ```
 
 To deploy to a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
