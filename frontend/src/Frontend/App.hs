@@ -23,11 +23,11 @@ type CurrentLinks = Maybe (Either String [Link])
 
 app :: MonadWidget t m => m ()
 app = divClass "ui container" $ do
-  divClass "ui segment" $ do
-    elClass "h1" "header" $ text "SlowNews"
+  elClass "h1" "ui top attached inverted header" $ text "SlowNews"
+  divClass "ui attached segment" $ do
     divClass "content" $ do
       viewLinks =<< getLinks
-  divClass "footer" $ do
+  divClass "ui bottom attached secondary segment" $ do
     elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
       text "SlowNews on GitHub (powered by Haskell and Reflex)"
 

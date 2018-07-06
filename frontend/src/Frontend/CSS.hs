@@ -32,18 +32,20 @@ appCss = do
     important $ fontFamily [snd mainFont] [sansSerif]
 
   h1 ? do
+    textAlign center
     important $ fontFamily [snd headerFont] [cursive]
     fontSize $ em 1.5
-    backgroundColor themeColor
+    important $ color themeColor
     sym padding $ em 0.3
 
   "tr, td" ? do
     important $ sym padding $ em 0.3
     important $ sym margin $ px 0
+    important $ borderWidth 0
 
   "td.meta" ? do
-    textAlign $ alignSide sideRight
-    color gray
+    important $ textAlign $ alignSide sideRight
+    important $ paddingRight $ em 0.5
 
   a ? do
     textDecoration none
@@ -61,10 +63,3 @@ appCss = do
     color themeColor
     backgroundColor "#444"
     sym2 padding (em 0.2) (em 0.4)
-
-  ".footer" ? do
-    textAlign center
-    paddingTop $ em 1
-    marginTop $ em 2
-    marginBottom $ em 2
-    borderTop solid (px 1) gray
