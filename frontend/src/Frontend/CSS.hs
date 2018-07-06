@@ -2,6 +2,7 @@
 
 module Frontend.CSS (appCssStr) where
 
+import Data.Semigroup ((<>))
 import Data.String.Conv (toS)
 import Data.Text (Text)
 
@@ -13,24 +14,32 @@ appCssStr = toS $ render appCss
 themeColor :: Color
 themeColor = lightgreen
 
+themeLighterColor :: Color
+themeLighterColor = "#e9fce9"
+
+mainFont :: (Text, Text)
+mainFont = ("Comfortaa:700", "Comfortaa")
+
+headerFont :: (Text, Text)
+headerFont = ("Faster+One", "Faster One")
+
 appCss :: Css
 appCss = do
-  importUrl "https://fonts.googleapis.com/css?family=Muli"
-  importUrl "https://fonts.googleapis.com/css?family=Autour+One"
+  importUrl $ "https://fonts.googleapis.com/css?family=" <> fst mainFont
+  importUrl $ "https://fonts.googleapis.com/css?family=" <> fst headerFont
 
-  html ? do
-    sym2 margin (px 0) auto
-    fontFamily ["Muli"] [sansSerif]
+  ".content" ? do
+    important $ fontFamily [snd mainFont] [sansSerif]
 
   h1 ? do
-    fontFamily ["Autour One"] [cursive]
+    important $ fontFamily [snd headerFont] [cursive]
     fontSize $ em 1.5
     backgroundColor themeColor
     sym padding $ em 0.3
 
-  td ? do
-    sym padding $ em 0.2
-    paddingBottom $ em 0.5
+  "tr, td" ? do
+    important $ sym padding $ em 0.3
+    important $ sym margin $ px 0
 
   "td.meta" ? do
     textAlign $ alignSide sideRight
@@ -43,15 +52,15 @@ appCss = do
     textDecoration lineThrough
     color gray
 
-  "a:hover" ? do
-    backgroundColor "#efefef"
+  "tr:hover" ? do
+    backgroundColor themeLighterColor -- "#efefef"
 
   ".meta a" ? do
     fontSize $ pct 85
     textDecoration none
-    color lightgreen
+    color themeColor
     backgroundColor "#444"
-    sym2 padding (em 0.2) (em 1)
+    sym2 padding (em 0.2) (em 0.4)
 
   ".footer" ? do
     textAlign center

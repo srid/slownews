@@ -16,7 +16,7 @@ import Data.Time.Format (defaultTimeLocale, formatTime)
 import Reflex.Dom.Core hiding (Link)
 
 import Common.Link (Link (..))
-import Frontend.ReflexUtil (matchMaybe, matchEither, getAndDecodeWithError)
+import Frontend.ReflexUtil (getAndDecodeWithError, matchEither, matchMaybe)
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
@@ -54,7 +54,7 @@ viewLink dLink = el "tr" $ do
 -- | Like dynText but for <a href...
 dynA :: MonadWidget t m => Dynamic t T.Text -> Dynamic t T.Text -> m ()
 dynA url title = elDynAttr "a" dAttr $ dynText title
-  where dAttr = ffor url $ \u -> "href" =: u
+  where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
 getBaseUrl :: Monad m => m Text
 getBaseUrl = do
