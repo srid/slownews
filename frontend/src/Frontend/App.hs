@@ -41,12 +41,12 @@ viewLinks links'' = matchMaybe links'' $ \case
     sortLinks = sortBy (flip compare `on` linkCreated)
 
 viewLink :: MonadWidget t m => Dynamic t Link -> m ()
-viewLink dLink = divClass "ui three column stackable grid" $ divClass "row" $ do
+viewLink dLink = divClass "ui three column grid" $ divClass "row" $ do
   divClass "one wide column" $ do
     dynText $ dayOfWeek . linkCreated <$> dLink
-  divClass "two wide column meta" $ do
+  divClass "five wide column meta" $ do
     dynA (linkMetaUrl <$> dLink) (linkSite <$> dLink)
-  divClass "ten wide column" $ do
+  divClass "nine wide column" $ do
     dynA (linkUrl <$> dLink) (linkTitle <$> dLink)
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
