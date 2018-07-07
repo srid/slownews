@@ -16,6 +16,7 @@ frontend :: (StaticWidget x (), Widget x ())
 frontend = (head', body)
   where
     head' = do
+      elAttr "meta" ("name" =: "viewport" <> "content" =: "width=device-width, initial-scale=1") blank
       el "title" $ text "SlowNews"
       elAttr "link" ("rel" =: "stylesheet" <> "type" =: "text/css" <> "href" =: static @"semantic.min.css") blank
       el "style" $ text appCssStr
