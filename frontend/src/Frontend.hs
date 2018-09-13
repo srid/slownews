@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -8,12 +9,15 @@ module Frontend where
 
 import Control.Monad (void)
 import Control.Monad.Fix (MonadFix)
+import Data.Aeson (FromJSON, eitherDecode)
+import Data.Bifunctor (Bifunctor (bimap))
+import qualified Data.ByteString.Lazy as BL
 import Data.Function (on)
 import Data.List (sortBy)
+import Data.Maybe (fromMaybe)
 import Data.Semigroup ((<>))
-import Data.Semigroup ((<>))
-import Data.Text (Text)
 import qualified Data.Text as T
+import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 
@@ -27,7 +31,6 @@ import Common.Link (Link (..))
 import Common.Route
 
 import Frontend.CSS (appCssStr)
-import Frontend.ReflexUtil (getAndDecodeWithError)
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
@@ -65,7 +68,7 @@ viewLinks links = do
       divClass "ui tablet stackable selectable inverted table links" $ do
         el "thead" $ do
           el "th" $ text "When"
-          el "th" $ text "Source"
+          elClass "th" "right aligned" $ text "Source"
           el "th" $ text "Title"
         el "tbody" $ do
           dyn_ $ ffor v' $ \case
@@ -84,15 +87,21 @@ viewLink dLink = el "tr" $ do
     dynA (linkUrl <$> dLink) (linkTitle <$> dLink)
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
-
--- | Like dynText but for <a href...
-dynA :: (DomBuilder t m, PostBuild t m) => Dynamic t T.Text -> Dynamic t T.Text -> m ()
-dynA url title = elDynAttr "a" dAttr $ dynText title
-  where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
+    dynA url title = elDynAttr "a" dAttr $ dynText title
+      where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
 -- | Fetch links from the server
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
 getLinks = do
   pb <- getPostBuild
   resp <- getAndDecodeWithError $ "/data" <$ pb
-  holdDyn Nothing $ Just <$> resp
+  holdDyn Nothing $ fmap Just resp
+  where
+    getAndDecodeWithError url = do
+      r <- performRequestAsyncWithError $ fmap (\x -> XhrRequest "GET" x def) url
+      return $ fmap (\e -> bimap show id e >>= decodeXhrResponseWithError) r
+    decodeXhrResponseWithError :: FromJSON a => XhrResponse -> Either String a
+    decodeXhrResponseWithError =
+      fromMaybe (Left "Empty response") . sequence
+      . traverse (eitherDecode . BL.fromStrict . encodeUtf8)
+      . _xhrResponse_responseText

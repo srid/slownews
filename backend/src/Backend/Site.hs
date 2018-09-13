@@ -4,7 +4,6 @@
 
 module Backend.Site where
 
-import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Monoid ((<>))
 import GHC.Generics (Generic)
@@ -26,5 +25,5 @@ fetchSite site = do
   putStrLn $ "Fetching " <> show site
   fetch site
   where
-    fetch (Reddit s)     = Reddit.fetch s
+    fetch (Reddit s) = Reddit.fetch s
     fetch (HackerNews s) = HackerNews.fetch s

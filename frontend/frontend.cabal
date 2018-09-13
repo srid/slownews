@@ -20,7 +20,6 @@ library
   exposed-modules:
     Frontend
   other-modules:
-    Frontend.ReflexUtil
     Frontend.CSS
   ghc-options: -Wall
 
