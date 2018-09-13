@@ -27,7 +27,7 @@ import Common.Link (Link (..))
 import Common.Route
 
 import Frontend.CSS (appCssStr)
-import Frontend.ReflexUtil (getAndDecodeWithError, matchEither, matchMaybe)
+import Frontend.ReflexUtil (getAndDecodeWithError)
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
@@ -56,11 +56,15 @@ frontend = Frontend
   }
 
 viewLinks :: (DomBuilder t m, PostBuild t m, MonadFix m, MonadHold t m) => Dynamic t CurrentLinks -> m ()
-viewLinks links'' = matchMaybe links'' $ \case
-  Nothing -> divClass "ui active dimmer" $ divClass "ui loader" blank
-  Just links' -> matchEither links' $ \case
-    Left err -> dynText $ T.pack <$> err
-    Right links -> void $ simpleList (sortLinks <$> links) viewLink
+viewLinks links = do
+  v <- maybeDyn links
+  dyn_ $ ffor v $ \case
+    Nothing -> divClass "ui active dimmer" $ divClass "ui loader" blank
+    Just links' -> do
+      v' <- eitherDyn links'
+      dyn_ $ ffor v' $ \case
+        Left err -> dynText $ T.pack <$> err
+        Right links'' -> void $ simpleList (sortLinks <$> links'') viewLink
   where
     sortLinks = sortBy (flip compare `on` linkCreated)
 
@@ -80,19 +84,9 @@ dynA :: (DomBuilder t m, PostBuild t m) => Dynamic t T.Text -> Dynamic t T.Text 
 dynA url title = elDynAttr "a" dAttr $ dynText title
   where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
-getBaseUrl :: Monad m => m Text
-getBaseUrl = do
-  -- FIXME: change this after fixing the backend
-  -- We need to inject from Obelisk.
-  -- cf. https://github.com/obsidiansystems/obelisk/pull/91
-  -- pure "https://slownews.srid.ca"
-  pure ""
-
 -- | Fetch links from the server
 getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
 getLinks = do
-  baseUrl <- getBaseUrl
   pb <- getPostBuild
-  let urlEvent = baseUrl <> "/data" <$ pb
-  resp <- getAndDecodeWithError urlEvent
+  resp <- getAndDecodeWithError $ "/data" <$ pb
   holdDyn Nothing $ Just <$> resp
