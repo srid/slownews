@@ -7,6 +7,7 @@ module Frontend.ReflexUtil
   ) where
 
 import Control.Monad (sequence)
+import Control.Monad.Fix (MonadFix)
 import Data.Aeson (FromJSON, eitherDecode)
 import Data.Bifunctor (Bifunctor (bimap))
 import qualified Data.ByteString.Lazy as BL
@@ -37,7 +38,7 @@ eitherMaybeHandle err = fromMaybe (Left err) . sequence
 
 -- | These functions exist to simplify nested either/maybe data types.
 
-matchMaybe :: MonadWidget t m
+matchMaybe :: (DomBuilder t m, MonadFix m, MonadHold t m, PostBuild t m)
            => Dynamic t (Maybe a)
            -> (Maybe (Dynamic t a) -> m b)
            -> m ()
@@ -45,7 +46,7 @@ matchMaybe m f = do
   v <- maybeDyn m
   dyn_ $ ffor v f
 
-matchEither :: MonadWidget t m
+matchEither :: (DomBuilder t m, MonadFix m, MonadHold t m, PostBuild t m)
             => Dynamic t (Either a b)
             -> (Either (Dynamic t a) (Dynamic t b) -> m c)
             -> m ()

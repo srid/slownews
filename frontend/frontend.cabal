@@ -22,7 +22,6 @@ library
   other-modules:
     Frontend.ReflexUtil
     Frontend.CSS
-    Frontend.App
   ghc-options: -Wall
 
 executable frontend
