@@ -22,7 +22,7 @@ data Env = Env
   } deriving (Generic, Eq, Show)
 
 instance DefConfig Env where
-  defConfig = Env 3000
+  defConfig = Env 3001
 
 instance FromEnv Env
 
