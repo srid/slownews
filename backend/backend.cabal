@@ -42,12 +42,17 @@ library
                 , wai-extra
                 , wai-middleware-static
                 , wreq
+                , dependent-sum
+                , dependent-sum-template
+                , obelisk-backend
+                , obelisk-route
   exposed-modules:
     Backend
   other-modules:  Backend.App
                 , Backend.Site
                 , Backend.HackerNews
                 , Backend.Reddit
+                , Backend.Entrypoint
   ghc-options: -Wall
 
 executable backend
@@ -91,3 +96,7 @@ executable backend
                 , wai-extra
                 , wai-middleware-static
                 , wreq
+                , dependent-sum
+                , dependent-sum-template
+                , obelisk-backend
+                , obelisk-route
