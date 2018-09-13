@@ -16,4 +16,8 @@ project ./. ({ pkgs, ... }: {
       sha256 = "0y38hyd2gvr7lrbxkrjwg4h0077a54m7gxlvm9s4kk0995z1ncax";
     };
   };
+
+  overrides = self: super: with pkgs.haskell.lib; {
+    clay = dontCheck super.clay;
+  };
 })
