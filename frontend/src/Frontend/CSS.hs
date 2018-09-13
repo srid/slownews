@@ -16,8 +16,8 @@ appCssStr = toS $ render appCss
 themeColor :: Color
 themeColor = lightgreen
 
-themeLighterColor :: Color
-themeLighterColor = "#e9fce9"
+themeLinkColor :: Color
+themeLinkColor = pink
 
 mainFont :: (Text, Text)
 mainFont = ("Comfortaa:700", "Comfortaa")
@@ -40,28 +40,18 @@ appCss = do
     important $ color themeColor
     sym padding $ em 0.3
 
-  ".row" ? do
-    important $ paddingTop $ rem 0.3
-    important $ paddingBottom $ rem 0.3
-    important $ sym margin $ px 0
+  ".ui.table.links" ? do
+    a ? do
+      textDecoration none
+      color themeLinkColor
 
-  ".meta" ? do
-    textAlign $ alignSide sideRight
-    important $ paddingRight $ em 0.5
+    "a:visited" ? do
+      textDecoration lineThrough
+      color gray
 
-  a ? do
-    textDecoration none
-
-  "a:visited" ? do
-    textDecoration lineThrough
-    color gray
-
-  ".row:hover" ? do
-    backgroundColor themeLighterColor -- "#efefef"
-
-  ".meta a" ? do
-    fontSize $ pct 85
-    textDecoration none
-    color themeColor
-    backgroundColor "#444"
-    sym2 padding (em 0.2) (em 0.4)
+    ".meta a" ? do
+      fontSize $ pct 85
+      textDecoration none
+      color themeColor
+      backgroundColor "#444"
+      sym2 padding (em 0.2) (em 0.4)

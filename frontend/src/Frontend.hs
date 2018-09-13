@@ -62,19 +62,25 @@ viewLinks links = do
     Nothing -> divClass "ui active dimmer" $ divClass "ui loader" blank
     Just links' -> do
       v' <- eitherDyn links'
-      dyn_ $ ffor v' $ \case
-        Left err -> dynText $ T.pack <$> err
-        Right links'' -> void $ simpleList (sortLinks <$> links'') viewLink
+      divClass "ui tablet stackable selectable inverted table links" $ do
+        el "thead" $ do
+          el "th" $ text "When"
+          el "th" $ text "Source"
+          el "th" $ text "Title"
+        el "tbody" $ do
+          dyn_ $ ffor v' $ \case
+            Left err -> dynText $ T.pack <$> err
+            Right links'' -> void $ simpleList (sortLinks <$> links'') viewLink
   where
     sortLinks = sortBy (flip compare `on` linkCreated)
 
 viewLink :: (DomBuilder t m, PostBuild t m) => Dynamic t Link -> m ()
-viewLink dLink = divClass "ui three column grid" $ divClass "row" $ do
-  divClass "one wide column" $ do
+viewLink dLink = el "tr" $ do
+  elClass "td" "when" $ do
     dynText $ dayOfWeek . linkCreated <$> dLink
-  divClass "five wide column meta" $ do
+  elClass "td" "meta right aligned" $ do
     dynA (linkMetaUrl <$> dLink) (linkSite <$> dLink)
-  divClass "nine wide column" $ do
+  elClass "td" "title" $ do
     dynA (linkUrl <$> dLink) (linkTitle <$> dLink)
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
