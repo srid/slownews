@@ -1,6 +1,6 @@
 # slownews
 
-A web app that aggregates top news during the last week from sites like reddit and Hacker News. Written in **Haskell** and using **Reflex** (via [Obelisk](https://github.com/obsidiansystems/obelisk)).
+A web app that aggregates top news during the last week from sites like reddit and Hacker News. Written in **Haskell** and using **Reflex** FRP (via [Obelisk](https://github.com/obsidiansystems/obelisk)).
 
 <img src="./screenshot.png" width="75%"></img>
 
@@ -14,9 +14,9 @@ ob run
 
 Visit http://localhost:3001/
 
-NOTE: The frontend uses a hardcoded backend URL (see `Frontend/App.hs:getBaseUrl`), which needs to be changed when deploying SlowNews elsewhere. This will be addressed in the near future as Obelisk improves.
+## Deploying
 
-## Release & deploy
+To deploy to a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
 
 To create a release for running locally, run:
 
@@ -24,10 +24,9 @@ To create a release for running locally, run:
 nix-build -A exe
 ```
 
-To run it:
+and then to run that:
 
 ```
-(cd result && ./backend)
+(cd result && ./backend -p 3001)
 ```
 
-To deploy to a remote (NixOS) server, use `ob deploy` (see Obelisk docs for details).
