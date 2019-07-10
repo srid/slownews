@@ -12,11 +12,12 @@ library
                , bytestring
                , common
                , reflex-dom
-               , static
                , text
                , time
                , obelisk-frontend
                , obelisk-route
+               , obelisk-generated-static
+               , jsaddle
   exposed-modules:
     Frontend
   other-modules:
@@ -36,12 +37,13 @@ executable frontend
                 , jsaddle-warp
                 , reflex-dom
                 , reflex-dom-core
-                , static
                 , text
                 , string-conv
                 , time
                 , obelisk-frontend
                 , obelisk-route
+                , obelisk-generated-static
+                , jsaddle
   --TODO: Make these ghc-options optional
   ghc-options: -threaded
   if os(darwin)

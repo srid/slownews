@@ -7,7 +7,7 @@
 {-# LANGUAGE TypeApplications #-}
 module Frontend where
 
-import Control.Monad (void)
+import Control.Monad
 import Control.Monad.Fix (MonadFix)
 import Data.Aeson (FromJSON, eitherDecode)
 import Data.Bifunctor (Bifunctor (bimap))
@@ -21,11 +21,11 @@ import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 
+import Language.Javascript.JSaddle.Types (MonadJSM)
 import Obelisk.Frontend
+import Obelisk.Generated.Static
 import Obelisk.Route.Frontend
 import Reflex.Dom.Core hiding (Link)
-
-import Static
 
 import Common.Link (Link (..))
 import Common.Route
@@ -35,7 +35,7 @@ import Frontend.CSS (appCssStr)
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
 
-frontend :: Frontend (R Route)
+frontend :: Frontend (R FrontendRoute)
 frontend = Frontend
   { _frontend_head = do
       elAttr "base" ("href" =: "/") blank
@@ -44,21 +44,21 @@ frontend = Frontend
       el "title" $ do
         r <- askRoute
         dynText $ ffor r $ \case
-          (_ :: R Route) -> "SlowNews" -- Placeholder for title changing logic
+          (_ :: R FrontendRoute) -> "SlowNews" -- Placeholder for title changing logic
       elAttr "link" ("rel" =: "stylesheet" <> "type" =: "text/css" <> "href" =: static @"semantic.min.css") blank
   , _frontend_body = subRoute_ $ \_r -> divClass "ui container" $ do
       elClass "h1" "ui top attached inverted header" $ text "SlowNews"
       divClass "ui attached segment" $ do
         divClass "content" $ do
-          viewLinks =<< prerender (pure $ constDyn Nothing) getLinks
+          viewLinks =<< fmap join (prerender (pure $ constDyn Nothing) getLinks)
       divClass "ui bottom attached secondary segment" $ do
         elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
           text "SlowNews on GitHub (powered by Haskell and Reflex)"
-
-  , _frontend_notFoundRoute = \_ -> Route_Home :/ () -- TODO: not used i think
   }
 
-viewLinks :: (DomBuilder t m, PostBuild t m, MonadFix m, MonadHold t m) => Dynamic t CurrentLinks -> m ()
+viewLinks
+  :: (DomBuilder t m, PostBuild t m, MonadFix m, MonadHold t m)
+  => Dynamic t CurrentLinks -> m ()
 viewLinks links = do
   v <- maybeDyn links
   dyn_ $ ffor v $ \case
@@ -91,10 +91,18 @@ viewLink dLink = el "tr" $ do
       where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
 -- | Fetch links from the server
-getLinks :: MonadWidget t m => m (Dynamic t CurrentLinks)
+getLinks
+  :: ( PostBuild t m
+     , TriggerEvent t m
+     , PerformEvent t m
+     , MonadHold t m
+     , HasJSContext (Performable m)
+     , MonadJSM (Performable m)
+     )
+  => m (Dynamic t CurrentLinks)
 getLinks = do
   pb <- getPostBuild
-  resp <- getAndDecodeWithError $ "/data" <$ pb
+  resp <- getAndDecodeWithError $ "/get-data" <$ pb
   holdDyn Nothing $ fmap Just resp
   where
     getAndDecodeWithError url = do

@@ -27,12 +27,9 @@ library
                 , modern-uri
                 , obelisk-backend
                 , obelisk-asset-serve-snap
-                , obelisk-snap
                 , snap-server
                 , snap
                 , reflex-dom
-                , obelisk-executable-config
-                , obelisk-executable-config-inject
                 , raw-strings-qq
                 , safe-exceptions >= 0.1
                 , stm
@@ -80,13 +77,10 @@ executable backend
                 , lifted-base
                 , modern-uri
                 , obelisk-backend
-                , obelisk-snap
                 , obelisk-asset-serve-snap
                 , snap-server
                 , snap
                 , reflex-dom
-                , obelisk-executable-config
-                , obelisk-executable-config-inject
                 , raw-strings-qq
                 , safe-exceptions >= 0.1
                 , stm

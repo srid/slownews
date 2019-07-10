@@ -10,7 +10,7 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as BSL
 import Data.Dependent.Sum (DSum (..))
 
-import Snap (writeBS)
+import Snap
 
 import Obelisk.Backend
 
@@ -18,11 +18,13 @@ import Common.Route
 
 import Backend.Entrypoint (start)
 
-backend :: Backend BackendRoute Route
+backend :: Backend BackendRoute FrontendRoute
 backend = Backend
   { _backend_run = \serve -> do
       getLinks <- liftIO start
       serve $ \case
+        BackendRoute_Missing :=> Identity () ->
+          writeLBS "404"
         BackendRoute_GetData :=> Identity () -> do
           links <- liftIO getLinks
           writeBS $ BSL.toStrict $ encode links

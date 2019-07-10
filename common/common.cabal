@@ -14,7 +14,6 @@ library
                , obelisk-route
                , mtl
                , universe
-               , universe-template
   exposed-modules:
     Common.Link
     Common.Route

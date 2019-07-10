@@ -1,4 +1,5 @@
 {-# LANGUAGE EmptyCase #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
@@ -13,54 +14,36 @@ module Common.Route where
 
 import Prelude hiding ((.))
 
-import Control.Category
-import Control.Monad.Except
 import Data.Functor.Sum
-import Data.Some (Some)
-import qualified Data.Some as Some
+import Data.Functor.Identity
 import Data.Text (Text)
 
 import Obelisk.Route
 import Obelisk.Route.TH
 
 backendRouteEncoder
-  :: ( check ~ parse
-     , MonadError Text parse
-     )
-  => Encoder check parse (R (Sum BackendRoute (ObeliskRoute Route))) PageName
-backendRouteEncoder = Encoder $ do
-  let myComponentEncoder = (backendRouteComponentEncoder `shadowEncoder` obeliskRouteComponentEncoder routeComponentEncoder) . someSumEncoder
-  myObeliskRestValidEncoder <- checkObeliskRouteRestEncoder routeRestEncoder
-  checkEncoder $ pathComponentEncoder myComponentEncoder $ \case
+  :: Encoder (Either Text) Identity (R (Sum BackendRoute (ObeliskRoute FrontendRoute))) PageName
+backendRouteEncoder = handleEncoder (const (InL BackendRoute_Missing :/ ())) $
+  pathComponentEncoder $ \case
     InL backendRoute -> case backendRoute of
-      BackendRoute_GetData -> endValidEncoder mempty
-    InR obeliskRoute -> runValidEncoderFunc myObeliskRestValidEncoder obeliskRoute
+      BackendRoute_Missing -> PathSegment "missing" $ unitEncoder mempty
+      BackendRoute_GetData -> PathSegment "get-data" $ unitEncoder mempty
+    InR obeliskRoute -> obeliskRouteSegment obeliskRoute $ \case
+      -- The encoder given to PathEnd determines how to parse query parameters,
+      -- in this example, we have none, so we insist on it.
+      FrontendRoute_Home -> PathEnd $ unitEncoder mempty
 
 --TODO: Should we rename `Route` to `AppRoute`?
 data BackendRoute :: * -> * where
+  BackendRoute_Missing :: BackendRoute ()
   BackendRoute_GetData :: BackendRoute ()
 
-data Route :: * -> * where
-  Route_Home :: Route ()
+data FrontendRoute :: * -> * where
+  FrontendRoute_Home :: FrontendRoute ()
 
-backendRouteComponentEncoder :: (MonadError Text check, MonadError Text parse) => Encoder check parse (Some BackendRoute) (Maybe Text)
-backendRouteComponentEncoder = enumEncoder $ \case
-  Some.This BackendRoute_GetData-> Just "data"
-
-routeComponentEncoder
-  :: (MonadError Text check, MonadError Text parse)
-  => Encoder check parse (Some Route) (Maybe Text)
-routeComponentEncoder = enumEncoder $ \case
-  Some.This Route_Home -> Nothing
-
-routeRestEncoder
-  :: (Applicative check, MonadError Text parse)
-  => Route a -> Encoder check parse a PageName
-routeRestEncoder = Encoder . pure . \case
-  Route_Home -> endValidEncoder mempty
 
 concat <$> mapM deriveRouteComponent
-  [ ''Route
+  [ ''FrontendRoute
   , ''BackendRoute
   ]
 
