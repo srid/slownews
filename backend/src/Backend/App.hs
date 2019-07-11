@@ -8,6 +8,7 @@ module Backend.App where
 
 import Data.Aeson (FromJSON, ToJSON, eitherDecode)
 import qualified Data.ByteString.Lazy as B
+import Control.Applicative
 import Data.Either (either)
 import GHC.Generics (Generic)
 import System.Directory
@@ -53,6 +54,5 @@ data App = App
 
 makeApp :: IO App
 makeApp = do
-  appEnvE <- decodeEnv
-  configE <- loadConfig
-  either fail pure $ App <$> appEnvE <*> configE
+  app <- liftA2 App <$> decodeEnv <*> loadConfig
+  either fail pure app

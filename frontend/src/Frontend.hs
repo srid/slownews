@@ -50,9 +50,10 @@ frontend = Frontend
       elClass "h1" "ui top attached inverted header" $ text "SlowNews"
       divClass "ui attached segment" $ do
         divClass "content" $ do
-          viewLinks =<< fmap join (prerender (pure $ constDyn Nothing) getLinks)
-      divClass "ui bottom attached secondary segment" $ do
-        elAttr "a" ("href" =: "https://github.com/srid/slownews") $ do
+          links <- join <$> prerender (pure $ constDyn Nothing) getLinks
+          viewLinks links
+      divClass "ui bottom attached secondary segment" $
+        elAttr "a" ("href" =: "https://github.com/srid/slownews") $
           text "SlowNews on GitHub (powered by Haskell and Reflex)"
   }
 
@@ -65,29 +66,30 @@ viewLinks links = do
     Nothing -> divClass "ui active dimmer" $ divClass "ui loader" blank
     Just links' -> do
       v' <- eitherDyn links'
-      divClass "ui tablet stackable selectable inverted table links" $ do
-        el "thead" $ do
-          el "th" $ text "When"
-          elClass "th" "right aligned" $ text "Source"
-          el "th" $ text "Title"
-        el "tbody" $ do
-          dyn_ $ ffor v' $ \case
-            Left err -> dynText $ T.pack <$> err
-            Right links'' -> void $ simpleList (sortLinks <$> links'') viewLink
+      dyn_ $ ffor v' $ \case
+        Left err -> dynText $ T.pack <$> err
+        Right links'' ->
+          divClass "ui tablet stackable selectable inverted table links" $ do
+            el "thead" $ do
+              el "th" $ text "When"
+              elClass "th" "right aligned" $ text "Source"
+              el "th" $ text "Title"
+            el "tbody" $
+              void $ simpleList (sortLinks <$> links'') viewLink
   where
     sortLinks = sortBy (flip compare `on` linkCreated)
 
 viewLink :: (DomBuilder t m, PostBuild t m) => Dynamic t Link -> m ()
 viewLink dLink = el "tr" $ do
-  elClass "td" "when" $ do
+  elClass "td" "when" $
     dynText $ dayOfWeek . linkCreated <$> dLink
-  elClass "td" "meta right aligned" $ do
-    dynA (linkMetaUrl <$> dLink) (linkSite <$> dLink)
-  elClass "td" "title" $ do
-    dynA (linkUrl <$> dLink) (linkTitle <$> dLink)
+  elClass "td" "meta right aligned" $
+    elLink (linkMetaUrl <$> dLink) (linkSite <$> dLink)
+  elClass "td" "title" $
+    elLink (linkUrl <$> dLink) (linkTitle <$> dLink)
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
-    dynA url title = elDynAttr "a" dAttr $ dynText title
+    elLink url title = elDynAttr "a" dAttr $ dynText title
       where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
 -- | Fetch links from the server

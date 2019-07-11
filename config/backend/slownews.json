@@ -1,17 +1,19 @@
 {"sites":
   [
-    {"tag":"HackerNews", "contents": {"count": 4}}
-  , {"tag":"HackerNews", "contents": {"query": "india", "count": 1}}
-  , {"tag":"HackerNews", "contents": {"query": "haskell", "count": 3}}
-  , {"tag":"HackerNews", "contents": {"query": "canada", "count": 1}}
-  , {"tag":"HackerNews", "contents": {"query": "quebec", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "haskell", "count": 20}}
-  , {"tag":"Reddit", "contents": {"subReddit": "reflexfrp", "count": 2}}
-  , {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 5}}
-  , {"tag":"Reddit", "contents": {"subReddit": "thinkpad", "count": 1}}
+    {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "IndiaDiscussion", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "IndiaSpeaks", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "PaleolithicKetogenic", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "ScientificNutrition", "count": 2}}
+  , {"tag":"Reddit", "contents": {"subReddit": "carnivore", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "chromeos", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "crostini", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "google", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "haskell", "count": 10}}
   , {"tag":"Reddit", "contents": {"subReddit": "linuxonthinkpad", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "fasting", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "bodyweightfitness", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "meatogains", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "reflexfrp", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "thinkpad", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zerocarb", "count": 2}}
   ]
 }

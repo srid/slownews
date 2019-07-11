@@ -6,8 +6,8 @@
 module Backend.Entrypoint where
 import Control.Concurrent.Async.Lifted (mapConcurrently)
 import Control.Concurrent.Lifted (fork, threadDelay)
-import Control.Concurrent.STM (TVar, atomically, newTVar, readTVar, writeTVar)
-import Control.Exception.Safe (handle)
+import Control.Concurrent.STM (TVar, atomically, newTVar, readTVarIO, writeTVar)
+import Control.Exception.Safe (catch)
 import Control.Monad (forever, join, void)
 import Data.Monoid ((<>))
 import Network.HTTP.Client (HttpException)
@@ -30,12 +30,8 @@ fetchAll app links = do
     storeTVar tvar = atomically . writeTVar tvar
 
 handleHttpException :: HttpException -> IO ()
-handleHttpException e = do
+handleHttpException e =
   putStrLn $ "ERROR: Http exception:" <> show e
-  return ()
-
-fetchAll' :: App.App -> Links -> IO ()
-fetchAll' app links = handle handleHttpException (fetchAll app links)
 
 start :: IO (IO [Link])
 start = do
@@ -46,7 +42,9 @@ start = do
   app <- App.makeApp
   print app
   links <- atomically $ newTVar mempty
-  void $ fork $ forever (fetchAll' app links >> sleepM 30)
-  pure $ atomically $ readTVar links
+  void $ fork $ forever $ do
+    fetchAll app links `catch` handleHttpException
+    sleepMins 30
+  pure $ readTVarIO links
   where
-    sleepM n = threadDelay (n * 60 * 1000 * 1000) -- sleep in minutes
+    sleepMins n = threadDelay (n * 60 * 1000 * 1000)
