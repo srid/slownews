@@ -28,5 +28,5 @@ backend = Backend
         BackendRoute_GetData :=> Identity () -> do
           links <- liftIO getLinks
           writeBS $ BSL.toStrict $ encode links
-  , _backend_routeEncoder = backendRouteEncoder
+  , _backend_routeEncoder = fullRouteEncoder
   }

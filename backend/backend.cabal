@@ -54,43 +54,11 @@ library
 
 executable backend
   main-is: main.hs
-  hs-source-dirs: src
+  hs-source-dirs: src-bin
   if impl(ghcjs)
     buildable: False
   build-depends: base
-                , aeson
-                , aeson-casing
-                , async
-                , backend
-                , bytestring
-                , common
-                , containers
-                , data-default
-                , directory
-                , envy
-                , filepath
-                , frontend
-                , http-client >= 0.5
-                , lens
-                , lens-aeson
-                , lifted-async
-                , lifted-base
-                , modern-uri
-                , obelisk-backend
-                , obelisk-asset-serve-snap
-                , snap-server
-                , snap
-                , reflex-dom
-                , raw-strings-qq
-                , safe-exceptions >= 0.1
-                , stm
-                , text
-                , time
-                , transformers
-                , wai-extra
-                , wai-middleware-static
-                , wreq
-                , dependent-sum
-                , dependent-sum-template
-                , obelisk-backend
-                , obelisk-route
+               , backend
+               , common
+               , frontend
+               , obelisk-backend
