@@ -12,7 +12,7 @@ Install [obelisk](https://github.com/obsidiansystems/obelisk) and run:
 ob run
 ```
 
-Visit http://localhost:3001/
+Visit http://localhost:8000/
 
 ## Deploying
 
