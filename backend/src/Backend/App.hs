@@ -41,13 +41,13 @@ instance FromJSON Config
 instance ToJSON Config
 
 loadConfig :: IO (Either String Config)
-loadConfig = do
-  userConfig <- getXdgDirectory XdgConfig "slownews.json"
-  f <- doesPathExist userConfig >>= \case
-    True -> pure userConfig
-    False -> pure "config/backend/slownews.json"
-  content <- B.readFile f
-  pure $ eitherDecode content
+loadConfig = fmap eitherDecode . B.readFile =<< configFile
+  where
+    configFile = do
+      userConfig <- getXdgDirectory XdgConfig "slownews.json"
+      doesPathExist userConfig >>= \case
+        True -> pure userConfig
+        False -> pure "config/backend/slownews.json"
 
 -- Application data structure
 
@@ -59,6 +59,6 @@ data App
   deriving (Show, Eq)
 
 makeApp :: IO App
-makeApp = do
-  app <- liftA2 App <$> decodeEnv <*> loadConfig
-  either fail pure app
+makeApp =
+  either fail pure
+    =<< liftA2 App <$> decodeEnv <*> loadConfig
