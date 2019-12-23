@@ -4,6 +4,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Backend.Entrypoint where
+
+import qualified Backend.App as App
+import qualified Backend.Site as Site
+import Common.Link (Link)
 import Control.Concurrent.Async.Lifted (mapConcurrently)
 import Control.Concurrent.Lifted (fork, threadDelay)
 import Control.Concurrent.STM (TVar, atomically, newTVar, readTVarIO, writeTVar)
@@ -12,10 +16,6 @@ import Control.Monad (forever, join, void)
 import Data.Monoid ((<>))
 import Network.HTTP.Client (HttpException)
 import System.IO (BufferMode (..), hSetBuffering, stdout)
-
-import qualified Backend.App as App
-import qualified Backend.Site as Site
-import Common.Link (Link)
 
 type Links = TVar [Link]
 
@@ -38,7 +38,6 @@ start = do
   -- TODO: use a logging library instead of buffering stdout for saner putStrLn
   -- behaviour.
   hSetBuffering stdout LineBuffering
-
   app <- App.makeApp
   print app
   links <- atomically $ newTVar mempty

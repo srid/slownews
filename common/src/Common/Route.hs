@@ -1,5 +1,4 @@
 {-# LANGUAGE EmptyCase #-}
-{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
@@ -10,15 +9,15 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-module Common.Route where
+{-# LANGUAGE TypeFamilies #-}
 
-import Prelude hiding ((.))
+module Common.Route where
 
 import Data.Functor.Identity
 import Data.Text (Text)
-
 import Obelisk.Route
 import Obelisk.Route.TH
+import Prelude hiding ((.))
 
 data BackendRoute :: * -> * where
   BackendRoute_Missing :: BackendRoute ()
@@ -27,21 +26,22 @@ data BackendRoute :: * -> * where
 data FrontendRoute :: * -> * where
   FrontendRoute_Home :: FrontendRoute ()
 
-fullRouteEncoder
-  :: Encoder (Either Text) Identity (R (FullRoute BackendRoute FrontendRoute)) PageName
-fullRouteEncoder = mkFullRouteEncoder
-  (FullRoute_Backend BackendRoute_Missing :/ ())
-  (\case
-      BackendRoute_Missing -> PathSegment "missing" $ unitEncoder mempty
-      BackendRoute_GetData -> PathSegment "get-data" $ unitEncoder mempty
-  )
-  (\case
-      FrontendRoute_Home -> PathEnd $ unitEncoder mempty
-  )
+fullRouteEncoder ::
+  Encoder (Either Text) Identity (R (FullRoute BackendRoute FrontendRoute)) PageName
+fullRouteEncoder =
+  mkFullRouteEncoder
+    (FullRoute_Backend BackendRoute_Missing :/ ())
+    ( \case
+        BackendRoute_Missing -> PathSegment "missing" $ unitEncoder mempty
+        BackendRoute_GetData -> PathSegment "get-data" $ unitEncoder mempty
+    )
+    ( \case
+        FrontendRoute_Home -> PathEnd $ unitEncoder mempty
+    )
 
-
-concat <$> mapM deriveRouteComponent
-  [ ''FrontendRoute
-  , ''BackendRoute
-  ]
-
+concat
+  <$> mapM
+    deriveRouteComponent
+    [ ''FrontendRoute,
+      ''BackendRoute
+    ]

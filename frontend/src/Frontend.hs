@@ -5,8 +5,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
+
 module Frontend where
 
+import Common.Link (Link (..))
+import Common.Route
 import Control.Monad
 import Control.Monad.Fix (MonadFix)
 import Data.Aeson (FromJSON, eitherDecode)
@@ -20,17 +23,12 @@ import qualified Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
-
+import Frontend.CSS (appCssStr)
 import Language.Javascript.JSaddle.Types (MonadJSM)
 import Obelisk.Frontend
 import Obelisk.Generated.Static
 import Obelisk.Route.Frontend
 import Reflex.Dom.Core hiding (Link)
-
-import Common.Link (Link (..))
-import Common.Route
-
-import Frontend.CSS (appCssStr)
 
 -- TODO: Rename Link type; conflicts with other modules.
 type CurrentLinks = Maybe (Either String [Link])
@@ -45,21 +43,22 @@ frontend = Frontend
         r <- askRoute
         dynText $ ffor r $ \case
           (_ :: R FrontendRoute) -> "SlowNews" -- Placeholder for title changing logic
-      elAttr "link" ("rel" =: "stylesheet" <> "type" =: "text/css" <> "href" =: static @"semantic.min.css") blank
-  , _frontend_body = subRoute_ $ \_r -> divClass "ui container" $ do
+      elAttr "link" ("rel" =: "stylesheet" <> "type" =: "text/css" <> "href" =: static @"semantic.min.css") blank,
+    _frontend_body = subRoute_ $ \_r -> divClass "ui container" $ do
       elClass "h1" "ui top attached inverted header" $ text "SlowNews"
       divClass "ui attached segment" $ do
         divClass "content" $ do
           links <- join <$> prerender (pure $ constDyn Nothing) getLinks
           viewLinks links
-      divClass "ui bottom attached secondary segment" $
-        elAttr "a" ("href" =: "https://github.com/srid/slownews") $
-          text "SlowNews on GitHub (powered by Haskell and Reflex)"
+      divClass "ui bottom attached secondary segment"
+        $ elAttr "a" ("href" =: "https://github.com/srid/slownews")
+        $ text "SlowNews on GitHub (powered by Haskell and Reflex)"
   }
 
-viewLinks
-  :: (DomBuilder t m, PostBuild t m, MonadFix m, MonadHold t m)
-  => Dynamic t CurrentLinks -> m ()
+viewLinks ::
+  (DomBuilder t m, PostBuild t m, MonadFix m, MonadHold t m) =>
+  Dynamic t CurrentLinks ->
+  m ()
 viewLinks links = do
   v <- maybeDyn links
   dyn_ $ ffor v $ \case
@@ -74,15 +73,17 @@ viewLinks links = do
               el "th" $ text "When"
               elClass "th" "right aligned" $ text "Source"
               el "th" $ text "Title"
-            el "tbody" $
-              void $ simpleList (sortLinks <$> links'') viewLink
+            el "tbody"
+              $ void
+              $ simpleList (sortLinks <$> links'') viewLink
   where
     sortLinks = sortBy (flip compare `on` linkCreated)
 
 viewLink :: (DomBuilder t m, PostBuild t m) => Dynamic t Link -> m ()
 viewLink dLink = el "tr" $ do
-  elClass "td" "when" $
-    dynText $ dayOfWeek . linkCreated <$> dLink
+  elClass "td" "when"
+    $ dynText
+    $ dayOfWeek . linkCreated <$> dLink
   elClass "td" "meta right aligned" $
     elLink (linkMetaUrl <$> dLink) (linkSite <$> dLink)
   elClass "td" "title" $
@@ -90,18 +91,19 @@ viewLink dLink = el "tr" $ do
   where
     dayOfWeek = T.pack . formatTime defaultTimeLocale "%a" . posixSecondsToUTCTime . fromIntegral
     elLink url title = elDynAttr "a" dAttr $ dynText title
-      where dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
+      where
+        dAttr = ffor url $ \u -> "href" =: u <> "target" =: "_blank"
 
 -- | Fetch links from the server
-getLinks
-  :: ( PostBuild t m
-     , TriggerEvent t m
-     , PerformEvent t m
-     , MonadHold t m
-     , HasJSContext (Performable m)
-     , MonadJSM (Performable m)
-     )
-  => m (Dynamic t CurrentLinks)
+getLinks ::
+  ( PostBuild t m,
+    TriggerEvent t m,
+    PerformEvent t m,
+    MonadHold t m,
+    HasJSContext (Performable m),
+    MonadJSM (Performable m)
+  ) =>
+  m (Dynamic t CurrentLinks)
 getLinks = do
   pb <- getPostBuild
   resp <- getAndDecodeWithError $ "/get-data" <$ pb
@@ -113,5 +115,5 @@ getLinks = do
     decodeXhrResponseWithError :: FromJSON a => XhrResponse -> Either String a
     decodeXhrResponseWithError =
       fromMaybe (Left "Empty response") . sequence
-      . traverse (eitherDecode . BL.fromStrict . encodeUtf8)
-      . _xhrResponse_responseText
+        . traverse (eitherDecode . BL.fromStrict . encodeUtf8)
+        . _xhrResponse_responseText

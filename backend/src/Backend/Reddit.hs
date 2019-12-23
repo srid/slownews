@@ -4,54 +4,60 @@
 
 module Backend.Reddit where
 
+import Common.Link (Link (Link))
 import Control.Lens ((&), (^.))
-import Data.Aeson (FromJSON (parseJSON), ToJSON, withObject, (.:))
+import Data.Aeson ((.:), FromJSON (parseJSON), ToJSON, withObject)
 import Data.Monoid ((<>))
 import Data.Text (Text)
 import GHC.Generics (Generic)
 import qualified Network.Wreq as WQ
 
-import Common.Link (Link (Link))
-
-data Site = Site
-  { subReddit :: String
-  , count     :: Maybe Int
-  }
+data Site
+  = Site
+      { subReddit :: String,
+        count :: Maybe Int
+      }
   deriving (Show, Eq, Generic)
 
 instance FromJSON Site
+
 instance ToJSON Site
 
-data Body = Body
-  { bodyChildren :: [RLink]
-  } deriving (Show, Eq)
+data Body
+  = Body
+      { bodyChildren :: [RLink]
+      }
+  deriving (Show, Eq)
 
 instance FromJSON Body where
   parseJSON = withObject "Body" $ \v -> do
     d <- v .: "data"
     Body <$> d .: "children"
 
-data RLink = RLink
-  { rlinkTitle                 :: Text
-  , rlinkUrl                   :: Text
-  , rlinkPermalink             :: Text
-  , rlinkCreatedUtc            :: Int
-  , rlinkSubredditNamePrefixed :: Text
-  } deriving (Show, Eq)
+data RLink
+  = RLink
+      { rlinkTitle :: Text,
+        rlinkUrl :: Text,
+        rlinkPermalink :: Text,
+        rlinkCreatedUtc :: Int,
+        rlinkSubredditNamePrefixed :: Text
+      }
+  deriving (Show, Eq)
 
 instance FromJSON RLink where
   parseJSON = withObject "RLink" $ \v -> do
     d <- v .: "data"
     RLink <$> d .: "title"
-          <*> d .: "url"
-          <*> d .: "permalink"
-          <*> d .: "created_utc"
-          <*> d .: "subreddit_name_prefixed"
+      <*> d .: "url"
+      <*> d .: "permalink"
+      <*> d .: "created_utc"
+      <*> d .: "subreddit_name_prefixed"
 
 toLink :: RLink -> Link
-toLink RLink{ rlinkTitle, rlinkUrl, rlinkPermalink, rlinkCreatedUtc, rlinkSubredditNamePrefixed } =
+toLink RLink {rlinkTitle, rlinkUrl, rlinkPermalink, rlinkCreatedUtc, rlinkSubredditNamePrefixed} =
   Link rlinkTitle rlinkUrl metaUrl rlinkCreatedUtc rlinkSubredditNamePrefixed
-  where metaUrl = "https://reddit.com" <> rlinkPermalink
+  where
+    metaUrl = "https://reddit.com" <> rlinkPermalink
 
 fetch :: Site -> IO [Link]
 fetch (Site subreddit countMaybe) = do
