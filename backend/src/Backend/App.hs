@@ -7,13 +7,11 @@
 module Backend.App where
 
 import Backend.Site (Site)
-import Control.Applicative
 import Data.Aeson (FromJSON, ToJSON, eitherDecode)
 import qualified Data.ByteString.Lazy as B
 import Data.Either (either)
 import GHC.Generics (Generic)
 import System.Directory
-import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
 
 -- Application JSON configuration
 

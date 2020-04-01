@@ -16,7 +16,6 @@ library
                 , containers
                 , data-default
                 , directory
-                , envy
                 , filepath
                 , frontend
                 , http-client >= 0.5
