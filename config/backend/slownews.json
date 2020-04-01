@@ -1,12 +1,19 @@
 {"sites":
   [
-    {"tag":"HackerNews", "contents": {}}
+    {"tag":"HackerNews", "contents": {"count": 2}}
   , {"tag":"HackerNews", "contents": {"query": "haskell"}}
   , {"tag":"HackerNews", "contents": {"query": "nixos"}}
   , {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "coronavirus"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "exvegans"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "frugal", "count": 1}}
   , {"tag":"Reddit", "contents": {"subReddit": "haskell", "count": 10}}
+  , {"tag":"Reddit", "contents": {"subReddit": "ketoscience", "count": 2}}
   , {"tag":"Reddit", "contents": {"subReddit": "linuxonthinkpad", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "scientificnutrition", "count": 2}}
-  , {"tag":"Reddit", "contents": {"subReddit": "meatogains", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "programming", "count": 1}}
+  , {"tag":"Reddit", "contents": {"subReddit": "meatogains", "count": 2}}
+  , {"tag":"Reddit", "contents": {"subReddit": "scientificnutrition"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zettelkasten"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "JamesDamore"}}
   ]
 }
