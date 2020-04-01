@@ -17,3 +17,4 @@ library
   exposed-modules:
     Common.Link
     Common.Route
+  ghc-options: -Wall

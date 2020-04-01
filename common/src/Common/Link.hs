@@ -2,7 +2,7 @@
 
 module Common.Link where
 
-import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON), genericParseJSON, genericToJSON)
+import Data.Aeson
 import Data.Aeson.Casing (aesonPrefix, snakeCase)
 import Data.Text (Text)
 import GHC.Generics (Generic)

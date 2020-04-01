@@ -17,7 +17,6 @@ import Data.Functor.Identity
 import Data.Text (Text)
 import Obelisk.Route
 import Obelisk.Route.TH
-import Prelude hiding ((.))
 
 data BackendRoute :: * -> * where
   BackendRoute_Missing :: BackendRoute ()
