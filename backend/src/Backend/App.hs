@@ -15,19 +15,6 @@ import GHC.Generics (Generic)
 import System.Directory
 import System.Envy (DefConfig (defConfig), FromEnv, decodeEnv)
 
--- Application environment variables
-
-data Env
-  = Env
-      { port :: Int -- "PORT"
-      }
-  deriving (Generic, Eq, Show)
-
-instance DefConfig Env where
-  defConfig = Env 3001
-
-instance FromEnv Env
-
 -- Application JSON configuration
 
 data Config
@@ -53,12 +40,10 @@ loadConfig = fmap eitherDecode . B.readFile =<< configFile
 
 data App
   = App
-      { env :: Env,
-        config :: Config
+      { config :: Config
       }
   deriving (Show, Eq)
 
 makeApp :: IO App
 makeApp =
-  either fail pure
-    =<< liftA2 App <$> decodeEnv <*> loadConfig
+  either fail (pure . App) =<< loadConfig
