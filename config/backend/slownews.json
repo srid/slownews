@@ -3,6 +3,10 @@
     {"tag":"HackerNews", "contents": {"count": 2}}
   , {"tag":"HackerNews", "contents": {"query": "haskell"}}
   , {"tag":"HackerNews", "contents": {"query": "nixos"}}
+  , {"tag":"Lobsters", "contents": {"tag":"linux", "count": 2}}
+  , {"tag":"Lobsters", "contents": {"tag":"haskell", "count": 3}}
+  , {"tag":"Lobsters", "contents": {"tag":"elm", "count": 2}}
+  , {"tag":"Lobsters", "contents": {"tag":"culture", "count": 4}}
   , {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 1}}
   , {"tag":"Reddit", "contents": {"subReddit": "coronavirus"}}
   , {"tag":"Reddit", "contents": {"subReddit": "exvegans"}}
