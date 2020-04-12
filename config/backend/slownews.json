@@ -8,16 +8,11 @@
   , {"tag":"Lobsters", "contents": {"tag":"elm", "count": 2}}
   , {"tag":"Lobsters", "contents": {"tag":"culture", "count": 4}}
   , {"tag":"Reddit", "contents": {"subReddit": "NixOS", "count": 1}}
-  , {"tag":"Reddit", "contents": {"subReddit": "coronavirus"}}
-  , {"tag":"Reddit", "contents": {"subReddit": "exvegans"}}
-  , {"tag":"Reddit", "contents": {"subReddit": "frugal", "count": 1}}
   , {"tag":"Reddit", "contents": {"subReddit": "haskell", "count": 10}}
   , {"tag":"Reddit", "contents": {"subReddit": "ketoscience", "count": 2}}
   , {"tag":"Reddit", "contents": {"subReddit": "linuxonthinkpad", "count": 1}}
   , {"tag":"Reddit", "contents": {"subReddit": "programming", "count": 1}}
   , {"tag":"Reddit", "contents": {"subReddit": "meatogains", "count": 2}}
-  , {"tag":"Reddit", "contents": {"subReddit": "scientificnutrition"}}
-  , {"tag":"Reddit", "contents": {"subReddit": "zettelkasten"}}
-  , {"tag":"Reddit", "contents": {"subReddit": "JamesDamore"}}
+  , {"tag":"Reddit", "contents": {"subReddit": "zettelkasten", "count": 4}}
   ]
 }
