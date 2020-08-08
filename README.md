@@ -1,6 +1,6 @@
 # slownews
 
-A web app that aggregates top news during the last week from sites like reddit and Hacker News. Written in **Haskell** and using **Reflex** FRP (via [Obelisk](https://github.com/obsidiansystems/obelisk)).
+A web app that aggregates top news during the last week from sites like reddit, Lobste.rs and Hacker News. Written in **Haskell** and using **Reflex** FRP (via [Obelisk](https://github.com/obsidiansystems/obelisk)).
 
 <img src="./screenshot.png" width="75%"></img>
 

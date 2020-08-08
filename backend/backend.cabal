@@ -48,6 +48,7 @@ library
                 , Backend.Site
                 , Backend.HackerNews
                 , Backend.Reddit
+                , Backend.Lobsters
                 , Backend.Entrypoint
   ghc-options: -Wall
 
