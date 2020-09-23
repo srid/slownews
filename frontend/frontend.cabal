@@ -35,6 +35,6 @@ executable frontend
                , obelisk-generated-static
                , frontend
   --TODO: Make these ghc-options optional
-  ghc-options: -threaded
+  -- ghc-options: -threaded
   if os(darwin)
      ghc-options: -dynamic
